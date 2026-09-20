@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": false,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "paths": {
+      "@statstrade/nextjs/*": [
+        "./src/*"
+      ]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "src/ui/**/*.ts",
+    "src/ui/**/*.tsx",
+    "src/ui/**/*.js",
+    "src/ui/**/*.jsx"
+  ],
+  "exclude": [
+    "src/app",
+    "node_modules"
+  ]
+}

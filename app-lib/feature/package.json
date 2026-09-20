@@ -1,0 +1,33 @@
+{
+  "name": "@statstrade/feature",
+  "version": "0.0.1",
+  "private": true,
+  "types": "./src",
+  "main": "src/index.ts",
+  "files": [
+    "src"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "echo 'no build'"
+  },
+  "dependencies": {
+    "@statstrade/component": "*",
+    "@statstrade/config": "*",
+    "@statstrade/edge": "*",
+    "react": "19.0.0",
+    "tamagui": "^1.144.1"
+  },
+  "devDependencies": {
+    "@statstrade/config-eslint": "*",
+    "@types/node": "^20.14.1",
+    "@types/react": "19.1.11",
+    "vitest": "^2.1.1"
+  }
+}

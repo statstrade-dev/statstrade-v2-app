@@ -1,0 +1,41 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalEnv": [
+    "DISABLE_EXTRACTION",
+    "NODE_ENV",
+    "EAS_BUILD_PLATFORM"
+  ],
+  "tasks": {
+    "build": {
+      "env": [
+        "DISABLE_EXTRACTION",
+        "NODE_ENV",
+        "EAS_BUILD_PLATFORM"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        ".next/**",
+        "!.next/cache/**",
+        "build/**",
+        "dist/**",
+        "node_modules/.cache/metro/**"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ]
+    },
+    "storybook": {
+      "dependsOn": [
+        "^storybook"
+      ]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

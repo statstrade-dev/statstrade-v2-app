@@ -1,0 +1,82 @@
+{
+  "name": "statstrade-lite",
+  "private": true,
+  "workspaces": [
+    "./app-gen/edge",
+    "./app-gen/group",
+    "./app-gen/edge-storybook",
+    "./app-lib/avatar",
+    "./app-lib/component",
+    "./app-lib/component-storybook",
+    "./app-lib/config",
+    "./app-lib/config-eslint",
+    "./app-gen/edge",
+    "./app-gen/edge-storybook",
+    "./app-gen/group",
+    "./app-lib/feature",
+    "./app-lib/feature-storybook",
+    "./app/nextjs"
+  ],
+  "scripts": {
+    "dev": "yarn workspace @statstrade/nextjs dev",
+    "start": "yarn workspace @statstrade/nextjs start:app",
+    "native": "cd app/expo && yarn start",
+    "native:prebuild": "cd app/expo && yarn prebuild",
+    "ios": "cd app/expo && yarn ios",
+    "android": "cd app/expo && yarn android",
+    "watch": "ultra -r --no-pretty --concurrency 400 watch",
+    "vercel:install": "yarn set version 3.5 && yarn install",
+    "app": "yarn build && cd app/nextjs && yarn next",
+    "app:extract": "DISABLE_EXTRACTION=false yarn workspace @statstrade/nextjs dev",
+    "app:prod": "yarn workspace @statstrade/nextjs build",
+    "app:prod:serve": "yarn workspace @statstrade/nextjs serve",
+    "postinstall": "yarn check-tamagui && yarn build",
+    "build": "yarn workspaces foreach --all --exclude @statstrade/nextjs run build",
+    "build:all": "turbo run build",
+    "upgrade:tamagui": "yarn up '*tamagui*'@latest '@tamagui/*'@latest",
+    "upgrade:tamagui:canary": "yarn up '*tamagui*'@canary '@tamagui/*'@canary",
+    "storybook": "yarn workspace @statstrade/component-storybook storybook",
+    "sb": "yarn storybook",
+    "check-tamagui": "tamagui check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepare": "husky",
+    "i18n:scan": "i18next-scanner --config i18next-scanner.config.js",
+    "i18n:scan:watch": "i18next-scanner --config i18next-scanner.config.js --watch"
+  },
+  "resolutions": {
+    "next": "15.5.9",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-refresh": "^0.14.0",
+    "react-native-svg": "15.12.1",
+    "react-native-web": "~0.20.0"
+  },
+  "dependencies": {
+    "@babel/preset-flow": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@babel/runtime": "^7.24.6",
+    "@tamagui/cli": "^1.144.1",
+    "eslint": "8.57.0",
+    "husky": "^9.1.6",
+    "next": "^15.5.9",
+    "prettier": "^3.3.3",
+    "turbo": "^2.5.6",
+    "typescript": "~5.8.3",
+    "ultra-runner": "^3.10.5",
+    "vitest": "^2.1.1"
+  },
+  "packageManager": "yarn@4.9.4",
+  "engines": {
+    "node": "20.x"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.4",
+    "@biomejs/biome": "^1.9.3",
+    "@statstrade/config-eslint": "*",
+    "baseline-browser-mapping": "^2.9.5",
+    "check-dependency-version-consistency": "^4.1.0",
+    "i18next-scanner": "^4.6.0",
+    "netlify-cli": "^23.4.2"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.base",
+  "include": [
+    "./src",
+    "../ui/src",
+    "./src/storybook"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@statstrade/component": ["../component/src/index"],
+      "@statstrade/component/*": ["../component/src/*"],
+      "@statstrade/edge": ["../../app-gen/edge/src/index"],
+      "@statstrade/edge/*": ["../../app-gen/edge/src/*"],
+      "@statstrade/nextjs": [
+        "../../projects/nextjs/src/index"
+      ],
+      "@statstrade/nextjs/*": [
+        "../../projects/nextjs/src/*"
+      ],
+      "react-native": [
+        "react-native-web"
+      ]
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@statstrade/group",
+  "version": "0.0.1",
+  "private": true,
+  "types": "./src",
+  "exports": {
+    "./*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "build": "echo 'no build'"
+  },
+  "dependencies": {
+    "@statstrade/edge": "*"
+  },
+  "devDependencies": {
+    "@statstrade/config-eslint": "*"
+  }
+}

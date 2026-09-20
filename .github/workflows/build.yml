@@ -1,0 +1,47 @@
+name: Trigger CI
+
+on: [push, repository_dispatch, workflow_dispatch]
+
+jobs:
+  trigger-main:
+      
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Notify CI
+        if: github.ref == 'refs/heads/main'
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: statstrade-dev/ci
+          event-type: ui-changed
+          client-payload: '{"repo": "${{ github.repository.id }}", "branch": "${{ github.ref_name }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "comment": "${{ github.payload.comment }}"}'
+          
+  trigger-prod:
+      
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Notify CI
+        if: github.ref == 'refs/heads/prod'
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: statstrade-dev/ci
+          event-type: ui-changed-prod
+          client-payload: '{"repo": "${{ github.repository.id }}", "branch": "${{ github.ref_name }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "comment": "${{ github.payload.comment }}"}'
+          
+  trigger-naren:
+      
+    runs-on: ubuntu-latest
+      
+    steps:
+      - name: Notify CI
+        if: github.ref == 'refs/heads/naren'
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          repository: statstrade-dev/ci
+          event-type: ui-changed-naren
+          client-payload: '{"repo": "${{ github.repository.id }}", "branch": "${{ github.ref_name }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "comment": "${{ github.payload.comment }}"}'
+          

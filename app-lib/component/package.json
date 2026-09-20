@@ -1,0 +1,33 @@
+{
+  "name": "@statstrade/component",
+  "version": "0.0.1",
+  "private": true,
+  "types": "./src",
+  "main": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "echo 'no build'"
+  },
+  "dependencies": {
+    "@statstrade/config": "*",
+    "@statstrade/edge": "*",
+    "@tamagui/lucide-icons": "^1.144.1",
+    "react": "19.0.0",
+    "tamagui": "^1.144.1"
+  },
+  "devDependencies": {
+    "@statstrade/config-eslint": "*",
+    "@types/node": "^20.14.1",
+    "@types/react": "19.1.11",
+    "vitest": "^2.1.1"
+  }
+}
