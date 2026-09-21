@@ -2,7 +2,7 @@ import
   {BarChart,Coins,CreditCard,House,Mail,Megaphone,Settings,Store}
  from '@tamagui/lucide-icons'
 
-// sznui.lib.component.layout.common.frame-manager-site/navGroups [10] 
+// statsui.basic.layout.common.frame-manager-site/navGroups [10] 
 export var navGroups = [
   {
   "items":[

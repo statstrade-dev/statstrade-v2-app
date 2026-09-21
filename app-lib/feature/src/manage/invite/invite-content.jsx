@@ -6,7 +6,7 @@ import * as main from '@statstrade/feature/manage/invite/invite-main'
 
 import * as create from '@statstrade/feature/manage/invite/invite-create'
 
-// sznui.lib.feature.manage.invites.invites-content/InviteContent [12] 
+// statstrade-web.feature.manage.invites.invites-content/InviteContent [12] 
 export function InviteContent(){
   let ctx = React.useContext(common.InviteContext);
   let view = ctx.controls.view;

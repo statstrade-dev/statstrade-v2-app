@@ -8,10 +8,10 @@ import * as ui_section from '@statstrade/component/ui-section'
 
 import * as null from '@statstrade/edge/lib/xt/lang/base-lib'
 
-// sznui.lib.component.ui-section-test/Metadata [17] 
+// statsui.basic.ui-section-test/Metadata [17] 
 export var Metadata = {[title]:"Components/ui-section",[tags]:["autodoc"]};
 
-// sznui.lib.component.ui-section-test/Test_FullScreenCentered [23] 
+// statsui.basic.ui-section-test/Test_FullScreenCentered [23] 
 export function Test_FullScreenCentered(){
   return (
     <ui_section.FullScreenCentered
@@ -22,13 +22,13 @@ export function Test_FullScreenCentered(){
     </ui_section.FullScreenCentered>);
 }
 
-// sznui.lib.component.ui-section-test/Test_FullScreenHeader [36] 
+// statsui.basic.ui-section-test/Test_FullScreenHeader [36] 
 export function Test_FullScreenHeader(){
   return (
     <ui_section.FullScreenHeader title="Full Screen Header"/>);
 }
 
-// sznui.lib.component.ui-section-test/Test_MinHeader [47] 
+// statsui.basic.ui-section-test/Test_MinHeader [47] 
 export function Test_MinHeader(){
   return (
     <ui_section.MinHeader
@@ -38,13 +38,13 @@ export function Test_MinHeader(){
       paragraph="This is a minimal header description."/>);
 }
 
-// sznui.lib.component.ui-section-test/Test_MinFrameCenter [60] 
+// statsui.basic.ui-section-test/Test_MinFrameCenter [60] 
 export function Test_MinFrameCenter(){
   return (
     <ui_section.MinFrameCenter backgroundColor="$color2"><T.Text>{"Centered Content in Frame"}</T.Text></ui_section.MinFrameCenter>);
 }
 
-// sznui.lib.component.ui-section-test/Test_SectionMinInfo [72] 
+// statsui.basic.ui-section-test/Test_SectionMinInfo [72] 
 export function Test_SectionMinInfo(){
   return (
     <ui_section.SectionMinInfo
@@ -61,7 +61,7 @@ export function Test_SectionMinInfo(){
     </ui_section.SectionMinInfo>);
 }
 
-// sznui.lib.component.ui-section-test/Test_SectionMinLogo [88] 
+// statsui.basic.ui-section-test/Test_SectionMinLogo [88] 
 export function Test_SectionMinLogo(){
   return (
     <ui_section.SectionMinLogo
@@ -71,7 +71,7 @@ export function Test_SectionMinLogo(){
           <T.H3>{"Logo Section Title"}</T.H3>)}/>);
 }
 
-// sznui.lib.component.ui-section-test/Test_sectionContent [100] 
+// statsui.basic.ui-section-test/Test_sectionContent [100] 
 export function Test_sectionContent(){
   return (
     <T.YStack gap="$4">

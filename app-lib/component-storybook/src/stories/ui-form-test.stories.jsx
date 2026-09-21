@@ -6,10 +6,10 @@ import * as hook_form from '@statstrade/edge/lib/js/lib/react-hook-form'
 
 import * as ui_form from '@statstrade/component/ui-form'
 
-// sznui.lib.component.ui-form-test/Metadata [16] 
+// statsui.basic.ui-form-test/Metadata [16] 
 export var Metadata = {[title]:"Components/ui-form",[tags]:["autodoc"]};
 
-// sznui.lib.component.ui-form-test/Test_FormInput [22] 
+// statsui.basic.ui-form-test/Test_FormInput [22] 
 export function Test_FormInput(){
   let {control,handleSubmit} = hook_form.useFormBase({"defaultValues":{"test_input":""}});
   return (
@@ -28,7 +28,7 @@ export function Test_FormInput(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-form-test/Test_FormInputTitle [46] 
+// statsui.basic.ui-form-test/Test_FormInputTitle [46] 
 export function Test_FormInputTitle(){
   return (
     <T.YStack gap="$4" height={100} justifyContent="center">
@@ -42,7 +42,7 @@ export function Test_FormInputTitle(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-form-test/Test_FormInputPlaceholder [60] 
+// statsui.basic.ui-form-test/Test_FormInputPlaceholder [60] 
 export function Test_FormInputPlaceholder(){
   let [displaced,setDisplaced] = React.useState(false);
   return (
@@ -63,7 +63,7 @@ export function Test_FormInputPlaceholder(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-form-test/Test_FormError [81] 
+// statsui.basic.ui-form-test/Test_FormError [81] 
 export function Test_FormError(){
   return (
     <T.YStack gap="$4">
@@ -71,7 +71,7 @@ export function Test_FormError(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-form-test/Test_FormTagSelect [94] 
+// statsui.basic.ui-form-test/Test_FormTagSelect [94] 
 export function Test_FormTagSelect(){
   let [selected,setSelected] = React.useState({});
   let toggle = function (id){
@@ -98,7 +98,7 @@ export function Test_FormTagSelect(){
         ]}/>);
 }
 
-// sznui.lib.component.ui-form-test/Test_FormInputErrorCheck [119] 
+// statsui.basic.ui-form-test/Test_FormInputErrorCheck [119] 
 export function Test_FormInputErrorCheck(){
   return (
     <T.YStack gap="$4">
@@ -119,7 +119,7 @@ export function Test_FormInputErrorCheck(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-form-test/Test_FormInputErrorTag [142] 
+// statsui.basic.ui-form-test/Test_FormInputErrorTag [142] 
 export function Test_FormInputErrorTag(){
   return (
     <T.YStack gap="$4" height={100}>
@@ -129,7 +129,7 @@ export function Test_FormInputErrorTag(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-form-test/Test_FormInputRender [157] 
+// statsui.basic.ui-form-test/Test_FormInputRender [157] 
 export function Test_FormInputRender(){
   let {control} = hook_form.useFormBase();
   return (

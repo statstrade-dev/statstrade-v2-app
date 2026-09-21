@@ -1,4 +1,4 @@
-// sznui.lib.edge.remote.group.manage-market-action/mockMarkets [9] 
+// statsui.edge.remote.group.manage-market-action/mockMarkets [9] 
 export function mockMarkets(){
   return [
     {
@@ -46,7 +46,7 @@ export function mockMarkets(){
   ];
 }
 
-// sznui.lib.edge.remote.group.manage-market-action/managerMarketApi [32] 
+// statsui.edge.remote.group.manage-market-action/managerMarketApi [32] 
 export var managerMarketApi = {
   "queries":{
     "prospect_market_list":{

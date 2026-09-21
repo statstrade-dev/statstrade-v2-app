@@ -4,10 +4,10 @@ import * as T from 'tamagui'
 
 import * as ui_image from '@statstrade/component/ui-image'
 
-// sznui.lib.component.ui-image-test/Metadata [15] 
+// statsui.basic.ui-image-test/Metadata [15] 
 export var Metadata = {[title]:"Components/ui-image",[tags]:["autodoc"]};
 
-// sznui.lib.component.ui-image-test/Test_ImageUpload [21] 
+// statsui.basic.ui-image-test/Test_ImageUpload [21] 
 export function Test_ImageUpload(){
   let [image,setImage] = React.useState(null);
   return (

@@ -2,7 +2,7 @@ import * as api_general from '@statstrade/edge/remote/api-general'
 
 import * as api_public from '@statstrade/edge/remote/api-public'
 
-// sznui.lib.edge.remote.group.manage-dashboard-action/managerDashboardApi [9] 
+// statsui.edge.remote.group.manage-dashboard-action/managerDashboardApi [9] 
 export var managerDashboardApi = {
   "queries":{
     "get_stats":{

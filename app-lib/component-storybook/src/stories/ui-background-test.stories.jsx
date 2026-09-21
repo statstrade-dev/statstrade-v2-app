@@ -2,10 +2,10 @@ import * as T from 'tamagui'
 
 import * as ui_background from '@statstrade/component/ui-background'
 
-// sznui.lib.component.ui-background-test/Metadata [12] 
+// statsui.basic.ui-background-test/Metadata [12] 
 export var Metadata = {[title]:"Components/ui-background",[tags]:["autodoc"]};
 
-// sznui.lib.component.ui-background-test/Test_BackgroundLinearGradient [18] 
+// statsui.basic.ui-background-test/Test_BackgroundLinearGradient [18] 
 export function Test_BackgroundLinearGradient(){
   return (
     <T.YStack

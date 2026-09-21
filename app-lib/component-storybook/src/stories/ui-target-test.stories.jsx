@@ -6,10 +6,10 @@ import * as ui_target from '@statstrade/component/ui-target'
 
 import * as ext_box from '@statstrade/edge/lib/js/react/ext-box'
 
-// sznui.lib.component.ui-target-test/Metadata [13] 
+// statsui.basic.ui-target-test/Metadata [13] 
 export var Metadata = {[title]:"Components/ui-target",[tags]:["autodoc"]};
 
-// sznui.lib.component.ui-target-test/Test_TargetScrollView [19] 
+// statsui.basic.ui-target-test/Test_TargetScrollView [19] 
 export function Test_TargetScrollView(){
   let [box] = React.useState(function (){
     ext_box.createBox({"targets":{},"scroll":null});

@@ -8,7 +8,7 @@ import * as api_general from '@statstrade/edge/remote/api-general'
 
 import * as api_public from '@statstrade/edge/remote/api-public'
 
-// sznui.lib.edge.remote.group.common-user-action/userApi [18] 
+// statsui.edge.remote.group.common-user-action/userApi [18] 
 export var userApi = {
   "queries":{
     "get_user":{"fn":api_general.get_user},
@@ -31,7 +31,7 @@ export var userApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.common-user-action/schemaUserProfile [51] 
+// statsui.edge.remote.group.common-user-action/schemaUserProfile [51] 
 export var schemaUserProfile = hf.Z.object({
   "handle":hf.Z.string().min(3,hf.t("Handle must be at least 3 characters.")).pipe(hf.Z.refine(function (handle){
     return api_public.check_handle_exists({handle});
@@ -43,7 +43,7 @@ export var schemaUserProfile = hf.Z.object({
   "location":hf.Z.object({"city":hf.Z.string().optional()})
 });
 
-// sznui.lib.edge.remote.group.common-user-action/formStateUser [69] 
+// statsui.edge.remote.group.common-user-action/formStateUser [69] 
 export var formStateUser = {
   "user_profile":{
     "defaultValues":{
@@ -58,7 +58,7 @@ export var formStateUser = {
   }
 };
 
-// sznui.lib.edge.remote.group.common-user-action/useUserActionContext [79] 
+// statsui.edge.remote.group.common-user-action/useUserActionContext [79] 
 export function useUserActionContext(){
   let api = rq.useApi(userApi);
   let forms = hf.useFormStateMap(formStateUser);

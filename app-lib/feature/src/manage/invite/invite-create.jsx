@@ -14,7 +14,7 @@ import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
 
 import * as ui_form from '@statstrade/component/ui-form'
 
-// sznui.lib.feature.manage.invites.invites-create/FormSelect [16] 
+// statstrade-web.feature.manage.invites.invites-create/FormSelect [16] 
 export function FormSelect({control,field,items,label}){
   return (
     <hf.FormController
@@ -49,7 +49,7 @@ export function FormSelect({control,field,items,label}){
         }}/>);
 }
 
-// sznui.lib.feature.manage.invites.invites-create/InviteCreate [53] 
+// statstrade-web.feature.manage.invites.invites-create/InviteCreate [53] 
 export function InviteCreate(){
   let ctx = React.useContext(common.InviteContext);
   let {api,controls,forms} = ctx;

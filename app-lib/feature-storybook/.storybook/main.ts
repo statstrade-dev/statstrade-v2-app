@@ -27,7 +27,7 @@ const config: StorybookConfig = {
         alias: {
           ...(config.resolve?.alias || {}),
           '@statstrade/ui': path.resolve(__dirname, '../../ui/src'),
-          '@statstrade/nextjs': path.resolve(__dirname, '../../web/src'),
+          '@statstrade/web-main': path.resolve(__dirname, '../../site/web-main/src'),
           '@statstrade/component': path.resolve(__dirname, '../../component/src'),
           '@statstrade/feature': path.resolve(__dirname, '../../feature/src'),
           '@statstrade/edge': path.resolve(__dirname, '../../edge/src'),

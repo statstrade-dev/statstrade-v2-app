@@ -8,7 +8,7 @@ import I18nLocalStorageCache from 'i18next-localstorage-cache'
 
 import I18nBrowserLanguageDetector from 'i18next-browser-languagedetector'
 
-// sznui.lib.edge.global-i18n/saveOptions [14] 
+// statsui.edge.global-i18n/saveOptions [14] 
 export var saveOptions = {
   "saveMissing":true,
   "saveMissingTo":"current",
@@ -20,7 +20,7 @@ export var saveOptions = {
   }
 };
 
-// sznui.lib.edge.global-i18n/__init__ [25] 
+// statsui.edge.global-i18n/__init__ [25] 
 I18n.use(initReactI18next).use(I18nHttpBackend).use(I18nLocalStorageCache).use(I18nBrowserLanguageDetector).init({
   "fallbackLng":"en",
   "interpolation":{"escapeValue":false},

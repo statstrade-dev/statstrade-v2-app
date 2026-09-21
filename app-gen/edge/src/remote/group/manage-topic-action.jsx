@@ -6,7 +6,7 @@ import * as qm_topic from '@statstrade/edge/remote/query-manage-topic'
 
 import * as api_public from '@statstrade/edge/remote/api-public'
 
-// sznui.lib.edge.remote.group.manage-topic-action/topicApi [18] 
+// statsui.edge.remote.group.manage-topic-action/topicApi [18] 
 export var topicApi = {
   "queries":{
     "topics_list":{
@@ -59,7 +59,7 @@ export var topicApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-topic-action/schemaTopicCreate [86] 
+// statsui.edge.remote.group.manage-topic-action/schemaTopicCreate [86] 
 export var schemaTopicCreate = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "description":hf.Z.string().optional(),
@@ -67,19 +67,19 @@ export var schemaTopicCreate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-topic-action/schemaTopicUpdateDraft [94] 
+// statsui.edge.remote.group.manage-topic-action/schemaTopicUpdateDraft [94] 
 export var schemaTopicUpdateDraft = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "description":hf.Z.string().optional(),
   "detail":hf.Z.any().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-topic-action/schemaTopicRevokeApikey [101] 
+// statsui.edge.remote.group.manage-topic-action/schemaTopicRevokeApikey [101] 
 export var schemaTopicRevokeApikey = hf.Z.object({
   "key_lookup":hf.Z.string().min(1,hf.t("Key lookup is required."))
 });
 
-// sznui.lib.edge.remote.group.manage-topic-action/formStateTopic [106] 
+// statsui.edge.remote.group.manage-topic-action/formStateTopic [106] 
 export var formStateTopic = {
   "topic_create":{
     "defaultValues":{"title":"","description":"","campaign_id":"","detail":{}},
@@ -95,7 +95,7 @@ export var formStateTopic = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-topic-action/useManageTopicContext [124] 
+// statsui.edge.remote.group.manage-topic-action/useManageTopicContext [124] 
 export function useManageTopicContext(){
   let api = rq.useApi(topicApi);
   let forms = hf.useFormStateMap(formStateTopic);

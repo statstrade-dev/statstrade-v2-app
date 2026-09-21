@@ -10,7 +10,7 @@ import * as ui from '@statstrade/component/ui-common'
 
 import * as ui_image from '@statstrade/component/ui-image'
 
-// sznui.lib.component.manage.organisation-manage-element/organisationCategories [16] 
+// statsui.basic.manage.organisation-manage-element/organisationCategories [16] 
 export var organisationCategories = [
   {"id":"tech","label":"Technology","icon":Cpu},
   {"id":"finance","label":"Finance","icon":DollarSign},
@@ -24,7 +24,7 @@ export var organisationCategories = [
   {"id":"food","label":"Food","icon":Utensils}
 ];
 
-// sznui.lib.component.manage.organisation-manage-element/OrganisationItem [28] 
+// statsui.basic.manage.organisation-manage-element/OrganisationItem [28] 
 export function OrganisationItem({org,existingOrg,onEdit,onSelect,onDelete}){
   let isSelected = existingOrg && (existingOrg.id == org.id);
   return (
@@ -113,7 +113,7 @@ export function OrganisationItem({org,existingOrg,onEdit,onSelect,onDelete}){
     </T.XStack>);
 }
 
-// sznui.lib.component.manage.organisation-manage-element/OrganisationList [93] 
+// statsui.basic.manage.organisation-manage-element/OrganisationList [93] 
 export function OrganisationList({orgs,existingOrg,onSelect,onEdit,onProceed,onSkip,onCreateNew}){
   let isNewSelected = existingOrg && (existingOrg.id == "new");
   return (
@@ -174,7 +174,7 @@ export function OrganisationList({orgs,existingOrg,onSelect,onEdit,onProceed,onS
     </T.YStack>);
 }
 
-// sznui.lib.component.manage.organisation-manage-element/OrganisationForm [154] 
+// statsui.basic.manage.organisation-manage-element/OrganisationForm [154] 
 export function OrganisationForm({
   form,
   onSubmit,

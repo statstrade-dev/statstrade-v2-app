@@ -2,7 +2,7 @@ import * as common from '@statstrade/feature/manage/invite/invite-common'
 
 import * as content from '@statstrade/feature/manage/invite/invite-content'
 
-// sznui.lib.feature.manage.invites/InviteScreen [11] 
+// statstrade-web.feature.manage.invites/InviteScreen [11] 
 export function InviteScreen(){
   let context = common.useInviteContext();
   return (

@@ -13,11 +13,11 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@statstrade/nextjs": [
-        "../../projects/nextjs/src/index"
+      "@statstrade/web-main": [
+        "../../site/web-main/src/index"
       ],
-      "@statstrade/nextjs/*": [
-        "../../projects/nextjs/src/*"
+      "@statstrade/web-main/*": [
+        "../../site/web-main/src/*"
       ],
       "react-native": [
         "react-native-web"

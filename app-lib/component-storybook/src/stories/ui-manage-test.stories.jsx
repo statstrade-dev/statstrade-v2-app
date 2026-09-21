@@ -4,10 +4,10 @@ import * as T from 'tamagui'
 
 import * as ui_manage from '@statstrade/component/ui-manage'
 
-// sznui.lib.component.ui-manage-test/Metadata [12] 
+// statsui.basic.ui-manage-test/Metadata [12] 
 export var Metadata = {[title]:"Components/ui-manage",[tags]:["autodoc"]};
 
-// sznui.lib.component.ui-manage-test/Test_ManagerScreenHeader [18] 
+// statsui.basic.ui-manage-test/Test_ManagerScreenHeader [18] 
 export function Test_ManagerScreenHeader(){
   return (
     <T.YStack gap="$4">
@@ -20,7 +20,7 @@ export function Test_ManagerScreenHeader(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-manage-test/Test_ScreenHeader [34] 
+// statsui.basic.ui-manage-test/Test_ScreenHeader [34] 
 export function Test_ScreenHeader(){
   return (
     <ui_manage.ScreenHeader
@@ -33,14 +33,14 @@ export function Test_ScreenHeader(){
           <T.Button>{"Control Button"}</T.Button>)}/>);
 }
 
-// sznui.lib.component.ui-manage-test/Test_SearchBar [48] 
+// statsui.basic.ui-manage-test/Test_SearchBar [48] 
 export function Test_SearchBar(){
   let [val,setVal] = React.useState("");
   return (
     <ui_manage.SearchBar value={val} onChangeText={setVal} placeholder="Search..."/>);
 }
 
-// sznui.lib.component.ui-manage-test/Test_FilterSelect [62] 
+// statsui.basic.ui-manage-test/Test_FilterSelect [62] 
 export function Test_FilterSelect(){
   let [val,setVal] = React.useState("all");
   return (
@@ -55,7 +55,7 @@ export function Test_FilterSelect(){
         ]}/>);
 }
 
-// sznui.lib.component.ui-manage-test/Test_CreateButton [79] 
+// statsui.basic.ui-manage-test/Test_CreateButton [79] 
 export function Test_CreateButton(){
   return (
     <ui_manage.CreateButton
@@ -65,7 +65,7 @@ export function Test_CreateButton(){
         }}/>);
 }
 
-// sznui.lib.component.ui-manage-test/Test_StatCard [91] 
+// statsui.basic.ui-manage-test/Test_StatCard [91] 
 export function Test_StatCard(){
   return (
     <T.XStack gap="$4">

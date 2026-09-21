@@ -1,4 +1,4 @@
-// sznui.lib.edge.remote.group.manage-settings-action/managerSettingsApi [9] 
+// statsui.edge.remote.group.manage-settings-action/managerSettingsApi [9] 
 export var managerSettingsApi = {
   "queries":{
     "get_profile":{

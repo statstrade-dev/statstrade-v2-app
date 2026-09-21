@@ -12,11 +12,11 @@ import * as ui_section from '@statstrade/component/ui-section'
 
 import * as ui from '@statstrade/component/ui-common'
 
-// sznui.lib.component.manage.organisation-manage-billing/stripePromise [16] 
+// statsui.basic.manage.organisation-manage-billing/stripePromise [16] 
 export var stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) : console.error("Stripe Publishable Key is missing.");
 null;;
 
-// sznui.lib.component.manage.organisation-manage-billing/PaymentForm [23] 
+// statsui.basic.manage.organisation-manage-billing/PaymentForm [23] 
 export function PaymentForm({onCancel,onSuccess}){
   let stripe = useStripe();
   let elements = useElements();
@@ -70,7 +70,7 @@ export function PaymentForm({onCancel,onSuccess}){
     </form>);
 }
 
-// sznui.lib.component.manage.organisation-manage-billing/PaymentSuccessView [73] 
+// statsui.basic.manage.organisation-manage-billing/PaymentSuccessView [73] 
 export function PaymentSuccessView({data,onContinue,org}){
   let receipt = data.receipt || {};
   let amount = receipt.amount || 0;
@@ -122,7 +122,7 @@ export function PaymentSuccessView({data,onContinue,org}){
     </T.YStack>);
 }
 
-// sznui.lib.component.manage.organisation-manage-billing/PaymentErrorView [110] 
+// statsui.basic.manage.organisation-manage-billing/PaymentErrorView [110] 
 export function PaymentErrorView({error,onBack}){
   return (
     <T.YStack
@@ -158,7 +158,7 @@ export function PaymentErrorView({error,onBack}){
     </T.YStack>);
 }
 
-// sznui.lib.component.manage.organisation-manage-billing/PlanActiveView [128] 
+// statsui.basic.manage.organisation-manage-billing/PlanActiveView [128] 
 export function PlanActiveView({onContinue,plan}){
   return (
     <T.YStack
@@ -193,7 +193,7 @@ export function PlanActiveView({onContinue,plan}){
     </T.YStack>);
 }
 
-// sznui.lib.component.manage.organisation-manage-billing/billingPlans [144] 
+// statsui.basic.manage.organisation-manage-billing/billingPlans [144] 
 export var billingPlans = [
   {
   "id":"starter",
@@ -227,7 +227,7 @@ export var billingPlans = [
 }
 ];
 
-// sznui.lib.component.manage.organisation-manage-billing/BillingCard [161] 
+// statsui.basic.manage.organisation-manage-billing/BillingCard [161] 
 export function BillingCard({plan,selected,onSelect,onProceed,isBusy}){
   let IconComponent = plan.icon;
   let [expanded,setExpanded] = React.useState(false);
@@ -333,7 +333,7 @@ export function BillingCard({plan,selected,onSelect,onProceed,isBusy}){
     </T.YStack>);
 }
 
-// sznui.lib.component.manage.organisation-manage-billing/PlanSelection [243] 
+// statsui.basic.manage.organisation-manage-billing/PlanSelection [243] 
 export function PlanSelection({isBusy,message,onProceed,onSelect,plans,selected}){
   return (
     <T.YStack
@@ -362,7 +362,7 @@ export function PlanSelection({isBusy,message,onProceed,onSelect,plans,selected}
     </T.YStack>);
 }
 
-// sznui.lib.component.manage.organisation-manage-billing/BillingScreen [268] 
+// statsui.basic.manage.organisation-manage-billing/BillingScreen [268] 
 export function BillingScreen({api,onFinish,org}){
   let [billingPlan,setBillingPlan] = React.useState("starter");
   let existingOrg = org;

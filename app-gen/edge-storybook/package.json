@@ -15,7 +15,7 @@
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@babel/preset-env": "^7.28.3",
     "@statstrade/config": "*",
-    "@statstrade/nextjs": "*",
+    "@statstrade/web-main": "*",
     "moti": "0.30.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",

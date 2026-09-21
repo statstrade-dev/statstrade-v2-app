@@ -6,7 +6,7 @@ import * as qm_campaign from '@statstrade/edge/remote/query-manage-campaign'
 
 import * as api_public from '@statstrade/edge/remote/api-public'
 
-// sznui.lib.edge.remote.group.manage-campaign-action/campaignApi [18] 
+// statsui.edge.remote.group.manage-campaign-action/campaignApi [18] 
 export var campaignApi = {
   "queries":{
     "list_campaigns":{"fn":qm_campaign.list_campaigns,"enabled":true,"default":[]},
@@ -42,7 +42,7 @@ export var campaignApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-campaign-action/schemaCampaignCreate [55] 
+// statsui.edge.remote.group.manage-campaign-action/schemaCampaignCreate [55] 
 export var schemaCampaignCreate = hf.Z.object({
   "description":hf.Z.string().min(1,hf.t("Description is required")),
   "tags":hf.Z.any().optional(),
@@ -60,14 +60,14 @@ export var schemaCampaignCreate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-campaign-action/schemaCampaignUpdate [73] 
+// statsui.edge.remote.group.manage-campaign-action/schemaCampaignUpdate [73] 
 export var schemaCampaignUpdate = hf.Z.object({
   "campaign_id":hf.Z.string().min(1,hf.t("Campaign ID is required.")),
   "title":hf.Z.string().optional(),
   "description":hf.Z.string().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-campaign-action/formStateCampaign [81] 
+// statsui.edge.remote.group.manage-campaign-action/formStateCampaign [81] 
 export var formStateCampaign = {
   "campaign_create":{
     "defaultValues":{
@@ -91,14 +91,14 @@ export var formStateCampaign = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-campaign-action/useManageCampaignContext [100] 
+// statsui.edge.remote.group.manage-campaign-action/useManageCampaignContext [100] 
 export function useManageCampaignContext(){
   let api = rq.useApi(campaignApi);
   let forms = hf.useFormStateMap(formStateCampaign);
   return {api,forms};
 }
 
-// sznui.lib.edge.remote.group.manage-campaign-action/campaignAccessApi [113] 
+// statsui.edge.remote.group.manage-campaign-action/campaignAccessApi [113] 
 export var campaignAccessApi = {
   "queries":{
     "list_campaign_members":{
@@ -119,12 +119,12 @@ export var campaignAccessApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-campaign-action/schemaCampaignRemoveParticipant [129] 
+// statsui.edge.remote.group.manage-campaign-action/schemaCampaignRemoveParticipant [129] 
 export var schemaCampaignRemoveParticipant = hf.Z.object({
   "participant_id":hf.Z.string().min(1,hf.t("Participant ID is required."))
 });
 
-// sznui.lib.edge.remote.group.manage-campaign-action/formStateCampaignAccess [134] 
+// statsui.edge.remote.group.manage-campaign-action/formStateCampaignAccess [134] 
 export var formStateCampaignAccess = {
   "campaign_participant_remove":{
     "defaultValues":{"participant_id":""},
@@ -132,7 +132,7 @@ export var formStateCampaignAccess = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-campaign-action/useManageCampaignAccessContext [139] 
+// statsui.edge.remote.group.manage-campaign-action/useManageCampaignAccessContext [139] 
 export function useManageCampaignAccessContext(){
   let api = rq.useApi(campaignAccessApi);
   let forms = hf.useFormStateMap(formStateCampaignAccess);

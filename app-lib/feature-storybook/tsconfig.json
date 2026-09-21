@@ -19,11 +19,11 @@
       "@statstrade/feature/*": ["../feature/src/feature/*"],
       "@statstrade/edge": ["../../app-gen/edge/src/index"],
       "@statstrade/edge/*": ["../../app-gen/edge/src/edge/*", "../../app-gen/edge/src/lib/*"],
-      "@statstrade/nextjs": [
-        "../../projects/nextjs/src/index"
+      "@statstrade/web-main": [
+        "../../site/web-main/src/index"
       ],
-      "@statstrade/nextjs/*": [
-        "../../projects/nextjs/src/*"
+      "@statstrade/web-main/*": [
+        "../../site/web-main/src/*"
       ],
       "react-native": [
         "react-native-web"

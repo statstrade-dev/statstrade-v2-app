@@ -12,7 +12,7 @@ import * as ui_manage from '@statstrade/component/ui-manage'
 
 import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
 
-// sznui.lib.feature.manage.invites.invites-main/InviteCard [17] 
+// statstrade-web.feature.manage.invites.invites-main/InviteCard [17] 
 export function InviteCard({item}){
   return (
     <T.Card
@@ -69,7 +69,7 @@ export function InviteCard({item}){
     </T.Card>);
 }
 
-// sznui.lib.feature.manage.invites.invites-main/InvitesList [51] 
+// statstrade-web.feature.manage.invites.invites-main/InvitesList [51] 
 export function InvitesList(){
   let ctx = React.useContext(common.InviteContext);
   let {api,controls} = ctx;

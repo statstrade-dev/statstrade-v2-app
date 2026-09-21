@@ -6,10 +6,10 @@ import React from 'react'
 
 import * as ui from '@statstrade/component/ui-common'
 
-// sznui.lib.component.ui-common-test/Metadata [12] 
+// statsui.basic.ui-common-test/Metadata [12] 
 export var Metadata = {[title]:"Components/ui-common",[tags]:["autodoc"]};
 
-// sznui.lib.component.ui-common-test/Test_Badge [18] 
+// statsui.basic.ui-common-test/Test_Badge [18] 
 export function Test_Badge(){
   return (
     <T.YStack gap="$4">
@@ -18,7 +18,7 @@ export function Test_Badge(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Image [52] 
+// statsui.basic.ui-common-test/Test_Image [52] 
 export function Test_Image(){
   return (
     <T.View width={300} height={200}>
@@ -29,7 +29,7 @@ export function Test_Image(){
     </T.View>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Video [67] 
+// statsui.basic.ui-common-test/Test_Video [67] 
 export function Test_Video(){
   return (
     <T.View width={300} height={200}>
@@ -40,7 +40,7 @@ export function Test_Video(){
     </T.View>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Tooltip [82] 
+// statsui.basic.ui-common-test/Test_Tooltip [82] 
 export function Test_Tooltip(){
   return (
     <T.YStack gap="$10" padding="$10">
@@ -48,7 +48,7 @@ export function Test_Tooltip(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Pad [99] 
+// statsui.basic.ui-common-test/Test_Pad [99] 
 export function Test_Pad(){
   return (
     <T.XStack height={50} backgroundColor="$gray5">
@@ -58,7 +58,7 @@ export function Test_Pad(){
     </T.XStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Horizontal [113] 
+// statsui.basic.ui-common-test/Test_Horizontal [113] 
 export function Test_Horizontal(){
   return (
     <T.YStack gap="$4" width={200}>
@@ -68,7 +68,7 @@ export function Test_Horizontal(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_HorizontalText [127] 
+// statsui.basic.ui-common-test/Test_HorizontalText [127] 
 export function Test_HorizontalText(){
   return (
     <T.YStack gap="$4" width={300}>
@@ -78,7 +78,7 @@ export function Test_HorizontalText(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_ButtonNormal [142] 
+// statsui.basic.ui-common-test/Test_ButtonNormal [142] 
 export function Test_ButtonNormal(){
   return (
     <T.YStack gap="$4">
@@ -87,25 +87,25 @@ export function Test_ButtonNormal(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_ButtonContrast [158] 
+// statsui.basic.ui-common-test/Test_ButtonContrast [158] 
 export function Test_ButtonContrast(){
   return (
     <T.YStack gap="$4"><ui.ButtonContrast>{"Contrast Button"}</ui.ButtonContrast></T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_ButtonOutlined [171] 
+// statsui.basic.ui-common-test/Test_ButtonOutlined [171] 
 export function Test_ButtonOutlined(){
   return (
     <T.YStack gap="$4"><ui.ButtonOutlined>{"Outlined Button"}</ui.ButtonOutlined></T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_ButtonInverse [184] 
+// statsui.basic.ui-common-test/Test_ButtonInverse [184] 
 export function Test_ButtonInverse(){
   return (
     <T.YStack gap="$4" backgroundColor="$black" padding="$4"><ui.ButtonInverse>{"Inverse Button"}</ui.ButtonInverse></T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_ButtonLink [197] 
+// statsui.basic.ui-common-test/Test_ButtonLink [197] 
 export function Test_ButtonLink(){
   return (
     <T.YStack gap="$4">
@@ -114,7 +114,7 @@ export function Test_ButtonLink(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_ButtonSwitch [214] 
+// statsui.basic.ui-common-test/Test_ButtonSwitch [214] 
 export function Test_ButtonSwitch(){
   let [checked,setChecked] = React.useState(false);
   return (
@@ -129,19 +129,19 @@ export function Test_ButtonSwitch(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_HomeAction [233] 
+// statsui.basic.ui-common-test/Test_HomeAction [233] 
 export function Test_HomeAction(){
   return (
     <ui.HomeAction href="/"/>);
 }
 
-// sznui.lib.component.ui-common-test/Test_ThemeSwitch [250] 
+// statsui.basic.ui-common-test/Test_ThemeSwitch [250] 
 export function Test_ThemeSwitch(){
   return (
     <ui.ThemeSwitch/>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Checkbox [260] 
+// statsui.basic.ui-common-test/Test_Checkbox [260] 
 export function Test_Checkbox(){
   let [checked,setChecked] = React.useState(false);
   return (
@@ -151,7 +151,7 @@ export function Test_Checkbox(){
     </T.XStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_PopoverMenu [276] 
+// statsui.basic.ui-common-test/Test_PopoverMenu [276] 
 export function Test_PopoverMenu(){
   let [open,setOpen] = React.useState(false);
   return (
@@ -164,7 +164,7 @@ export function Test_PopoverMenu(){
     </ui.PopoverMenu>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Dropdown [294] 
+// statsui.basic.ui-common-test/Test_Dropdown [294] 
 export function Test_Dropdown(){
   let [val,setVal] = React.useState("apple");
   return (
@@ -178,7 +178,7 @@ export function Test_Dropdown(){
         ]}/>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Toast [310] 
+// statsui.basic.ui-common-test/Test_Toast [310] 
 export function Test_Toast(){
   return (
     <TToast.ToastProvider>
@@ -197,7 +197,7 @@ export function Test_Toast(){
     </TToast.ToastProvider>);
 }
 
-// sznui.lib.component.ui-common-test/Test_Dialog [330] 
+// statsui.basic.ui-common-test/Test_Dialog [330] 
 export function Test_Dialog(){
   let [open,setOpen] = React.useState(false);
   return (
@@ -223,7 +223,7 @@ export function Test_Dialog(){
     </T.YStack>);
 }
 
-// sznui.lib.component.ui-common-test/Test_DialogConfirm [354] 
+// statsui.basic.ui-common-test/Test_DialogConfirm [354] 
 export function Test_DialogConfirm(){
   let [open,setOpen] = React.useState(false);
   return (

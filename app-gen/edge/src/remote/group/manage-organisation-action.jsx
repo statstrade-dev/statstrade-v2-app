@@ -6,7 +6,7 @@ import * as api_public from '@statstrade/edge/remote/api-public'
 
 import * as qm_organisation from '@statstrade/edge/remote/query-manage-organisation'
 
-// sznui.lib.edge.remote.group.manage-organisation-action/organisationApi [20] 
+// statsui.edge.remote.group.manage-organisation-action/organisationApi [20] 
 export var organisationApi = {
   "queries":{
     "organisations_list":{
@@ -28,12 +28,12 @@ export var organisationApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaOrganisationName [39] 
+// statsui.edge.remote.group.manage-organisation-action/schemaOrganisationName [39] 
 export var schemaOrganisationName = hf.Z.string().min(1,hf.t("ID is required.")).min(3,hf.t("ID must be at least 3 characters.")).regex(/^[a-z0-9_]+$/,hf.t(
   "ID can only contain lowercase letters, numbers, and underscores."
 ));
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaOrganisationCreate [46] 
+// statsui.edge.remote.group.manage-organisation-action/schemaOrganisationCreate [46] 
 export var schemaOrganisationCreate = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "name":schemaOrganisationName.pipe(hf.Z.refine(function (name){
@@ -42,13 +42,13 @@ export var schemaOrganisationCreate = hf.Z.object({
   "description":hf.Z.string().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaOrganisationUpdate [59] 
+// statsui.edge.remote.group.manage-organisation-action/schemaOrganisationUpdate [59] 
 export var schemaOrganisationUpdate = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "description":hf.Z.string().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/formStateOrganisation [66] 
+// statsui.edge.remote.group.manage-organisation-action/formStateOrganisation [66] 
 export var formStateOrganisation = {
   "organisation_create":{
     "defaultValues":{"name":"","title":"","description":""},
@@ -60,14 +60,14 @@ export var formStateOrganisation = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/useManageOrganisationContext [77] 
+// statsui.edge.remote.group.manage-organisation-action/useManageOrganisationContext [77] 
 export function useManageOrganisationContext({userId}){
   let api = rq.useApi(organisationApi);
   let forms = hf.useFormStateMap(formStateOrganisation);
   return {api,forms};
 }
 
-// sznui.lib.edge.remote.group.manage-organisation-action/organisationAccessApi [92] 
+// statsui.edge.remote.group.manage-organisation-action/organisationAccessApi [92] 
 export var organisationAccessApi = {
   "queries":{
     "organisation_member_list":{
@@ -88,7 +88,7 @@ export var organisationAccessApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaOrganisationAddMember [106] 
+// statsui.edge.remote.group.manage-organisation-action/schemaOrganisationAddMember [106] 
 export var schemaOrganisationAddMember = hf.Z.object({
   "handle":hf.Z.string().min(1,hf.t("Handle is required.")).pipe(hf.Z.refine(function (handle){
     return api_public.check_handle_exists({handle});
@@ -97,7 +97,7 @@ export var schemaOrganisationAddMember = hf.Z.object({
   "scope":hf.Z.string().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/formStateOrganisationAccess [121] 
+// statsui.edge.remote.group.manage-organisation-action/formStateOrganisationAccess [121] 
 export var formStateOrganisationAccess = {
   "organisation_member_add":{
     "defaultValues":{"handle":"","level":"member","scope":""},
@@ -105,14 +105,14 @@ export var formStateOrganisationAccess = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/useManageOrganisationAccessContext [128] 
+// statsui.edge.remote.group.manage-organisation-action/useManageOrganisationAccessContext [128] 
 export function useManageOrganisationAccessContext(){
   let api = rq.useApi(organisationAccessApi);
   let forms = formStateOrganisationAccess;
   return {api,forms};
 }
 
-// sznui.lib.edge.remote.group.manage-organisation-action/organisationTokenApi [141] 
+// statsui.edge.remote.group.manage-organisation-action/organisationTokenApi [141] 
 export var organisationTokenApi = {
   "queries":{
     "organisation_token_list":{
@@ -192,7 +192,7 @@ export var organisationTokenApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaTokenCreate [167] 
+// statsui.edge.remote.group.manage-organisation-action/schemaTokenCreate [167] 
 export var schemaTokenCreate = hf.Z.object({
   "color":hf.Z.string().optional(),
   "symbol":hf.Z.string().optional(),
@@ -207,7 +207,7 @@ export var schemaTokenCreate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaTokenUpdate [182] 
+// statsui.edge.remote.group.manage-organisation-action/schemaTokenUpdate [182] 
 export var schemaTokenUpdate = hf.Z.object({
   "color":hf.Z.string().optional(),
   "symbol":hf.Z.string().optional(),
@@ -222,7 +222,7 @@ export var schemaTokenUpdate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/formStateOrganisationToken [197] 
+// statsui.edge.remote.group.manage-organisation-action/formStateOrganisationToken [197] 
 export var formStateOrganisationToken = {
   "organisation_token_create":{
     "defaultValues":{
@@ -258,7 +258,7 @@ export var formStateOrganisationToken = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/useManageOrganisationTokenContext [226] 
+// statsui.edge.remote.group.manage-organisation-action/useManageOrganisationTokenContext [226] 
 export function useManageOrganisationTokenContext({name}){
   let api = rq.useApi(
     organisationTokenApi,
@@ -268,7 +268,7 @@ export function useManageOrganisationTokenContext({name}){
   return {api,forms};
 }
 
-// sznui.lib.edge.remote.group.manage-organisation-action/organisationCommodityApi [240] 
+// statsui.edge.remote.group.manage-organisation-action/organisationCommodityApi [240] 
 export var organisationCommodityApi = {
   "queries":{
     "list_organisation_commodities":{
@@ -289,7 +289,7 @@ export var organisationCommodityApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaCommodityCreate [253] 
+// statsui.edge.remote.group.manage-organisation-action/schemaCommodityCreate [253] 
 export var schemaCommodityCreate = hf.Z.object({
   "name":hf.Z.string().min(1,hf.t("Name is required.")),
   "code":hf.Z.string().min(1,hf.t("Code is required.")),
@@ -301,7 +301,7 @@ export var schemaCommodityCreate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaCommodityUpdate [265] 
+// statsui.edge.remote.group.manage-organisation-action/schemaCommodityUpdate [265] 
 export var schemaCommodityUpdate = hf.Z.object({
   "name":hf.Z.string().optional(),
   "code":hf.Z.string().optional(),
@@ -313,7 +313,7 @@ export var schemaCommodityUpdate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/formStateOrganisationCommodity [277] 
+// statsui.edge.remote.group.manage-organisation-action/formStateOrganisationCommodity [277] 
 export var formStateOrganisationCommodity = {
   "organisation_commodity_create":{
     "defaultValues":{
@@ -343,7 +343,7 @@ export var formStateOrganisationCommodity = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/useManageOrganisationCommodityContext [300] 
+// statsui.edge.remote.group.manage-organisation-action/useManageOrganisationCommodityContext [300] 
 export function useManageOrganisationCommodityContext({name}){
   let api = rq.useApi(
     organisationCommodityApi,
@@ -353,7 +353,7 @@ export function useManageOrganisationCommodityContext({name}){
   return {api,forms};
 }
 
-// sznui.lib.edge.remote.group.manage-organisation-action/managerBillingApi [314] 
+// statsui.edge.remote.group.manage-organisation-action/managerBillingApi [314] 
 export var managerBillingApi = {
   "queries":{
     "list_invoices":{
@@ -375,7 +375,7 @@ export var managerBillingApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaBilling [324] 
+// statsui.edge.remote.group.manage-organisation-action/schemaBilling [324] 
 export var schemaBilling = hf.Z.object({
   "card_name":hf.Z.string().min(1,hf.t("Cardholder Name is required")),
   "card_number":hf.Z.string().min(16,hf.t("Invalid Card Number")),
@@ -383,7 +383,7 @@ export var schemaBilling = hf.Z.object({
   "cvc":hf.Z.string().min(3,hf.t("CVC is required"))
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/formStateBilling [332] 
+// statsui.edge.remote.group.manage-organisation-action/formStateBilling [332] 
 export var formStateBilling = {
   "billing_new":{
     "defaultValues":{"card_name":"","card_number":"","expiry":"","cvc":""},
@@ -391,14 +391,14 @@ export var formStateBilling = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/useManageBillingContext [337] 
+// statsui.edge.remote.group.manage-organisation-action/useManageBillingContext [337] 
 export function useManageBillingContext(){
   let api = rq.useApi(managerBillingApi);
   let forms = hf.useFormStateMap(formStateBilling);
   return {api,forms};
 }
 
-// sznui.lib.edge.remote.group.manage-organisation-action/manageInviteApi [349] 
+// statsui.edge.remote.group.manage-organisation-action/manageInviteApi [349] 
 export var manageInviteApi = {
   "queries":{
     "organisation_invite_list":{
@@ -415,14 +415,14 @@ export var manageInviteApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/schemaInviteCreate [361] 
+// statsui.edge.remote.group.manage-organisation-action/schemaInviteCreate [361] 
 export var schemaInviteCreate = hf.Z.object({
   "channel":hf.Z.string().min(1,"Channel is required"),
   "campaign":hf.Z.string().optional(),
   "emails":hf.Z.string().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/formStateInvite [368] 
+// statsui.edge.remote.group.manage-organisation-action/formStateInvite [368] 
 export var formStateInvite = {
   "invite_create":{
     "defaultValues":{"channel":"generic","campaign":"","emails":""},
@@ -430,14 +430,14 @@ export var formStateInvite = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/useManageInviteContext [373] 
+// statsui.edge.remote.group.manage-organisation-action/useManageInviteContext [373] 
 export function useManageInviteContext(){
   let api = rq.useApi(manageInviteApi);
   let forms = hf.useFormStateMap(formStateInvite);
   return {api,forms};
 }
 
-// sznui.lib.edge.remote.group.manage-organisation-action/managerSettingsApi [385] 
+// statsui.edge.remote.group.manage-organisation-action/managerSettingsApi [385] 
 export var managerSettingsApi = {
   "queries":{
     "get_settings":{
@@ -461,14 +461,14 @@ export var managerSettingsApi = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/settingsSchema [395] 
+// statsui.edge.remote.group.manage-organisation-action/settingsSchema [395] 
 export var settingsSchema = hf.Z.object({
   "orgName":hf.Z.string().min(1,"Name is required"),
   "email":hf.Z.string().min(1,"Email is required"),
   "website":hf.Z.string().optional()
 });
 
-// sznui.lib.edge.remote.group.manage-organisation-action/formStateSettings [402] 
+// statsui.edge.remote.group.manage-organisation-action/formStateSettings [402] 
 export var formStateSettings = {
   "settings_profile":{
     "defaultValues":{"orgName":"","email":"","website":""},
@@ -476,7 +476,7 @@ export var formStateSettings = {
   }
 };
 
-// sznui.lib.edge.remote.group.manage-organisation-action/useSettingsContext [407] 
+// statsui.edge.remote.group.manage-organisation-action/useSettingsContext [407] 
 export function useSettingsContext(){
   let api = rq.useApi(managerSettingsApi);
   let forms = hf.useFormStateMap(formStateSettings);

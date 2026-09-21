@@ -14,7 +14,7 @@ import * as ui from '@statstrade/component/ui-common'
 
 import * as ui_router from '@statstrade/component/ui-router'
 
-// sznui.lib.feature.contact-us/contactPageSubmit [18] 
+// statstrade-web.feature.contact-us/contactPageSubmit [18] 
 export function contactPageSubmit({form,setSubmitted}){
   return fetch(
     process.env.NEXT_PUBLIC_CONTACT_US_URL,
@@ -27,13 +27,13 @@ export function contactPageSubmit({form,setSubmitted}){
   });
 }
 
-// sznui.lib.feature.contact-us/contactUsDefaults [34] 
+// statstrade-web.feature.contact-us/contactUsDefaults [34] 
 export var contactUsDefaults = {
   "defaultValues":{"name":"","email":"","message":""},
   "onSubmit":contactPageSubmit
 };
 
-// sznui.lib.feature.contact-us/schemaContactUs [41] 
+// statstrade-web.feature.contact-us/schemaContactUs [41] 
 export var schemaContactUs = hf.Z.object({
   "name":hf.Z.string().min(1,"Name is required.").min(2,"Name at least 2 characters."),
   "email":hf.Z.string().min(1,"Email is required.").email("Email should be valid."),
@@ -44,10 +44,10 @@ export var schemaContactUs = hf.Z.object({
   })
 });
 
-// sznui.lib.feature.contact-us/ContactUsContext [64] 
+// statstrade-web.feature.contact-us/ContactUsContext [64] 
 export var ContactUsContext = React.createContext({});
 
-// sznui.lib.feature.contact-us/ContactUsForm [67] 
+// statstrade-web.feature.contact-us/ContactUsForm [67] 
 export function ContactUsForm(props){
   let context = props.context || React.useContext(ContactUsContext);
   let {controls,form,onSubmit} = context;
@@ -104,7 +104,7 @@ export function ContactUsForm(props){
     </T.Form>);
 }
 
-// sznui.lib.feature.contact-us/ContactUsStatus [118] 
+// statstrade-web.feature.contact-us/ContactUsStatus [118] 
 export function ContactUsStatus(){
   let router = ui_router.useRouter();
   let {submitted,setSubmitted} = React.useContext(ContactUsContext);
@@ -139,7 +139,7 @@ export function ContactUsStatus(){
     </T.YStack>);
 }
 
-// sznui.lib.feature.contact-us/useContactUsContext [152] 
+// statstrade-web.feature.contact-us/useContactUsContext [152] 
 export function useContactUsContext({
   schema = schemaContactUs,
   defaultValues = contactUsDefaults.defaultValues,
@@ -150,7 +150,7 @@ export function useContactUsContext({
   return {controls,form,onSubmit};
 }
 
-// sznui.lib.feature.contact-us/ContactUsScreen [168] 
+// statstrade-web.feature.contact-us/ContactUsScreen [168] 
 export function ContactUsScreen(props){
   let context = useContactUsContext(props);
   gu.usePathContext(["contact_us"],context);

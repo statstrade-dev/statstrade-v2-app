@@ -6,10 +6,10 @@ import * as action_organisation from '@statstrade/group/manage-organisation-acti
 
 import * as global_store from '@statstrade/edge/global-store'
 
-// sznui.lib.feature.manage.invites.invites-common/InviteContext [16] 
+// statstrade-web.feature.manage.invites.invites-common/InviteContext [16] 
 export var InviteContext = React.createContext();
 
-// sznui.lib.feature.manage.invites.invites-common/useInviteContext [19] 
+// statstrade-web.feature.manage.invites.invites-common/useInviteContext [19] 
 export function useInviteContext(){
   let [org] = global_store.useStore(["context","organisation"]);
   let orgId = org && org.id;

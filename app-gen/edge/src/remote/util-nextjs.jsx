@@ -1,6 +1,6 @@
 import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
 
-// sznui.lib.edge.remote.util-nextjs/callApi [8] 
+// statsui.edge.remote.util-nextjs/callApi [8] 
 export async function callApi(path,method,data,options = {}){
   let {headers} = options;
   let fetch_opts = {

@@ -1,4 +1,4 @@
-// sznui.lib.edge.remote.util-supabase-server/getServerSideProps [15] 
+// statsui.edge.remote.util-supabase-server/getServerSideProps [15] 
 export async function getServerSideProps(context){
   let supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL,process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,{
     "cookies":{

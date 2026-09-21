@@ -8,10 +8,10 @@ import * as ui_datepicker from '@statstrade/component/ui-datepicker'
 
 import * as ui from '@statstrade/component/ui-common'
 
-// sznui.lib.component.ui-datepicker-test/Metadata [14] 
+// statsui.basic.ui-datepicker-test/Metadata [14] 
 export var Metadata = {"title":"Components/ui-datepicker","tags":["autodoc"]};
 
-// sznui.lib.component.ui-datepicker-test/Test_DatePicker [20] 
+// statsui.basic.ui-datepicker-test/Test_DatePicker [20] 
 export function Test_DatePicker(){
   let [date,setDate] = React.useState(new Date());
   return (
