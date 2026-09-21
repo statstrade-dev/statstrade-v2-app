@@ -1,0 +1,65 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "react-native": [
+        "react-native-web"
+      ],
+      "@statstrade/web-main/*": [
+        "./src/*"
+      ],
+      "@statstrade/component/*": [
+        "../../app-lib/component/src/*"
+      ],
+      "@statstrade/config/*": [
+        "../../app-lib/config/src/*"
+      ],
+      "@statstrade/edge/*": [
+        "../../app-gen/edge/src/*"
+      ],
+      "@statstrade/feature/*": [
+        "../../app-lib/feature/src/*"
+      ],
+      "@statstrade/group": [
+        "../../app-gen/group/src"
+      ],
+      "@statstrade/group/*": [
+        "../../app-gen/group/src/*"
+      ]
+    },
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.js",
+    "src/**/*.jsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

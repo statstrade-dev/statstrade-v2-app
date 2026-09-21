@@ -11,7 +11,8 @@ export default defineConfig({
       '@statstrade/group': path.resolve(__dirname, './app-gen/group/src'),
       '@statstrade/component': path.resolve(__dirname, './app-lib/component/src'),
       '@statstrade/feature': path.resolve(__dirname, './app-lib/feature/src'),
-      '@statstrade/nextjs': path.resolve(__dirname, './app/nextjs/src'),
+      '@statstrade/web-main': path.resolve(__dirname, './site/web-main/src'),
+      '@statstrade/web-superadmin': path.resolve(__dirname, './site/web-superadmin/src'),
     },
   },
   test: {

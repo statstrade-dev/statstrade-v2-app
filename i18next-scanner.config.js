@@ -40,11 +40,11 @@ module.exports = {
     resource: {
       loadPath: path.resolve(
         __dirname,
-        'app/nextjs/public/locales/{{lng}}/{{ns}}.json'
+        'site/web-main/public/locales/{{lng}}/{{ns}}.json'
       ),
       savePath: path.resolve(
         __dirname,
-        'app/nextjs/public/locales/{{lng}}/{{ns}}.json'
+        'site/web-main/public/locales/{{lng}}/{{ns}}.json'
       ),
       jsonIndent: 2,
       lineEnding: '\n',

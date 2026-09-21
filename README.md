@@ -55,7 +55,7 @@ ignored Next.js environment file, and applies the generated database schema.
 Then start the app from this directory with:
 
 ```sh
-yarn workspace @statstrade/nextjs dev
+yarn workspace @statstrade/web-main dev
 ```
 
 The backend profiles and their reset/status/test commands are documented in
