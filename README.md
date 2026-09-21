@@ -1,118 +1,153 @@
-# Tamagui + Solito + Next + Expo Monorepo
+# Statstrade v2 App
 
-```sh
-npm create tamagui
+This repository contains the Statstrade frontend as a Yarn workspaces monorepo.
+The checked-in application target is a Next.js web app, with shared UI,
+feature, configuration, and generated integration packages alongside it.
+
+## Stack
+
+- Next.js 15 with the App Router
+- React 19 and TypeScript/JavaScript
+- Tamagui for the design system and theming
+- React Native Web and selected Expo packages for cross-platform components
+- Supabase for authentication and data access
+- Stripe integrations for billing
+- Storybook 9 with Vite for component and feature development
+- Vitest for tests
+
+The repository does not currently contain a native Expo application under
+`app/expo`; the application entry point checked in here is the Next.js app.
+
+## Repository layout
+
+```text
+app/
+  nextjs/                  Next.js application and API routes
+
+app-gen/
+  edge/                    Shared generated edge, auth, and remote actions
+  group/                   Shared generated group and Supabase actions
+  edge-storybook/          Storybook for the generated edge modules
+
+app-lib/
+  config/                  Tamagui configuration, themes, tokens, and fonts
+  config-eslint/           Shared ESLint configuration package
+  avatar/                  Three.js/VRM avatar components
+  component/               Shared UI and management components
+  feature/                 Reusable product features
+  component-storybook/     Storybook stories for shared components
+  feature-storybook/       Storybook stories for shared features
 ```
 
-## 🔦 About
+The workspace package names are defined in the package manifests under
+`app-gen/`, `app-lib/`, and `app/nextjs/`.
 
-This monorepo is a starter for an Expo + Next.js + Tamagui + Solito app.
+## Prerequisites
 
-Many thanks to [@FernandoTheRojo](https://twitter.com/fernandotherojo) for the Solito starter monorepo which this was forked from. Check out his [talk about using expo + next together at Next.js Conf 2021](https://www.youtube.com/watch?v=0lnbdRweJtA).
+- Node.js 20.x
+- Yarn 4.9.4
 
-## 📦 Included packages
+Enable Corepack if Yarn is not already available, then install the
+dependencies from the repository root:
 
-- [Tamagui](https://tamagui.dev) 🪄
-- [solito](https://solito.dev) for cross-platform navigation
-- Expo SDK
-- Next.js
-- Expo Router
+```sh
+corepack enable
+yarn install
+```
 
-## 🗂 Folder layout
+## Environment
 
-The main apps are:
+Create `app/nextjs/.env.local` for local development, or configure these
+variables in the deployment environment. Set only the variables needed by the
+features you are using.
 
-- `expo` (native)
-- `next` (web)
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_SUPABASE_URL` | Public Supabase URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public Supabase anonymous key |
+| `NEXT_SERVER_SUPABASE_URL` | Supabase URL for the server-only debug route |
+| `NEXT_SERVER_SUPABASE_KEY` | Server-only Supabase key for the debug route |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe browser integration |
+| `NEXT_PUBLIC_SITE_URL` | Site URL used for billing return URLs |
+| `NEXT_PUBLIC_CONTACT_US_URL` | Destination used by the contact feature |
 
-- `packages` shared packages across apps
-  - `ui` includes your custom UI kit that will be optimized by Tamagui
-  - `app` you'll be importing most files from `app/`
-    - `features` (don't use a `screens` folder. organize by feature.)
-    - `provider` (all the providers that wrap the app, and some no-ops for Web.)
+Never expose `NEXT_SERVER_SUPABASE_KEY` to the browser or commit environment
+files. This repository does not include a local backend bootstrap script; the
+Supabase service must be configured separately.
 
-You can add other folders inside of `projects/` if you know what you're doing and have a good reason to.
+## Development
 
-> [!TIP]
-> Switching from `app` to `pages` router:
->
-> - remove `app` folder from `apps/next`
-> - move `index.tsx` from `pages-example` to `pages` folder
-> - rename `pages-example-user` to `user` and be sure to update `linkTarget` in `screen.tsx` to `user` as well
-> - delete `SwitchRouterButton.tsx` component and remove it from `screen.tsx` and `projects/ui/src/index.tsx`
-> - search for `pagesMode` keyword and remove it
+Start the Next.js development server from the repository root:
 
-## 🏁 Start the app
+```sh
+yarn dev
+```
 
-- Install dependencies: `yarn`
-
-- Next.js local dev: `yarn web`
-
-For the repository's local SznDB/Supabase backend, run
-`../../scripts/local-dev.sh init` from the repository root first. This starts
-the API-enabled `szn-min` profile on `http://127.0.0.1:44221`, generates the
-ignored Next.js environment file, and applies the generated database schema.
-Then start the app from this directory with:
+The same command can be run directly in the app workspace:
 
 ```sh
 yarn workspace @statstrade/nextjs dev
 ```
 
-The backend profiles and their reset/status/test commands are documented in
-the repository root `README.md`. Local Supabase keys are generated by the CLI
-and must remain in ignored environment files.
-
-To run with optimizer on in dev mode (just for testing, it's faster to leave it off): `yarn web:extract`. To build for production `yarn web:prod`.
-
-To see debug output to verify the compiler, add `// debug` as a comment to the top of any file.
-
-- Expo local dev: `yarn native`
-
-## UI Kit
-
-Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
-
-See `projects/ui` named `@my/ui` for how this works.
-
-## 🆕 Add new dependencies
-
-### Pure JS dependencies
-
-If you're installing a JavaScript-only dependency that will be used across platforms, install it in `projects/app`:
+For a production Next.js build and local server:
 
 ```sh
-cd projects/app
-yarn add date-fns
-cd ../..
-yarn
+yarn workspace @statstrade/nextjs build:app
+yarn start
 ```
 
-### Native dependencies
-
-If you're installing a library with any native code, you must install it in `expo`:
+Tamagui extraction can be enabled while developing with:
 
 ```sh
-cd apps/expo
-yarn add react-native-reanimated
-cd ..
-yarn
+yarn app:extract
 ```
 
-## Update new dependencies
+## Tests, builds, and Storybook
 
-### Pure JS dependencies
+Run the repository test suite:
 
 ```sh
-yarn upgrade-interactive
+yarn test
 ```
 
-You can also install the native library inside of `projects/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
+Useful validation commands include:
 
-You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
+```sh
+yarn check-tamagui
+yarn workspace @statstrade/nextjs lint
+yarn build
+yarn build:all
+```
 
-### Deploying to Vercel
+`yarn build` runs the build scripts for the library workspaces. The Next.js
+runtime build is the separate `build:app` command shown above.
 
-- Root: `apps/next`
-- Install command to be `yarn set version stable && yarn install`
-- Build command: leave default setting
-- Output dir: leave default setting
+The root Storybook command starts the shared component Storybook on port 6007:
+
+```sh
+yarn storybook
+```
+
+Other Storybook targets are available through their workspaces:
+
+```sh
+yarn workspace @statstrade/ui.storybook storybook       # port 6006
+yarn workspace @statstrade/component-storybook storybook # port 6007
+yarn workspace @statstrade/feature-storybook storybook   # port 6008
+```
+
+Build a static Storybook with the corresponding workspace's
+`build:storybook` script.
+
+## Other repository commands
+
+```sh
+yarn i18n:scan          # Scan translations
+yarn i18n:scan:watch   # Watch files while scanning translations
+yarn watch              # Watch workspace packages
+```
+
+Deployment configuration is kept with the Next.js app in
+`app/nextjs/netlify.toml` and `app/nextjs/vercel.json`. Configure the
+environment variables above in the selected hosting provider before
+deploying.
