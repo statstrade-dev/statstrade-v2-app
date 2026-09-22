@@ -100,7 +100,6 @@
     "zod": "^4.1.5"
   },
   "devDependencies": {
-    "@netlify/plugin-nextjs": "^5.13.1",
     "@statstrade/config-eslint": "*",
     "@tamagui/build": "^1.144.1",
     "@tamagui/next-plugin": "^1.144.1",

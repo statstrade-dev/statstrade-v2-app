@@ -4867,13 +4867,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@netlify/plugin-nextjs@npm:^5.13.1":
-  version: 5.15.4
-  resolution: "@netlify/plugin-nextjs@npm:5.15.4"
-  checksum: 10/f988b457c2bb54c24acdcc66f695be395614ab7e89225142c08df19805a7f3f32ff7b7e8a03142891e3c05cb02a4514c0dded86a592b153e63c09b160d3a6702
-  languageName: node
-  linkType: hard
-
 "@netlify/plugins-list@npm:^6.80.0":
   version: 6.80.0
   resolution: "@netlify/plugins-list@npm:6.80.0"
@@ -7609,7 +7602,6 @@ __metadata:
     "@lexical/selection": "npm:^0.39.0"
     "@lexical/table": "npm:^0.39.0"
     "@lexical/utils": "npm:^0.39.0"
-    "@netlify/plugin-nextjs": "npm:^5.13.1"
     "@react-navigation/core": "npm:^7.12.4"
     "@react-navigation/native": "npm:^7.1.17"
     "@s77rt/react-native-date-picker": "npm:^3.1.1"
@@ -7708,7 +7700,6 @@ __metadata:
     "@lexical/selection": "npm:^0.39.0"
     "@lexical/table": "npm:^0.39.0"
     "@lexical/utils": "npm:^0.39.0"
-    "@netlify/plugin-nextjs": "npm:^5.13.1"
     "@react-navigation/core": "npm:^7.12.4"
     "@react-navigation/native": "npm:^7.1.17"
     "@s77rt/react-native-date-picker": "npm:^3.1.1"

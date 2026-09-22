@@ -1,9 +1,9 @@
 [build]
-  command = "yarn build"
+  command = "yarn workspace @statstrade/web-superadmin build:app"
   publish = "site/web-superadmin/.next"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
+[build.environment]
+  NODE_VERSION = "20"
 
 [[headers]]
   for = "/*"
