@@ -31,6 +31,10 @@ const plugins = [
 
 const configureWebpack = (config) => {
   config.resolve.alias = { ...(config.resolve.alias || {}) }
+  config.resolve.fallback = {
+    ...(config.resolve.fallback || {}),
+    worker_threads: false,
+  }
   delete config.resolve.alias['@xtalk/db/net']
   const xtNet = join(__dirname, '../../libs/xt-net')
   config.resolve.alias['@xtalk/net/net/http-fetch.js'] = join(xtNet, 'net/http-fetch.js')
