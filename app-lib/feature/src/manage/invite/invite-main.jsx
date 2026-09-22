@@ -10,7 +10,7 @@ import * as context_manage from '@statstrade/component/layout/manage/context-man
 
 import * as ui_manage from '@statstrade/component/ui-manage'
 
-import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
+import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
 // statstrade-web.feature.manage.invites.invites-main/InviteCard [17] 
 export function InviteCard({item}){
@@ -74,7 +74,7 @@ export function InvitesList(){
   let ctx = React.useContext(common.InviteContext);
   let {api,controls} = ctx;
   let {orgId,setView} = controls;
-  let invites = k.get_in(api,["queries","list_invites","data"]) || [];
+  let invites = kd.get_in(api,["queries","list_invites","data"]) || [];
   context_manage.useTopBar((
     <ui_manage.ManagerScreenHeader
       title="Invites"

@@ -10,7 +10,7 @@ import * as context_manage from '@statstrade/component/layout/manage/context-man
 
 import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form'
 
-import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
+import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
 import * as ui_form from '@statstrade/component/ui-form'
 
@@ -57,7 +57,7 @@ export function InviteCreate(){
   let form = forms.invite_create;
   let {control,handleSubmit,setValue,watch} = form;
   let channel = watch("channel");
-  let createInvite = k.get_in(api,["mutations","create_invite"]);
+  let createInvite = kd.get_in(api,["mutations","create_invite"]);
   console.log(api);
   let onSubmit = function (data){
     createInvite.mutateAsync({

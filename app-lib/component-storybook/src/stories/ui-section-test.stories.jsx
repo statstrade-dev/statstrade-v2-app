@@ -6,7 +6,7 @@ import * as logo from '@statstrade/component/logo/logo-statstrade'
 
 import * as ui_section from '@statstrade/component/ui-section'
 
-import * as null from '@statstrade/edge/lib/xt/lang/base-lib'
+import * as k from '@statstrade/edge/lib/xt/lang/common-lib.jsx'
 
 // statsui.basic.ui-section-test/Metadata [17] 
 export var Metadata = {[title]:"Components/ui-section",[tags]:["autodoc"]};
@@ -77,7 +77,7 @@ export function Test_sectionContent(){
     <T.YStack gap="$4">
       <T.YStack>
         {(
-          <T.Text>{"Component Content"}</T.Text>) ? (xt.lang.base_lib.fnp((
+          <T.Text>{"Component Content"}</T.Text>) ? (k.is_functionp((
           <T.Text>{"Component Content"}</T.Text>)) ? React.createElement((
           <T.Text>{"Component Content"}</T.Text>),{}) : (
           <T.Text>{"Component Content"}</T.Text>)) : null}
@@ -86,7 +86,7 @@ export function Test_sectionContent(){
         {(function (){
           return (
             <T.Text>{"Function Content"}</T.Text>);
-        }) ? (xt.lang.base_lib.fnp(function (){
+        }) ? (k.is_functionp(function (){
           return (
             <T.Text>{"Function Content"}</T.Text>);
         }) ? React.createElement(function (){

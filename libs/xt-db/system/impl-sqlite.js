@@ -195,11 +195,11 @@ function impl_sqlite(client,schema,lookup){
 
 function impl_sqlite_init(impl){
   let {client,lookup,opts,schema} = impl;
+  let sql = manage.table_create_all(schema,lookup,opts).join("\n\n");
   return conn_sql.connect(client,{}).then(function (client){
-    conn_sql.query(
-      client,
-      manage.table_create_all(schema,lookup,opts).join("\n\n")
-    );
+    if(0 < sql.length){
+      conn_sql.query(client,sql);
+    }
     return impl;
   });
 }

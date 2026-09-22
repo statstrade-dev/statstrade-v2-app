@@ -2,16 +2,20 @@ import React from 'react'
 
 import * as SupabaseClient from '@supabase/supabase-js'
 
-import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
+import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
-import * as gs from '@statstrade/edge/global-store'
+import * as kl from '@statstrade/edge/lib/xt/lang/common-lib.jsx'
 
-// statsui.edge.remote.util-supabase/newEntry [15] 
+import * as gs from '@statstrade/edge/global-store.jsx'
+
+import * as ks from '@statstrade/edge/lib/xt/lang/common-string.jsx'
+
+// statsui.edge.remote.util-supabase/newEntry [19] 
 export function newEntry(instance,params){
   return {"instance":instance,"params":params,"subscriptions":[]};
 }
 
-// statsui.edge.remote.util-supabase/unsyncEntry [23] 
+// statsui.edge.remote.util-supabase/unsyncEntry [27] 
 export function unsyncEntry({instance,params,subscriptions}){
   return {
     "instance":instance,
@@ -22,7 +26,7 @@ export function unsyncEntry({instance,params,subscriptions}){
   };
 }
 
-// statsui.edge.remote.util-supabase/createParams [36] 
+// statsui.edge.remote.util-supabase/createParams [40] 
 export function createParams(input = {}){
   return {
     "url":input.url || process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -30,56 +34,56 @@ export function createParams(input = {}){
   };
 }
 
-// statsui.edge.remote.util-supabase/CLIENTS [43] 
-globalThis["sznui_lib_edge_remote_util_supabase$$CLIENTS"] = {};
+// statsui.edge.remote.util-supabase/CLIENTS [47] 
+globalThis["statsui_edge_remote_util_supabase$$CLIENTS"] = {};
 
-// statsui.edge.remote.util-supabase/getEntry [47] 
+// statsui.edge.remote.util-supabase/getEntry [51] 
 export function getEntry(client_id = "default"){
-  return globalThis["sznui_lib_edge_remote_util_supabase$$CLIENTS"][client_id];
+  return globalThis["statsui_edge_remote_util_supabase$$CLIENTS"][client_id];
 }
 
-// statsui.edge.remote.util-supabase/createClient [53] 
+// statsui.edge.remote.util-supabase/createClient [57] 
 export function createClient(params){
   let {url,key} = createParams(params);
   return SupabaseClient.createClient(url,key);
 }
 
-// statsui.edge.remote.util-supabase/getDefaultClient [61] 
+// statsui.edge.remote.util-supabase/getDefaultClient [65] 
 export function getDefaultClient(client_id = "default"){
-  return globalThis["sznui_lib_edge_remote_util_supabase$$CLIENTS"][client_id];
+  return globalThis["statsui_edge_remote_util_supabase$$CLIENTS"][client_id];
 }
 
-// statsui.edge.remote.util-supabase/getClient [67] 
+// statsui.edge.remote.util-supabase/getClient [71] 
 export function getClient(client_id = "default",params){
   let {key,url} = createParams(params);
-  let entry = globalThis["sznui_lib_edge_remote_util_supabase$$CLIENTS"][client_id];
+  let entry = globalThis["statsui_edge_remote_util_supabase$$CLIENTS"][client_id];
   if(entry && ((url != entry.params.url) || (key != entry.params.key))){
     unsyncEntry(entry);
-    delete globalThis["sznui_lib_edge_remote_util_supabase$$CLIENTS"][client_id];
+    delete globalThis["statsui_edge_remote_util_supabase$$CLIENTS"][client_id];
     entry = null;
   }
   if(!entry){
     let instance = createClient({key,url});
     entry = newEntry(instance,{key,url});
-    globalThis["sznui_lib_edge_remote_util_supabase$$CLIENTS"][client_id] = entry;
+    globalThis["statsui_edge_remote_util_supabase$$CLIENTS"][client_id] = entry;
     instance.entry = entry;
     return instance;
   }
   return entry.instance;
 }
 
-// statsui.edge.remote.util-supabase/removeSubscription [91] 
+// statsui.edge.remote.util-supabase/removeSubscription [95] 
 export function removeSubscription(client,subscription){
   let {entry} = client;
   if(!entry){
     return null;
   }
-  entry.subscriptions = k.arr_omit(entry.subscriptions,function (s){
+  entry.subscriptions = kd.arr_omit(entry.subscriptions,function (s){
     return s == subscription;
   });
 }
 
-// statsui.edge.remote.util-supabase/initLocal [103] 
+// statsui.edge.remote.util-supabase/initLocal [107] 
 export async function initLocal(client = getClient()){
   let {data,error} = await client.auth.getSession();
   if(!error){
@@ -89,7 +93,7 @@ export async function initLocal(client = getClient()){
   return gs.getStore(["account"]);
 }
 
-// statsui.edge.remote.util-supabase/getLocalStore [117] 
+// statsui.edge.remote.util-supabase/getLocalStore [121] 
 export function getLocalStore(storage_key){
   let stored = localStorage.getItem(storage_key);
   try{
@@ -101,7 +105,7 @@ export function getLocalStore(storage_key){
   return stored;
 }
 
-// statsui.edge.remote.util-supabase/addListeners [127] 
+// statsui.edge.remote.util-supabase/addListeners [131] 
 export function addListeners(listeners = {},client = getClient()){
   let {onAll,onInitial,onPasswordRecovery,onSignedIn,onSignedOut,onTokenRefreshed,onUserUpdated} = listeners;
   try{
@@ -156,23 +160,23 @@ export function addListeners(listeners = {},client = getClient()){
   }
 }
 
-// statsui.edge.remote.util-supabase/getCurrentUserId [181] 
+// statsui.edge.remote.util-supabase/getCurrentUserId [185] 
 export async function getCurrentUserId(){
   let {data,error} = await getClient().auth.getUser();
-  return k.get_in(data,["user","id"]);
+  return kd.get_in(data,["user","id"]);
 }
 
-// statsui.edge.remote.util-supabase/wrapProcess [190] 
+// statsui.edge.remote.util-supabase/wrapProcess [194] 
 export async function wrapProcess(f){
   let client = getClient();
   let {data,error} = await f(client);
   if(error){
     console.error(error);
   }
-  return {data,error};
+  return {data,error}
 }
 
-// statsui.edge.remote.util-supabase/useListeners [205] 
+// statsui.edge.remote.util-supabase/useListeners [209] 
 export function useListeners(listeners,client = getClient()){
   React.useEffect(function (){
     let subscription = addListeners(listeners,client);
@@ -182,7 +186,7 @@ export function useListeners(listeners,client = getClient()){
   },[]);
 }
 
-// statsui.edge.remote.util-supabase/useStoreSync [216] 
+// statsui.edge.remote.util-supabase/useStoreSync [220] 
 export function useStoreSync(client = getClient()){
   let [session,setSession] = React.useState();
   useListeners({
@@ -194,7 +198,7 @@ export function useStoreSync(client = getClient()){
   return [session,setSession];
 }
 
-// statsui.edge.remote.util-supabase/useListenSession [229] 
+// statsui.edge.remote.util-supabase/useListenSession [233] 
 export function useListenSession(client = getClient()){
   let [session,setSession] = React.useState();
   useListeners({
@@ -205,36 +209,36 @@ export function useListenSession(client = getClient()){
   return [session,setSession];
 }
 
-// statsui.edge.remote.util-supabase/useListenPrint [240] 
+// statsui.edge.remote.util-supabase/useListenPrint [244] 
 export function useListenPrint(client = getClient()){
   useListeners({"onAll":console.log},client);
 }
 
-// statsui.edge.remote.util-supabase/callRemote [253] 
+// statsui.edge.remote.util-supabase/callRemote [257] 
 export function callRemote(fstr,margs,options = {}){
   let {sbClient = getClient()} = options;
-  return sbClient.schema("szn_rpc").rpc(fstr,margs);
+  return sbClient.schema("stats_rpc").rpc(fstr,margs);
 }
 
-// statsui.edge.remote.util-supabase/callRemoteDebug [264] 
+// statsui.edge.remote.util-supabase/callRemoteDebug [268] 
 export function callRemoteDebug(fstr,margs,options = {}){
   let {sbClient = getClient()} = options;
   return sbClient.schema("szn_debug").rpc(fstr,margs);
 }
 
-// statsui.edge.remote.util-supabase/callGraphql [279] 
+// statsui.edge.remote.util-supabase/callGraphql [283] 
 export function callGraphql(query,variables = {}){
   return wrapProcess(function (client){
     return client.graphql.query(query,variables);
   });
 }
 
-// statsui.edge.remote.util-supabase/toSelect [295] 
+// statsui.edge.remote.util-supabase/toSelect [299] 
 export function toSelect(spec){
-  if(Array.isArray(spec)){
-    return spec.join(",");
+  if(kl.is_arrayp(spec)){
+    return ks.join(",",spec);
   }
-  return k.arr_map(k.obj_pairs(spec),function ([key,val]){
+  return kd.arr_map(kd.obj_pairs(spec),function ([key,val]){
     if(true == val){
       return key;
     }

@@ -118,6 +118,7 @@ function kernel_teardown_main(node,config){
   kernel_teardown_single(node,xtd.get_in(config,["primary","id"]));
   kernel_teardown_single(node,xtd.get_in(config,["caching","id"]));
   substrate.remove_service(node,xtd.get_in(config,["common","id"]));
+  delete(node["meta"]["xt.db/kernel-init"]);
   return {"status":"teardown","data":config};
 }
 
@@ -131,11 +132,27 @@ function kernel_teardown_handler(space,args,request,node){
 }
 
 function kernel_init_main(node,config,schema,lookup){
+  let meta = node["meta"];
+  let pending = xtd.get_in(meta,["xt.db/kernel-init"]);
+  if(null != pending){
+    return pending.then(function (_){
+      return kernel_init_main(node,config,schema,lookup);
+    });
+  }
   if(kernel_check_exists(node,config)){
     return {"status":"no_change","data":kernel_create_config(config)};
   }
   else{
-    return kernel_setup_main(node,config,schema,lookup);
+    let setup = kernel_setup_main(node,config,schema,lookup);
+    let guarded = setup.then(function (result){
+      delete(meta["xt.db/kernel-init"]);
+      return result;
+    }).catch(function (err){
+      delete(meta["xt.db/kernel-init"]);
+      throw err;
+    });
+    meta["xt.db/kernel-init"] = guarded;
+    return guarded;
   }
 }
 

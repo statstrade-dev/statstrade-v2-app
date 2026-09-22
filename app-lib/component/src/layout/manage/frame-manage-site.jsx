@@ -1,0 +1,58 @@
+import 
+  {BarChart,Coins,CreditCard,House,Mail,Megaphone,Settings,Store}
+ from '@tamagui/lucide-icons'
+
+// statsui.basic.layout.manage.frame-manage-site/navGroups [10] 
+export var navGroups = [
+  {
+  "items":[
+    {"id":"home","label":"Home","icon":House,"path":"/manage"},
+    {
+    "id":"campaigns",
+    "label":"Campaigns",
+    "icon":Megaphone,
+    "path":"/manage/campaigns"
+  },
+    {
+    "id":"invites",
+    "label":"Invites",
+    "icon":Mail,
+    "path":"/manage/invite"
+  },
+    {
+    "id":"markets",
+    "label":"Markets",
+    "icon":Store,
+    "path":"/manage/markets"
+  },
+    {
+    "id":"tokens",
+    "label":"Tokens",
+    "icon":Coins,
+    "path":"/manage/tokens"
+  },
+    {
+    "id":"analytics",
+    "label":"Analytics",
+    "icon":BarChart,
+    "path":"/manage/analytics"
+  }
+  ]
+},
+  {
+  "items":[
+    {
+    "id":"billing",
+    "label":"Billing",
+    "icon":CreditCard,
+    "path":"/manage/billing"
+  },
+    {
+    "id":"settings",
+    "label":"Settings",
+    "icon":Settings,
+    "path":"/manage/settings"
+  }
+  ]
+}
+];

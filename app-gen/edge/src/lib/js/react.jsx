@@ -2,11 +2,19 @@ import React from 'react'
 
 import ReactDOM from 'react-dom/client'
 
-import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
+import * as xtt from '@statstrade/edge/lib/xt/lang/common-tree.jsx'
 
-// js.react/getDOMRoot [173] 
+import * as xtd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
+
+import * as k from '@statstrade/edge/lib/xt/lang/common-lib.jsx'
+
+import * as math from '@statstrade/edge/lib/xt/lang/common-math.jsx'
+
+import * as str from '@statstrade/edge/lib/xt/lang/common-string.jsx'
+
+// js.react/getDOMRoot [177] 
 export function getDOMRoot(domNode){
-  let internalKey = k.arr_find(k.obj_keys(domNode),function (key){
+  let internalKey = xtd.arr_find(xtd.obj_keys(domNode),function (key){
     return key.startsWith("__reactContainer$");
   });
   if(internalKey > 0){
@@ -15,7 +23,7 @@ export function getDOMRoot(domNode){
   return null;
 }
 
-// js.react/renderDOMRoot [184] 
+// js.react/renderDOMRoot [188] 
 export function renderDOMRoot(id,Component){
   let rootElement = document.getElementById(id);
   let root = getDOMRoot(rootElement);
@@ -27,13 +35,13 @@ export function renderDOMRoot(id,Component){
   return true;
 }
 
-// js.react/useStateFor [193] 
+// js.react/useStateFor [197] 
 export function useStateFor(controls,key){
-  let setterKey = "set" + k.capitalize(key);
+  let setterKey = "set" + str.capitalize(key);
   return [controls[key],controls[setterKey]];
 }
 
-// js.react/Try [200] 
+// js.react/Try [204] 
 export class Try extends React.Component{
   constructor(props) {
     super(props);
@@ -52,13 +60,13 @@ export class Try extends React.Component{
   }
 }
 
-// js.react/id [218] 
+// js.react/id [222] 
 export function id(n){
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  return React.useRef(Math.random().toString(36).substr(2,(n || 6) || 4)).current;
+  return React.useRef(Math.random().toString(36).substr(2,n || 6)).current;
 }
 
-// js.react/useStep [229] 
+// js.react/useStep [235] 
 export function useStep(f){
   let [done,setDone] = React.useState();
   React.useEffect(function (){
@@ -69,9 +77,9 @@ export function useStep(f){
   return [done,setDone];
 }
 
-// js.react/makeLazy [239] 
+// js.react/makeLazy [245] 
 export function makeLazy(component){
-  if(k.fnp(component)){
+  if("function" == (typeof component)){
     return component;
   }
   else{
@@ -81,9 +89,9 @@ export function makeLazy(component){
   }
 }
 
-// js.react/useLazy [247] 
+// js.react/useLazy [253] 
 export function useLazy(component){
-  if(k.fnp(component)){
+  if("function" == (typeof component)){
     return component;
   }
   else{
@@ -94,7 +102,7 @@ export function useLazy(component){
   }
 }
 
-// js.react/useRefresh [260] 
+// js.react/useRefresh [266] 
 export function useRefresh(){
   let [flag,setFlag] = React.useState(true);
   let refresh = function (){
@@ -103,7 +111,7 @@ export function useRefresh(){
   return refresh;
 }
 
-// js.react/useGetCount [268] 
+// js.react/useGetCount [274] 
 export function useGetCount(n){
   let counterRef = React.useRef(n || 0);
   React.useEffect(function (){
@@ -115,7 +123,7 @@ export function useGetCount(n){
   return getCount;
 }
 
-// js.react/useFollowRef [278] 
+// js.react/useFollowRef [284] 
 export function useFollowRef(value,f){
   f = (f || k.identity);
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -127,7 +135,7 @@ export function useFollowRef(value,f){
   return valueRef;
 }
 
-// js.react/useIsMounted [294] 
+// js.react/useIsMounted [300] 
 export function useIsMounted(){
   let mountedRef = React.useRef(true);
   let isMounted = React.useRef(function (){
@@ -141,7 +149,7 @@ export function useIsMounted(){
   return isMounted;
 }
 
-// js.react/useIsMountedWrap [305] 
+// js.react/useIsMountedWrap [311] 
 export function useIsMountedWrap(){
   let isMounted = useIsMounted();
   return function (f){
@@ -153,7 +161,7 @@ export function useIsMountedWrap(){
   };
 }
 
-// js.react/useMountedCallback [316] 
+// js.react/useMountedCallback [322] 
 export function useMountedCallback(cb){
   let cbRef = useFollowRef(cb);
   React.useEffect(function (){
@@ -168,7 +176,7 @@ export function useMountedCallback(cb){
   },[]);
 }
 
-// js.react/useFollowDelayed [328] 
+// js.react/useFollowDelayed [334] 
 export function useFollowDelayed(value,delay,isMounted){
   if(0 == delay){
     return [value,k.noop];
@@ -179,34 +187,35 @@ export function useFollowDelayed(value,delay,isMounted){
   React.useEffect(function (){
     new Promise(function (resolve,reject){
       setTimeout(function (){
-        try{
-          resolve(          (function (){
-                      if(isMounted()){
-                        setDelayed(value);
-                      }
-                    })());
-        }
-        catch(e){
-          reject(e);
-        }
+        new Promise(function (inner_resolve){
+          inner_resolve((function (){
+            if(isMounted()){
+              setDelayed(value);
+            }
+          })());
+        }).then(function (value){
+          resolve(value);
+        }).catch(function (err){
+          reject(err);
+        });
       },delay);
     });
   },[value]);
   return [delayed,setDelayed];
 }
 
-// js.react/useStablized [343] 
+// js.react/useStablized [350] 
 export function useStablized(input,isStabilized){
   let [output,setOutput] = React.useState(input);
   React.useEffect(function (){
-    if(isStabilized && (null != input) && k.eq_nested(input,output)){
+    if(isStabilized && (null != input) && xtt.eq_nested(input,output)){
       setOutput(input);
     }
   },[input]);
   return isStabilized ? output : input;
 }
 
-// js.react/runIntervalStop [359] 
+// js.react/runIntervalStop [366] 
 export function runIntervalStop(intervalRef){
   let interval = intervalRef.current;
   if(null != interval){
@@ -216,14 +225,12 @@ export function runIntervalStop(intervalRef){
   return interval;
 }
 
-// js.react/runIntervalStart [369] 
+// js.react/runIntervalStart [376] 
 export function runIntervalStart(fRef,msRef,intervalRef){
   let prev = runIntervalStop(intervalRef);
   if(null != msRef.current){
     let curr = setInterval(function (){
-      new Promise(function (){
-        fRef.current();
-      });
+      fRef.current();
     },msRef.current);
     intervalRef.current = curr;
     return [prev,curr];
@@ -231,7 +238,7 @@ export function runIntervalStart(fRef,msRef,intervalRef){
   return [prev];
 }
 
-// js.react/useInterval [382] 
+// js.react/useInterval [390] 
 export function useInterval(f,ms){
   let fRef = useFollowRef(f);
   let msRef = useFollowRef(ms);
@@ -249,7 +256,7 @@ export function useInterval(f,ms){
   return {startInterval,stopInterval};
 }
 
-// js.react/runTimeoutStop [405] 
+// js.react/runTimeoutStop [413] 
 export function runTimeoutStop(timeoutRef){
   let timeout = timeoutRef.current;
   if(null != timeout){
@@ -259,19 +266,17 @@ export function runTimeoutStop(timeoutRef){
   return timeout;
 }
 
-// js.react/runTimeoutStart [415] 
+// js.react/runTimeoutStart [423] 
 export function runTimeoutStart(fRef,msRef,timeoutRef){
   let prev = runTimeoutStop(timeoutRef);
   let curr = setTimeout(function (){
-    new Promise(function (){
-      fRef.current();
-    });
+    fRef.current();
   },msRef.current || 0);
   timeoutRef.current = curr;
   return [prev,curr];
 }
 
-// js.react/useTimeout [426] 
+// js.react/useTimeout [435] 
 export function useTimeout(f,ms,init){
   let fRef = useFollowRef(f);
   let msRef = useFollowRef(ms);
@@ -291,7 +296,7 @@ export function useTimeout(f,ms,init){
   return {startTimeout,stopTimeout};
 }
 
-// js.react/useCountdown [448] 
+// js.react/useCountdown [457] 
 export function useCountdown(initial,onComplete,opts){
   let {interval = 1000,step = 1,to = 0} = opts || {};
   let [current,setCurrent] = React.useState(initial);
@@ -313,7 +318,7 @@ export function useCountdown(initial,onComplete,opts){
   ];
 }
 
-// js.react/useNow [476] 
+// js.react/useNow [485] 
 export function useNow(interval){
   let [now,setNow] = React.useState(Date.now());
   let {startInterval,stopInterval} = useInterval(function (){
@@ -322,7 +327,7 @@ export function useNow(interval){
   return [now,{"startNow":startInterval,"stopNow":stopInterval}];
 }
 
-// js.react/useSubmit [493] 
+// js.react/useSubmit [502] 
 export function useSubmit({
   result,
   delay = 200,
@@ -333,7 +338,7 @@ export function useSubmit({
   return null;
 }),
   onError = (function (res){
-  console.log(" js.react/useSubmit",501,"\n\n","ERRORED",res);
+  console.log(" js.react/useSubmit 510\n\n","ERRORED",res);
   return res["body"];
 }),
   onSuccess = k.identity,
@@ -346,60 +351,35 @@ export function useSubmit({
   });
   let onAction = function (){
     setWaiting(true);
-    new Promise(function (resolve,reject){
-      try{
-        resolve(        (function (){
-                  if(onSubmit){
-                    return onSubmit();
-                  }
-                })());
-      }
-      catch(e){
-        reject(e);
+    Promise.resolve().then(function (){
+      if(onSubmit){
+        return onSubmit();
       }
     }).then(function (res){
       if(isMounted()){
         setResult(onSuccess(res));
       }
-      new Promise(function (resolve,reject){
-        setTimeout(function (){
-          try{
-            resolve(            (function (){
-                          if(isMounted()){
-                            setWaiting(false);
-                          }
-                        })());
-          }
-          catch(e){
-            reject(e);
-          }
-        },delay);
-      });
+      setTimeout(function (){
+        if(isMounted()){
+          setWaiting(false);
+        }
+      },delay);
     }).catch(function (err){
-      new Promise(function (resolve,reject){
-        setTimeout(function (){
-          try{
-            resolve(            (function (){
-                          if(isMounted()){
-                            setWaiting(false);
-                          }
-                        })());
-          }
-          catch(e){
-            reject(e);
-          }
-        },delay);
-      });
+      setTimeout(function (){
+        if(isMounted()){
+          setWaiting(false);
+        }
+      },delay);
       if(isMounted()){
         setResult(onError(err));
       }
     });
   };
-  let errored = result && ("error" == result[["status"]]);
+  let errored = result && ("error" == result["status"]);
   return {errored,onAction,setWaiting,waiting};
 }
 
-// js.react/useSubmitResult [528] 
+// js.react/useSubmitResult [542] 
 export function useSubmitResult({onError,onResult,onSubmit,onSuccess,result,setResult}){
   let isMounted = useIsMounted();
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -417,69 +397,50 @@ export function useSubmitResult({onError,onResult,onSubmit,onSuccess,result,setR
     }};
 }
 
-// js.react/convertIndex [567] 
-export function convertIndex({
-  data,
-  value,
-  setValue,
-  allowNotFound,
-  valueFn = (function (x){
-  return x;
-})
-}){
+// js.react/convertIndex [581] 
+export function convertIndex({data,value,setValue,allowNotFound,valueFn = k.identity}){
   let forwardFn = function (idx){
     let out = data && data[idx || 0];
     return out ? valueFn(out) : null;
   };
   let reverseFn = function (label){
-    let idx = data.map(valueFn).indexOf(label);
+    let idx = xtd.arr_find(xtd.arr_map(data,valueFn),function (item){
+      return item == label;
+    });
     return allowNotFound ? idx : Math.max(0,idx);
   };
   let setIndex = function (idx){
     setValue(forwardFn(idx));
   };
   let index = reverseFn(value);
-  let items = data.map(valueFn);
+  let items = xtd.arr_map(data,valueFn);
   return {index,items,setIndex};
 }
 
-// js.react/convertModular [589] 
-export function convertModular({
-  data,
-  value,
-  setValue,
-  valueFn = (function (x){
-  return x;
-}),
-  indexFn
-}){
+// js.react/convertModular [604] 
+export function convertModular({data,value,setValue,valueFn = k.identity,indexFn}){
   let forwardFn = function (idx){
-    let out = data && data[k.mod_pos(idx || 0,(data).length)];
+    let out = data && data[math.mod_pos(idx || 0,data.length)];
     return out ? valueFn(out) : null;
   };
   let reverseFn = function (label){
     let pval = indexFn();
-    let nval = Math.max(0,data.map(valueFn).indexOf(label));
-    let offset = k.mod_offset(pval,nval,(data).length);
+    let nval = Math.max(0,xtd.arr_find(xtd.arr_map(data,valueFn),function (item){
+      return item == label;
+    }));
+    let offset = math.mod_offset(pval,nval,data.length);
     return pval + offset;
   };
   let setIndex = function (idx){
     setValue(forwardFn(idx));
   };
   let index = reverseFn(value);
-  let items = data.map(valueFn);
+  let items = xtd.arr_map(data,valueFn);
   return {index,items,setIndex};
 }
 
-// js.react/convertIndices [621] 
-export function convertIndices({
-  data,
-  values,
-  setValues,
-  valueFn = (function (x){
-  return x;
-})
-}){
+// js.react/convertIndices [637] 
+export function convertIndices({data,values,setValues,valueFn = k.identity}){
   let forwardFn = function (indices){
     let out = [];
     for(let i = 0; i < indices.length; ++i){
@@ -491,19 +452,21 @@ export function convertIndices({
     return out;
   };
   let reverseFn = function (values){
-    return data.map(function (e){
-      return 0 <= values.indexOf(e);
+    return xtd.arr_map(data,function (e){
+      return 0 <= xtd.arr_find(values,function (item){
+        return item == e;
+      });
     });
   };
   let setIndices = function (indices){
     setValues(forwardFn(indices));
   };
   let indices = reverseFn(values);
-  let items = data.map(valueFn);
+  let items = xtd.arr_map(data,valueFn);
   return {indices,items,setIndices};
 }
 
-// js.react/convertPosition [642] 
+// js.react/convertPosition [663] 
 export function convertPosition({length,max,min,step}){
   let divisions = Math.floor((max - min) / step);
   let unit = length / divisions;
@@ -513,34 +476,36 @@ export function convertPosition({length,max,min,step}){
   };
   let reverseFn = function (pos){
     let relative = Math.max(0,Math.min(length,pos));
-    let n = Math.round(relative / unit);
+    let n = math.round(relative / unit);
     let out = min + (n * step);
     return out;
   };
   return {forwardFn,reverseFn};
 }
 
-// js.react/useChanging [662] 
+// js.react/useChanging [683] 
 export function useChanging(data,f,state){
-  f = (f || (function (arr){
-    return arr[0];
-  }));
+  f = (f || xtd.first);
   data = (data || []);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   let [value,setValue] = state || React.useState(f(data));
   React.useEffect(function (){
-    if(k.not_emptyp(data) && ((null == value) || (0 > data.indexOf(value)))){
+    if(xtd.not_emptyp(data) && ((null == value) || (0 > xtd.arr_find(data,function (item){
+      return item == value;
+    })))){
       setValue(f(data));
     }
   },[JSON.stringify(data)]);
   return [value,setValue];
 }
 
-// js.react/useTree [677] 
+// js.react/useTree [700] 
 export function useTree({branchesFn,displayFn,formatFn,initial,parents,root,setInitial,targetFn,tree}){
   branchesFn = (branchesFn || (function (tree,_parents,_root){
     if(tree){
-      return k.sort(k.obj_keys(tree));
+      let out = xtd.obj_keys(tree);
+      out.sort();
+      return out;
     }
     else{
       return [];
@@ -555,11 +520,11 @@ export function useTree({branchesFn,displayFn,formatFn,initial,parents,root,setI
     }
   }));
   let branches = branchesFn(tree,parents,root);
-  let [branch,setBranch] = React.useState(initial || branches[0]);
+  let [branch,setBranch] = React.useState(initial || xtd.first(branches));
   let target = (tree && branch) ? targetFn(tree,branch,parents,root) : null;
   React.useEffect(function (){
-    if((null != branch) && (null == target) && k.not_emptyp(branches) && targetFn(tree,branches[0],parents,root)){
-      setBranch(branches[0]);
+    if((null != branch) && (null == target) && xtd.not_emptyp(branches) && targetFn(tree,xtd.first(branches),parents,root)){
+      setBranch(xtd.first(branches));
     }
     if((null != branch) && setInitial && (initial != branch)){
       setInitial(branch);

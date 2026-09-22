@@ -364,10 +364,11 @@ function sharedworker_source(script,opts){
   };
 }
 
-function sharedworker_url_source(url){
+function sharedworker_url_source(url,opts){
+  let worker_opts = opts || {};
   return {
     "create_fn":function (listener){
-        let shared = new SharedWorker(url);
+        let shared = new SharedWorker(url,worker_opts);
         let {port} = shared;
         port.start();
         port.addEventListener("message",function (e){
@@ -382,7 +383,8 @@ function node_worker_source(script,opts){
   let config = opts || {};
   let eval_flag = config["eval"];
   let eval_mode = (null == eval_flag) ? true : eval_flag;
-  let Worker_value = require("worker_threads");
+  let load = eval("require");
+  let Worker_value = load("worker_threads");
   let {Worker} = Worker_value;
   return {
     "create_fn":function (listener){

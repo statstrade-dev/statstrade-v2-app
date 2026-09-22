@@ -1,5 +1,5 @@
 [build]
-  command = "yarn workspace @statstrade/web-superadmin build:app"
+  command = "yarn workspace @statstrade/web-superadmin build:app && mkdir -p site/web-superadmin/.next/workers && cp -R site/web-superadmin/public/. site/web-superadmin/.next/"
   publish = "site/web-superadmin/.next"
 
 [build.environment]

@@ -1,11 +1,11 @@
-import * as k from '@statstrade/edge/lib/xt/lang/base-lib'
+import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
-// statsui.edge.remote.util-nextjs/callApi [8] 
+// statsui.edge.remote.util-nextjs/callApi [12] 
 export async function callApi(path,method,data,options = {}){
   let {headers} = options;
   let fetch_opts = {
     "method":method,
-    "headers":k.obj_assign({"Content-Type":"application/json"},headers)
+    "headers":kd.obj_assign({"Content-Type":"application/json"},headers)
   };
   if((method == "GET") || (method == "DELETE")){
     if(data){

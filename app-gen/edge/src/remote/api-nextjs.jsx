@@ -1,4 +1,4 @@
-import * as api_nextjs from '@statstrade/edge/remote/util-nextjs'
+import * as api_nextjs from '@statstrade/edge/remote/util-nextjs.jsx'
 
 // statsui.edge.remote.api-nextjs/util-ping [8] 
 export function util_ping(input,options = {}){
