@@ -96,7 +96,7 @@ export function LayoutBaseInner({Component,children}){
 }
 
 // statsui.basic.layout.layout-base/LayoutBase [100] 
-export function LayoutBase({children}){
+export function LayoutBase({children,showDevtool}){
   let [mounted,setMounted] = React.useState(false);
   React.useEffect(function (){
     if(!mounted){
@@ -108,7 +108,7 @@ export function LayoutBase({children}){
       <LayoutBaseInner>
         <TToast.ToastProvider>
           <devtool.FrameDevtoolProvider>
-            {process.env.NEXT_PUBLIC_DEV ? (
+            {(process.env.NEXT_PUBLIC_DEV || showDevtool) ? (
               <devtool.FrameDevtoolPanel/>) : null}
             <TToast.ToastViewport left={10} top={10} zIndex={100000000}/>
             <frame_toast.FrameToast/>

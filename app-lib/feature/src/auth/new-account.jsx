@@ -97,7 +97,8 @@ export function NewAccountForm(){
 // statstrade-web.feature.auth.new-account/NewAccountScreenRegister [98] 
 export function NewAccountScreenRegister(){
   let context = React.useContext(NewAccountContext);
-  let {api,controls} = context;
+  let {api,controls,pathPrefix} = context;
+  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   let isBusy = api.mutations.sign_up.isPending || api.mutations.sign_in_oauth.isPending;
   return (
     <React.Fragment>
@@ -111,7 +112,12 @@ export function NewAccountScreenRegister(){
           icon={logo_google.LogoGoogle}
           disabled={isBusy}
           onPress={function (){
-              api.mutations.sign_in_oauth.mutateAsync({"provider":"google"});
+              api.mutations.sign_in_oauth.mutateAsync({
+                "provider":"google",
+                "options":{
+                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                    }
+              });
             }}/>
         <ui.ButtonInverse
           flex={1}
@@ -119,7 +125,12 @@ export function NewAccountScreenRegister(){
           icon={Github}
           disabled={isBusy}
           onPress={function (){
-              api.mutations.sign_in_oauth.mutateAsync({"provider":"github"});
+              api.mutations.sign_in_oauth.mutateAsync({
+                "provider":"github",
+                "options":{
+                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                    }
+              });
             }}/>
       </T.XStack>
       <ui.HorizontalText
@@ -133,17 +144,18 @@ export function NewAccountScreenRegister(){
       </T.YStack>
       <ui.Horizontal marginVertical="$2" borderColor="$color1"/>
       <T.YStack alignItems="center">
-        <ui.ButtonLink href="/sign-in">{ui.t("Already have an account?")}</ui.ButtonLink>
+        <ui.ButtonLink href={authPath + "sign-in"}>{ui.t("Already have an account?")}</ui.ButtonLink>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreenVerify [151] 
+// statstrade-web.feature.auth.new-account/NewAccountScreenVerify [157] 
 export function NewAccountScreenVerify(){
   let router = ui_router.useRouter();
   let [current,setCurrent,{startCountdown,stopCountdown}] = r.useCountdown(30,null,{"interval":1000});
   let context = React.useContext(NewAccountContext);
-  let {api,controls,forms} = context;
+  let {api,controls,forms,pathPrefix} = context;
+  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   let isBusy = api.mutations.sign_up.isPending || api.mutations.sign_in_oauth.isPending;
   let toast = ui.useToastController();
   sb.useListeners({
@@ -198,12 +210,12 @@ export function NewAccountScreenVerify(){
                 })}>Resend
             </ui.ButtonInverse>)}/>
       <T.YStack alignItems="center">
-        <ui.ButtonLink href="/sign-in">{ui.t("Sign In")}</ui.ButtonLink>
+        <ui.ButtonLink href={authPath + "sign-in"}>{ui.t("Sign In")}</ui.ButtonLink>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreenMain [220] 
+// statstrade-web.feature.auth.new-account/NewAccountScreenMain [228] 
 export function NewAccountScreenMain(){
   let context = React.useContext(NewAccountContext);
   let {controls} = context;
@@ -212,7 +224,7 @@ export function NewAccountScreenMain(){
     <ui_section.MinFrameCenter><Component/></ui_section.MinFrameCenter>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreen [234] 
+// statstrade-web.feature.auth.new-account/NewAccountScreen [242] 
 export function NewAccountScreen(props){
   let ctx = common_auth.useSignUpContext(props);
   let controls = hf.useControls([
@@ -224,7 +236,7 @@ export function NewAccountScreen(props){
     ],
     ["isVerified",false]
   ]);
-  let context = props.context || Object.assign(ctx,{"controls":controls});
+  let context = props.context || Object.assign(ctx,{"controls":controls,"pathPrefix":props.pathPrefix});
   gu.usePathContext(["new_account"],context);
   gu.useSyncContext(context);
   return (

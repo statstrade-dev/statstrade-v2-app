@@ -94,7 +94,8 @@ export function SignInForm(){
 // statstrade-web.feature.auth.sign-in/SignInScreenLogin [101] 
 export function SignInScreenLogin(){
   let context = React.useContext(SignInContext);
-  let {api,controls,forms} = context;
+  let {api,controls,forms,pathPrefix} = context;
+  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   let isBusy = api.mutations.sign_in.isPending || api.mutations.sign_in_oauth.isPending;
   return (
     <React.Fragment>
@@ -108,7 +109,12 @@ export function SignInScreenLogin(){
           icon={logo_google.LogoGoogle}
           disabled={isBusy}
           onPress={function (){
-              api.mutations.sign_in_oauth.mutateAsync({"provider":"google"});
+              api.mutations.sign_in_oauth.mutateAsync({
+                "provider":"google",
+                "options":{
+                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                    }
+              });
             }}/>
         <ui.ButtonOutlined
           flex={1}
@@ -116,7 +122,12 @@ export function SignInScreenLogin(){
           icon={Github}
           disabled={isBusy}
           onPress={function (){
-              api.mutations.sign_in_oauth.mutateAsync({"provider":"github"});
+              api.mutations.sign_in_oauth.mutateAsync({
+                "provider":"github",
+                "options":{
+                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                    }
+              });
             }}/>
       </T.XStack>
       <ui.HorizontalText
@@ -129,15 +140,15 @@ export function SignInScreenLogin(){
         <SignInForm/>
         <ui.Horizontal marginVertical="$2" borderColor="$color1"/>
         <T.XStack gap="$3">
-          <ui.ButtonLink href="/forgot-password">{ui.t("Forgot Password")}</ui.ButtonLink>
+          <ui.ButtonLink href={authPath + "forgot-password"}>{ui.t("Forgot Password")}</ui.ButtonLink>
           <T.View flex={1}/>
-          <ui.ButtonLink href="/new-account">{ui.t("New Account")}</ui.ButtonLink>
+          <ui.ButtonLink href={authPath + "new-account"}>{ui.t("New Account")}</ui.ButtonLink>
         </T.XStack>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenSuccess [162] 
+// statstrade-web.feature.auth.sign-in/SignInScreenSuccess [168] 
 export function SignInScreenSuccess(){
   let router = ui_router.useRouter();
   let context = React.useContext(SignInContext);
@@ -166,7 +177,7 @@ export function SignInScreenSuccess(){
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenMain [194] 
+// statstrade-web.feature.auth.sign-in/SignInScreenMain [200] 
 export function SignInScreenMain(){
   let context = React.useContext(SignInContext);
   let {controls} = context;
@@ -175,7 +186,7 @@ export function SignInScreenMain(){
     <ui_section.MinFrameCenter><Component/></ui_section.MinFrameCenter>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreen [207] 
+// statstrade-web.feature.auth.sign-in/SignInScreen [213] 
 export function SignInScreen(props){
   let ctx = common_auth.useSignInContext(props);
   let controls = hf.useControls([
@@ -187,7 +198,7 @@ export function SignInScreen(props){
     ],
     ["isVerified",false]
   ]);
-  let context = props.context || Object.assign(ctx,{"controls":controls});
+  let context = props.context || Object.assign(ctx,{"controls":controls,"pathPrefix":props.pathPrefix});
   gu.usePathContext(["sign_in"],context);
   return (
     <SignInContext.Provider value={context}><SignInScreenMain/></SignInContext.Provider>);

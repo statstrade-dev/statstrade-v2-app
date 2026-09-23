@@ -1,8 +1,12 @@
-import React from 'react'
-
 import * as T from 'tamagui'
 
+import React from 'react'
+
 import * as page_proxy from '@xtalk/substrate/page-proxy.js'
+
+import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
+
+import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as admin_layout from '@statstrade/component/layout/layout-admin.jsx'
 
@@ -10,7 +14,132 @@ import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
 
 import * as routes from '@statstrade/component/layout/admin-routes.jsx'
 
-// statsui.basic.layout.admin-page/PingPanel [15] 
+// statsui.basic.layout.admin-page/organisationHref [17] 
+export function organisationHref(org){
+  return "/organisation/" + (org.name || org.id);
+}
+
+// statsui.basic.layout.admin-page/userHref [24] 
+export function userHref(user){
+  return "/u/" + (user.handle || user.id);
+}
+
+// statsui.basic.layout.admin-page/loadAdminDirectory [31] 
+export async function loadAdminDirectory(){
+  let client = sb.getClient();
+  let organisations_response = await client.schema("stats_type").from("Org").select("id,name,title,description,picture").order("name");
+  if(organisations_response.error){
+    throw organisations_response.error;
+  }
+  let users_response = await client.schema("stats_type").from("User").select("id,handle,first_name,last_name,picture,is_active,is_super").order("handle");
+  if(users_response.error){
+    throw users_response.error;
+  }
+  return {
+    "organisations":organisations_response.data || [],
+    "users":users_response.data || []
+  };
+}
+
+// statsui.basic.layout.admin-page/DirectoryLink [56] 
+export function DirectoryLink({href,title,detail}){
+  return (
+    <ui.Link
+      href={href}
+      display="flex"
+      padding="$3"
+      borderWidth={1}
+      borderColor="$color4"
+      borderRadius="$2"
+      hoverStyle={{"backgroundColor":"$color2"}}>
+      <T.YStack gap="$1">
+        <T.Text fontWeight="600">{title}</T.Text>
+        <T.Text fontSize="$2" color="$color10">{detail}</T.Text>
+      </T.YStack>
+    </ui.Link>);
+}
+
+// statsui.basic.layout.admin-page/OrganisationListSection [75] 
+export function OrganisationListSection({organisations}){
+  let rows = (organisations.length > 0) ? (organisations || []).map(function (org){
+    return (
+      <DirectoryLink
+        key={org.id}
+        href={organisationHref(org)}
+        title={org.title || org.name || org.id}
+        detail={org.name || org.id}/>);
+  }) : (
+    <T.Text color="$color10">No organisations found.</T.Text>);
+  return (
+    <T.YStack gap="$2"><T.H3 fontSize="$5">Organisations</T.H3>{rows}</T.YStack>);
+}
+
+// statsui.basic.layout.admin-page/UserListSection [97] 
+export function UserListSection({users}){
+  let rows = (users.length > 0) ? (users || []).map(function (user){
+    return (
+      <DirectoryLink
+        key={user.id}
+        href={userHref(user)}
+        title={user.handle || user.id}
+        detail={((user.first_name || "") + " " + (user.last_name || "")) || user.id}/>);
+  }) : (
+    <T.Text color="$color10">No users found.</T.Text>);
+  return (
+    <T.YStack gap="$2"><T.H3 fontSize="$5">Users</T.H3>{rows}</T.YStack>);
+}
+
+// statsui.basic.layout.admin-page/AdminOrganisationSection [122] 
+export function AdminOrganisationSection(){
+  let [directory,setDirectory] = React.useState(
+    {"status":"loading","organisations":[],"users":[],"error":null}
+  );
+  React.useEffect(function (){
+    let alive = true;
+    let run = async function run(){
+      try{
+        let data = await loadAdminDirectory();
+        if(alive){
+          setDirectory({
+            "status":"ready",
+            "organisations":data.organisations,
+            "users":data.users,
+            "error":null
+          });
+        }
+      }
+      catch(e){
+        if(alive){
+          setDirectory({
+            "status":"error",
+            "organisations":[],
+            "users":[],
+            "error":"Unable to load the admin directory."
+          });
+        }
+      }
+    };
+    run();
+    return function (){
+      alive = false;
+    };
+  },[]);
+  let {error,organisations,status,users} = directory;
+  let body = (status == "loading") ? (
+    <T.Spinner size="small"/>) : (error ? (
+    <T.Text color="$red10">{error}</T.Text>) : (
+    <T.YStack gap="$5">
+      <OrganisationListSection organisations={organisations}/>
+      <UserListSection users={users}/>
+    </T.YStack>));
+  return (
+    <T.ScrollView
+      flex={1}
+      contentContainerStyle={{"gap":20,"paddingBottom":"$5"}}>{body}
+    </T.ScrollView>);
+}
+
+// statsui.basic.layout.admin-page/PingPanel [171] 
 export function PingPanel({client}){
   let output = ext_page.listenModel(client,"room/superadmin",["system","ping"],"output",{});
   let [busy,setBusy] = React.useState(false);
@@ -57,7 +186,7 @@ export function PingPanel({client}){
     </T.YStack>);
 }
 
-// statsui.basic.layout.admin-page/SectionTabs [81] 
+// statsui.basic.layout.admin-page/SectionTabs [237] 
 export function SectionTabs({group,active,onSelect}){
   let sections = routes.sectionsFor(group);
   return (
@@ -77,7 +206,7 @@ export function SectionTabs({group,active,onSelect}){
     </T.XStack>);
 }
 
-// statsui.basic.layout.admin-page/AdminSection [102] 
+// statsui.basic.layout.admin-page/AdminSection [258] 
 export function AdminSection({client,group,section,resource,onSection}){
   let metadata = routes.getSection(group,section);
   return (
@@ -88,7 +217,8 @@ export function AdminSection({client,group,section,resource,onSection}){
         <T.Text color="$color10">{metadata.description}</T.Text>
       </T.YStack>
       {(metadata.key == "home/dashboard") ? (
-        <PingPanel client={resource["client"]}/>) : (
+        <PingPanel client={resource["client"]}/>) : ((metadata.key == "manage/organisation") ? (
+        <AdminOrganisationSection/>) : (
         <T.YStack
           padding="$5"
           borderWidth={1}
@@ -99,11 +229,11 @@ export function AdminSection({client,group,section,resource,onSection}){
           <T.Text color="$color10">
             The modular page shell is active. Add the domain body for this section here.
           </T.Text>
-        </T.YStack>)}
+        </T.YStack>))}
     </T.YStack>);
 }
 
-// statsui.basic.layout.admin-page/AdminApp [132] 
+// statsui.basic.layout.admin-page/AdminApp [290] 
 export function AdminApp({resource}){
   let [group,setGroup] = React.useState(routes.F01_HOME);
   let [section,setSection] = React.useState("dashboard");
