@@ -4,7 +4,7 @@ import * as index_landing from '@statstrade/feature/landing/index-landing.jsx'
 
 import * as index_onboarding from '@statstrade/feature/onboarding/index-onboarding.jsx'
 
-// statstrade-web.page.index/Page [13] 
+// statstrade-web.page.index/Page [17] 
 export function Page(){
   return (
     <layout_full.LayoutFull

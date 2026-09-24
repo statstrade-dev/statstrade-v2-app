@@ -18,14 +18,8 @@ import * as substrate from '@xtalk/substrate/substrate.js'
 
 import * as browser_transport from '@xtalk/substrate/transport-browser.js'
 
-// statstrade-superadmin.pages.index/PING-RPC [20] 
-var PING_RPC = {
-  "id":"ping",
-  "schema":"stats_rpc",
-  "input":[],
-  "return":"text",
-  "flags":{}
-};
+// statstrade-superadmin.pages.index/PING-RPC [24] 
+var PING_RPC = "ping";
 
 // statstrade-superadmin.pages.index/createWorkerSource [27] 
 function createWorkerSource(){
@@ -41,6 +35,7 @@ function createConfig(){
   let secured = url.protocol == "https:";
   let pathname = url.pathname;
   return {
+    "site_map_url":"/worker/site-map/manifest.json",
     "primary":{
         "type":"supabase",
         "defaults":{
@@ -55,24 +50,24 @@ function createConfig(){
   };
 }
 
-// statstrade-superadmin.pages.index/createClient [52] 
+// statstrade-superadmin.pages.index/createClient [53] 
 function createClient(){
   return substrate.node_create({"id":"statstrade-superadmin-client"});
 }
 
-// statstrade-superadmin.pages.index/initState [56] 
+// statstrade-superadmin.pages.index/initState [57] 
 async function initState(client){
   return await runtime.sharedworker_connect_state(client,createConfig(),{},{},createWorkerSource(),null);
 }
 
-// statstrade-superadmin.pages.index/initNode [68] 
+// statstrade-superadmin.pages.index/initNode [69] 
 async function initNode(){
   let client = createClient();
   let state = await initState(client);
   return {"client":client,"state":state};
 }
 
-// statstrade-superadmin.pages.index/attachPing [75] 
+// statstrade-superadmin.pages.index/attachPing [76] 
 async function attachPing(resource){
   let client = resource["client"];
   let page_args = {
@@ -91,23 +86,23 @@ async function attachPing(resource){
   return resource;
 }
 
-// statstrade-superadmin.pages.index/initPing [94] 
+// statstrade-superadmin.pages.index/initPing [95] 
 async function initPing(resource){
   return await attachPing(resource);
 }
 
-// statstrade-superadmin.pages.index/initProxy [98] 
+// statstrade-superadmin.pages.index/initProxy [99] 
 async function initProxy(resource){
   await page_proxy.group_open_proxy(resource["client"],"room/superadmin","system",{});
   return resource;
 }
 
-// statstrade-superadmin.pages.index/callPing [108] 
+// statstrade-superadmin.pages.index/callPing [109] 
 function callPing(resource){
   return page_proxy.model_proxy_call(resource["client"],"room/superadmin","system","ping",[],true,{});
 }
 
-// statstrade-superadmin.pages.index/closeNode [120] 
+// statstrade-superadmin.pages.index/closeNode [121] 
 async function closeNode(resource){
   if(resource && !resource["closed"]){
     resource["closed"] = true;
@@ -128,7 +123,7 @@ async function closeNode(resource){
   return true;
 }
 
-// statstrade-superadmin.pages.index/initPage [134] 
+// statstrade-superadmin.pages.index/initPage [135] 
 async function initPage(){
   let resource = await initNode();
   try{
@@ -142,7 +137,7 @@ async function initPage(){
   }
 }
 
-// statstrade-superadmin.pages.index/PingApp [145] 
+// statstrade-superadmin.pages.index/PingApp [146] 
 function PingApp({resource}){
   let client = resource["client"];
   devtool.useDevtoolSharedWorker(resource);
@@ -172,7 +167,7 @@ function PingApp({resource}){
   ),React.createElement("div",{},output_text),error ? React.createElement("div",{},error) : null);
 }
 
-// statstrade-superadmin.pages.index/Page [186] 
+// statstrade-superadmin.pages.index/Page [187] 
 function Page(){
   let [readyState,setReadyState] = React.useState("loading");
   let [resource,setResource] = React.useState(null);

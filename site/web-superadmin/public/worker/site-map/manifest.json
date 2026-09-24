@@ -1,0 +1,10 @@
+{
+  "version" : 1,
+  "site" : "web-superadmin",
+  "schema_url" : "/worker/site-map/schema.json",
+  "lookup_url" : "/worker/site-map/lookup.json",
+  "rpc_url" : "/worker/site-map/rpc.json",
+  "tables" : [ ],
+  "rpcs" : [ "ping" ],
+  "pages" : [ "statstrade-superadmin.pages.auth.forgot-password", "statstrade-superadmin.pages.auth.new-account", "statstrade-superadmin.pages.auth.sign-in", "statstrade-superadmin.pages.auth.verify-account", "statstrade-superadmin.pages.demos.show-hello", "statstrade-superadmin.pages.demos.show-ping", "statstrade-superadmin.pages.index", "statstrade-superadmin.pages.new-account" ]
+}

@@ -6,7 +6,7 @@ import * as layout_auth from '@statstrade/component/layout/layout-auth.jsx'
 
 import * as layoutbase from '@statstrade/component/layout/layout-base.jsx'
 
-// statstrade-superadmin.pages.auth.forgot-password/Page [13] 
+// statstrade-superadmin.pages.auth.forgot-password/Page [17] 
 function Page(){
   return (
     <layoutbase.LayoutBase showDevtool={true}>

@@ -4,7 +4,7 @@ import * as frame from '@statstrade/component/layout/common/frame-base.jsx'
 
 import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
 
-// statstrade-web.page._app/AppLayout [21] 
+// statstrade-web.page._app/AppLayout [25] 
 export function AppLayout({Component,pageProps}){
   React.useEffect(function (){
     

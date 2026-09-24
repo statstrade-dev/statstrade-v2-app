@@ -8,7 +8,7 @@ import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as layoutbase from '@statstrade/component/layout/layout-base.jsx'
 
-// statstrade-superadmin.pages.auth.verify-account/Page [14] 
+// statstrade-superadmin.pages.auth.verify-account/Page [18] 
 function Page(){
   return (
     <layoutbase.LayoutBase showDevtool={true}>

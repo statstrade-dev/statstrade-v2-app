@@ -12,6 +12,8 @@ const impl_main = require("@xtalk/db/system/main.js")
 
 const substrate = require("@xtalk/substrate/substrate.js")
 
+const site_map = require("@xtalk/db/node/site-map.js")
+
 function get_primary_impl(node,service_id){
   let impl = substrate.get_service(node,service_id);
   let primary_id = xtd.get_in(impl,["metadata","primary_id"]);
@@ -119,6 +121,7 @@ function kernel_teardown_main(node,config){
   kernel_teardown_single(node,xtd.get_in(config,["caching","id"]));
   substrate.remove_service(node,xtd.get_in(config,["common","id"]));
   delete(node["meta"]["xt.db/kernel-init"]);
+  delete(node["meta"]["xt.db/site-map"]);
   return {"status":"teardown","data":config};
 }
 
@@ -131,6 +134,14 @@ function kernel_teardown_handler(space,args,request,node){
   return kernel_teardown_main(node,config);
 }
 
+function kernel_store_site_map_rpc(node,config,loaded){
+  let setup_config = kernel_create_config(config);
+  let common_id = xtd.get_in(setup_config,["common","id"]);
+  let common = substrate.get_service(node,common_id);
+  common["rpc"] = (loaded["rpc"] || {});
+  return loaded;
+}
+
 function kernel_init_main(node,config,schema,lookup){
   let meta = node["meta"];
   let pending = xtd.get_in(meta,["xt.db/kernel-init"]);
@@ -139,21 +150,32 @@ function kernel_init_main(node,config,schema,lookup){
       return kernel_init_main(node,config,schema,lookup);
     });
   }
-  if(kernel_check_exists(node,config)){
-    return {"status":"no_change","data":kernel_create_config(config)};
-  }
-  else{
-    let setup = kernel_setup_main(node,config,schema,lookup);
-    let guarded = setup.then(function (result){
-      delete(meta["xt.db/kernel-init"]);
-      return result;
-    }).catch(function (err){
-      delete(meta["xt.db/kernel-init"]);
-      throw err;
-    });
-    meta["xt.db/kernel-init"] = guarded;
-    return guarded;
-  }
+  let init = site_map.load_site_map(node,config,schema,lookup).then(function (loaded){
+    let next_schema = loaded["schema"] || schema;
+    let next_lookup = loaded["lookup"] || lookup;
+    if(kernel_check_exists(node,config)){
+      kernel_store_site_map_rpc(node,config,loaded);
+      return Promise.resolve().then(function (){
+        return {"status":"no_change","data":kernel_create_config(config)};
+      });
+    }
+    else{
+      let setup = kernel_setup_main(node,config,next_schema,next_lookup);
+      return setup.then(function (result){
+        kernel_store_site_map_rpc(node,config,loaded);
+        return result;
+      });
+    }
+  });
+  let guarded = init.then(function (result){
+    delete(meta["xt.db/kernel-init"]);
+    return result;
+  }).catch(function (err){
+    delete(meta["xt.db/kernel-init"]);
+    throw err;
+  });
+  meta["xt.db/kernel-init"] = guarded;
+  return guarded;
 }
 
 function kernel_init_handler(space,args,request,node){
@@ -235,7 +257,24 @@ function detach_model_handler(space,args,request,node){
   return detach_base_model(node,primary_id,space_id,group_id,model_id);
 }
 
+function rpc_resolve(node,primary_id,rpc_spec){
+  if("string" == (typeof rpc_spec)){
+    let primary = get_primary_impl(node,primary_id);
+    let common_id = xtd.get_in(primary,["metadata","common_id"]);
+    let common = substrate.get_service(node,common_id);
+    let resolved = xtd.get_in(common,["rpc",rpc_spec]);
+    if(null == resolved){
+      throw "Unknown site-map RPC: " + rpc_spec;
+    }
+    return resolved;
+  }
+  else{
+    return rpc_spec;
+  }
+}
+
 function rpc_call_baseline_fn(node,primary_id,rpc_spec,rpc_args){
+  rpc_spec = rpc_resolve(node,primary_id,rpc_spec);
   let primary = get_primary_impl(node,primary_id);
   return impl_common.rpc_call_async(primary,rpc_spec,rpc_args).then(function (result){
     let {table} = rpc_spec;
@@ -280,7 +319,7 @@ function rpc_create_model(primary_id,rpc_spec,model){
 function rpc_attach_model(space,args,request,node){
   let primary_id = args[0];
   let page_args = args[1];
-  let rpc_spec = args[2];
+  let rpc_spec = rpc_resolve(node,primary_id,args[2]);
   let model = args[3];
   let {group_id,model_id,space_id} = page_args;
   let model_spec = rpc_create_model(primary_id,rpc_spec,model);
@@ -464,6 +503,7 @@ module.exports = {
   ["kernel_setup_handler"]:kernel_setup_handler,
   ["kernel_teardown_main"]:kernel_teardown_main,
   ["kernel_teardown_handler"]:kernel_teardown_handler,
+  ["kernel_store_site_map_rpc"]:kernel_store_site_map_rpc,
   ["kernel_init_main"]:kernel_init_main,
   ["kernel_init_handler"]:kernel_init_handler,
   ["subscribe_db_handler"]:subscribe_db_handler,
@@ -473,6 +513,7 @@ module.exports = {
   ["attach_model_handler"]:attach_model_handler,
   ["detach_base_model"]:detach_base_model,
   ["detach_model_handler"]:detach_model_handler,
+  ["rpc_resolve"]:rpc_resolve,
   ["rpc_call_baseline_fn"]:rpc_call_baseline_fn,
   ["rpc_call_handler"]:rpc_call_handler,
   ["rpc_create_model"]:rpc_create_model,

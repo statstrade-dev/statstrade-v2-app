@@ -6,7 +6,7 @@ import * as feature from '@statstrade/feature/auth/new-account.jsx'
 
 import * as layoutbase from '@statstrade/component/layout/layout-base.jsx'
 
-// statstrade-superadmin.pages.new-account/Page [13] 
+// statstrade-superadmin.pages.new-account/Page [17] 
 function Page(){
   return (
     <layoutbase.LayoutBase showDevtool={true}>

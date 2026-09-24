@@ -1,0 +1,10 @@
+{
+  "version" : 1,
+  "site" : "web-main",
+  "schema_url" : "/worker/site-map/schema.json",
+  "lookup_url" : "/worker/site-map/lookup.json",
+  "rpc_url" : "/worker/site-map/rpc.json",
+  "tables" : [ ],
+  "rpcs" : [ ],
+  "pages" : [ "statstrade-web.page._app", "statstrade-web.page.about.cookies", "statstrade-web.page.about.features", "statstrade-web.page.about.pricing", "statstrade-web.page.about.privacy", "statstrade-web.page.about.terms", "statstrade-web.page.forgot-password", "statstrade-web.page.index", "statstrade-web.page.manage.analytics", "statstrade-web.page.manage.billing", "statstrade-web.page.manage.campaigns", "statstrade-web.page.manage.index", "statstrade-web.page.manage.invite", "statstrade-web.page.manage.markets", "statstrade-web.page.manage.settings", "statstrade-web.page.manage.tokens", "statstrade-web.page.new-account", "statstrade-web.page.profile", "statstrade-web.page.sign-in" ]
+}

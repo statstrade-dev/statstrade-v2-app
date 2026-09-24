@@ -2,7 +2,7 @@
 
 import * as T from 'tamagui'
 
-// statstrade-superadmin.pages.demos.show-hello/Page [20] 
+// statstrade-superadmin.pages.demos.show-hello/Page [24] 
 function Page(){
   return (
     <T.Text>Hello World</T.Text>);

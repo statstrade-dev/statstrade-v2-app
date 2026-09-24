@@ -1,0 +1,14 @@
+{
+  "ping" : {
+    "id" : "ping",
+    "schema" : "stats_rpc",
+    "input" : [ ],
+    "return" : "text",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  }
+}
