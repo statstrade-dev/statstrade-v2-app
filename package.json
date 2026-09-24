@@ -35,7 +35,7 @@
     "superadmin": "yarn workspace @statstrade/web-superadmin dev",
     "superadmin:prod": "yarn workspace @statstrade/web-superadmin build:app",
     "superadmin:prod:serve": "yarn workspace @statstrade/web-superadmin serve",
-    "xtalk:generate": "cd ../../ref/foundation && lein run -m xtalk.packages ../../js/statstrade-app ../../js/statstrade-app/build/xtalk-dart",
+    "xtalk:generate": "cd ../.. && lein run -m statsbuild.project.main xtalk",
     "postinstall": "yarn check-tamagui && yarn build",
     "build": "yarn workspaces foreach --all --exclude @statstrade/web-main --exclude @statstrade/web-superadmin run build",
     "build:all": "turbo run build",
