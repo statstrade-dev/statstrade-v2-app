@@ -7374,9 +7374,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@statstrade/avatar@npm:*, @statstrade/avatar@workspace:app-lib/avatar":
+"@statstrade/avatar@npm:*, @statstrade/avatar@workspace:candidates/avatar":
   version: 0.0.0-use.local
-  resolution: "@statstrade/avatar@workspace:app-lib/avatar"
+  resolution: "@statstrade/avatar@workspace:candidates/avatar"
   dependencies:
     "@pixiv/three-vrm": "npm:^3.2.0"
     "@react-three/drei": "npm:^9.105.6"
@@ -7388,9 +7388,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/component-storybook@workspace:app-lib/component-storybook":
+"@statstrade/component-storybook@workspace:site-sb/component-storybook":
   version: 0.0.0-use.local
-  resolution: "@statstrade/component-storybook@workspace:app-lib/component-storybook"
+  resolution: "@statstrade/component-storybook@workspace:site-sb/component-storybook"
   dependencies:
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
     "@babel/preset-env": "npm:^7.28.3"
@@ -7428,9 +7428,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/component@npm:*, @statstrade/component@workspace:app-lib/component":
+"@statstrade/component@npm:*, @statstrade/component@workspace:packages/component":
   version: 0.0.0-use.local
-  resolution: "@statstrade/component@workspace:app-lib/component"
+  resolution: "@statstrade/component@workspace:packages/component"
   dependencies:
     "@statstrade/config": "npm:*"
     "@statstrade/config-eslint": "npm:*"
@@ -7444,9 +7444,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/config-eslint@npm:*, @statstrade/config-eslint@workspace:app-lib/config-eslint":
+"@statstrade/config-eslint@npm:*, @statstrade/config-eslint@workspace:packages/config-eslint":
   version: 0.0.0-use.local
-  resolution: "@statstrade/config-eslint@workspace:app-lib/config-eslint"
+  resolution: "@statstrade/config-eslint@workspace:packages/config-eslint"
   dependencies:
     "@typescript-eslint/eslint-plugin": "npm:^6.2.1"
     "@typescript-eslint/parser": "npm:^6.2.1"
@@ -7454,9 +7454,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/config@npm:*, @statstrade/config@workspace:app-lib/config":
+"@statstrade/config@npm:*, @statstrade/config@workspace:packages/config":
   version: 0.0.0-use.local
-  resolution: "@statstrade/config@workspace:app-lib/config"
+  resolution: "@statstrade/config@workspace:packages/config"
   dependencies:
     "@statstrade/config-eslint": "npm:*"
     "@tamagui/animations-react-native": "npm:^1.144.1"
@@ -7469,9 +7469,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/edge@npm:*, @statstrade/edge@workspace:app-gen/edge":
+"@statstrade/edge@npm:*, @statstrade/edge@workspace:packages/edge":
   version: 0.0.0-use.local
-  resolution: "@statstrade/edge@workspace:app-gen/edge"
+  resolution: "@statstrade/edge@workspace:packages/edge"
   dependencies:
     "@statstrade/config": "npm:*"
     "@statstrade/config-eslint": "npm:*"
@@ -7486,9 +7486,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/feature-storybook@workspace:app-lib/feature-storybook":
+"@statstrade/feature-storybook@workspace:site-sb/feature-storybook":
   version: 0.0.0-use.local
-  resolution: "@statstrade/feature-storybook@workspace:app-lib/feature-storybook"
+  resolution: "@statstrade/feature-storybook@workspace:site-sb/feature-storybook"
   dependencies:
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
     "@babel/preset-env": "npm:^7.28.3"
@@ -7526,9 +7526,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/feature@npm:*, @statstrade/feature@workspace:app-lib/feature":
+"@statstrade/feature@npm:*, @statstrade/feature@workspace:packages/feature":
   version: 0.0.0-use.local
-  resolution: "@statstrade/feature@workspace:app-lib/feature"
+  resolution: "@statstrade/feature@workspace:packages/feature"
   dependencies:
     "@statstrade/component": "npm:*"
     "@statstrade/config": "npm:*"
@@ -7542,18 +7542,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@statstrade/group@workspace:app-gen/group":
+"@statstrade/group@workspace:packages/group":
   version: 0.0.0-use.local
-  resolution: "@statstrade/group@workspace:app-gen/group"
+  resolution: "@statstrade/group@workspace:packages/group"
   dependencies:
     "@statstrade/config-eslint": "npm:*"
     "@statstrade/edge": "npm:*"
   languageName: unknown
   linkType: soft
 
-"@statstrade/ui.storybook@workspace:app-gen/edge-storybook":
+"@statstrade/ui.storybook@workspace:site-sb/edge-storybook":
   version: 0.0.0-use.local
-  resolution: "@statstrade/ui.storybook@workspace:app-gen/edge-storybook"
+  resolution: "@statstrade/ui.storybook@workspace:site-sb/edge-storybook"
   dependencies:
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
     "@babel/preset-env": "npm:^7.28.3"
@@ -11782,9 +11782,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@xtalk/db@npm:*, @xtalk/db@workspace:libs/xt-db":
+"@xtalk/db@npm:*, @xtalk/db@workspace:packages/libs/xt-db":
   version: 0.0.0-use.local
-  resolution: "@xtalk/db@workspace:libs/xt-db"
+  resolution: "@xtalk/db@workspace:packages/libs/xt-db"
   dependencies:
     "@xtalk/event": "npm:0.1.0"
     "@xtalk/lang": "npm:0.1.0"
@@ -11793,32 +11793,32 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xtalk/event@npm:0.1.0, @xtalk/event@workspace:libs/xt-event":
+"@xtalk/event@npm:0.1.0, @xtalk/event@workspace:packages/libs/xt-event":
   version: 0.0.0-use.local
-  resolution: "@xtalk/event@workspace:libs/xt-event"
+  resolution: "@xtalk/event@workspace:packages/libs/xt-event"
   dependencies:
     "@xtalk/lang": "npm:0.1.0"
   languageName: unknown
   linkType: soft
 
-"@xtalk/lang@npm:0.1.0, @xtalk/lang@workspace:libs/xt-lang":
+"@xtalk/lang@npm:0.1.0, @xtalk/lang@workspace:packages/libs/xt-lang":
   version: 0.0.0-use.local
-  resolution: "@xtalk/lang@workspace:libs/xt-lang"
+  resolution: "@xtalk/lang@workspace:packages/libs/xt-lang"
   languageName: unknown
   linkType: soft
 
-"@xtalk/mcp@workspace:libs/xt-mcp":
+"@xtalk/mcp@workspace:packages/libs/xt-mcp":
   version: 0.0.0-use.local
-  resolution: "@xtalk/mcp@workspace:libs/xt-mcp"
+  resolution: "@xtalk/mcp@workspace:packages/libs/xt-mcp"
   dependencies:
     "@xtalk/lang": "npm:0.1.0"
     "@xtalk/substrate": "npm:0.1.0"
   languageName: unknown
   linkType: soft
 
-"@xtalk/net@npm:*, @xtalk/net@npm:0.1.0, @xtalk/net@workspace:libs/xt-net":
+"@xtalk/net@npm:*, @xtalk/net@npm:0.1.0, @xtalk/net@workspace:packages/libs/xt-net":
   version: 0.0.0-use.local
-  resolution: "@xtalk/net@workspace:libs/xt-net"
+  resolution: "@xtalk/net@workspace:packages/libs/xt-net"
   dependencies:
     "@sqlite.org/sqlite-wasm": "npm:^3.46.1-build1"
     "@xtalk/lang": "npm:0.1.0"
@@ -11834,9 +11834,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xtalk/substrate@npm:*, @xtalk/substrate@npm:0.1.0, @xtalk/substrate@workspace:libs/xt-substrate":
+"@xtalk/substrate@npm:*, @xtalk/substrate@npm:0.1.0, @xtalk/substrate@workspace:packages/libs/xt-substrate":
   version: 0.0.0-use.local
-  resolution: "@xtalk/substrate@workspace:libs/xt-substrate"
+  resolution: "@xtalk/substrate@workspace:packages/libs/xt-substrate"
   dependencies:
     "@xtalk/event": "npm:0.1.0"
     "@xtalk/lang": "npm:0.1.0"
@@ -11844,9 +11844,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@xtalk/ui@workspace:libs/xt-ui":
+"@xtalk/ui@workspace:packages/libs/xt-ui":
   version: 0.0.0-use.local
-  resolution: "@xtalk/ui@workspace:libs/xt-ui"
+  resolution: "@xtalk/ui@workspace:packages/libs/xt-ui"
   dependencies:
     "@xtalk/event": "npm:0.1.0"
     "@xtalk/lang": "npm:0.1.0"

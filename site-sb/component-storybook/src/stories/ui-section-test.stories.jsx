@@ -2,23 +2,21 @@ import React from 'react'
 
 import * as T from 'tamagui'
 
-import * as logo from '@statstrade/component/logo/logo-statstrade'
+import * as ui_section from '@statstrade/component/ui-section.jsx'
 
-import * as ui_section from '@statstrade/component/ui-section'
-
-import * as k from '@statstrade/edge/lib/xt/lang/common-lib.jsx'
+import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
 // statsui.basic.ui-section-test/Metadata [17] 
 export var Metadata = {[title]:"Components/ui-section",[tags]:["autodoc"]};
 
-// statsui.basic.ui-section-test/Test_FullScreenCentered [23] 
+// statsui.basic.ui-section-test/Test_FullScreenCentered [24] 
 export function Test_FullScreenCentered(){
   return (
     <ui_section.FullScreenCentered
       leftAction={(
-          <T.Button>{"Left"}</T.Button>)}
+          <T.Button>Left</T.Button>)}
       rightAction={(
-          <T.Button>{"Right"}</T.Button>)}><T.Text>{"Centered Content"}</T.Text>
+          <T.Button>Right</T.Button>)}><T.Text>Centered Content</T.Text>
     </ui_section.FullScreenCentered>);
 }
 
@@ -28,7 +26,7 @@ export function Test_FullScreenHeader(){
     <ui_section.FullScreenHeader title="Full Screen Header"/>);
 }
 
-// statsui.basic.ui-section-test/Test_MinHeader [47] 
+// statsui.basic.ui-section-test/Test_MinHeader [46] 
 export function Test_MinHeader(){
   return (
     <ui_section.MinHeader
@@ -38,63 +36,63 @@ export function Test_MinHeader(){
       paragraph="This is a minimal header description."/>);
 }
 
-// statsui.basic.ui-section-test/Test_MinFrameCenter [60] 
+// statsui.basic.ui-section-test/Test_MinFrameCenter [58] 
 export function Test_MinFrameCenter(){
   return (
-    <ui_section.MinFrameCenter backgroundColor="$color2"><T.Text>{"Centered Content in Frame"}</T.Text></ui_section.MinFrameCenter>);
+    <ui_section.MinFrameCenter backgroundColor="$color2"><T.Text>Centered Content in Frame</T.Text></ui_section.MinFrameCenter>);
 }
 
-// statsui.basic.ui-section-test/Test_SectionMinInfo [72] 
+// statsui.basic.ui-section-test/Test_SectionMinInfo [69] 
 export function Test_SectionMinInfo(){
   return (
     <ui_section.SectionMinInfo
       title={(
-          <T.H2>{"Info Title"}</T.H2>)}
+          <T.H2>Info Title</T.H2>)}
       body={(
-          <T.Text>{"Info Body Text"}</T.Text>)}
+          <T.Text>Info Body Text</T.Text>)}
       logo={(
           <logo.LogoStatstrade size={50}/>)}
       left={(
-          <T.Button>{"Action 1"}</T.Button>)}
+          <T.Button>Action 1</T.Button>)}
       right={(
-          <T.Button>{"Action 2"}</T.Button>)}><T.Text>{"Additional Children"}</T.Text>
+          <T.Button>Action 2</T.Button>)}><T.Text>Additional Children</T.Text>
     </ui_section.SectionMinInfo>);
 }
 
-// statsui.basic.ui-section-test/Test_SectionMinLogo [88] 
+// statsui.basic.ui-section-test/Test_SectionMinLogo [84] 
 export function Test_SectionMinLogo(){
   return (
     <ui_section.SectionMinLogo
       logo={(
           <logo.LogoStatstrade size={60}/>)}
       title={(
-          <T.H3>{"Logo Section Title"}</T.H3>)}/>);
+          <T.H3>Logo Section Title</T.H3>)}/>);
 }
 
-// statsui.basic.ui-section-test/Test_sectionContent [100] 
+// statsui.basic.ui-section-test/Test_sectionContent [95] 
 export function Test_sectionContent(){
   return (
     <T.YStack gap="$4">
       <T.YStack>
         {(
-          <T.Text>{"Component Content"}</T.Text>) ? (k.is_functionp((
-          <T.Text>{"Component Content"}</T.Text>)) ? React.createElement((
-          <T.Text>{"Component Content"}</T.Text>),{}) : (
-          <T.Text>{"Component Content"}</T.Text>)) : null}
+          <T.Text>Component Content</T.Text>) ? (xt.lang.common_lib.is_functionp((
+          <T.Text>Component Content</T.Text>)) ? React.createElement((
+          <T.Text>Component Content</T.Text>),{}) : (
+          <T.Text>Component Content</T.Text>)) : null}
       </T.YStack>
       <T.YStack>
         {(function (){
           return (
-            <T.Text>{"Function Content"}</T.Text>);
-        }) ? (k.is_functionp(function (){
+            <T.Text>Function Content</T.Text>);
+        }) ? (xt.lang.common_lib.is_functionp(function (){
           return (
-            <T.Text>{"Function Content"}</T.Text>);
+            <T.Text>Function Content</T.Text>);
         }) ? React.createElement(function (){
           return (
-            <T.Text>{"Function Content"}</T.Text>);
+            <T.Text>Function Content</T.Text>);
         },{}) : (function (){
           return (
-            <T.Text>{"Function Content"}</T.Text>);
+            <T.Text>Function Content</T.Text>);
         })) : null}
       </T.YStack>
     </T.YStack>);

@@ -4,11 +4,11 @@ const babel = require('@babel/core');
 
 module.exports = {
   input: [
-    'app/**/src/**/*.{js,jsx,ts,tsx}',
-    'app-lib/**/src/**/*.{js,jsx,ts,tsx}',
+    'packages/**/src/**/*.{js,jsx,ts,tsx}',
+    'site/**/src/**/*.{js,jsx,ts,tsx}',
     // Exclude test and storybook if you want:
     '!**/src/**/*.test.{js,jsx,ts,tsx}',
-    '!app-lib/edge-storybook/**',
+    '!site-sb/**',
   ],
   output: './',
   options: {

@@ -2,12 +2,12 @@ import React from 'react'
 
 import * as T from 'tamagui'
 
-import * as ui_manage from '@statstrade/component/ui-manage'
+import * as ui_manage from '@statstrade/component/ui-manage.jsx'
 
 // statsui.basic.ui-manage-test/Metadata [12] 
 export var Metadata = {[title]:"Components/ui-manage",[tags]:["autodoc"]};
 
-// statsui.basic.ui-manage-test/Test_ManagerScreenHeader [18] 
+// statsui.basic.ui-manage-test/Test_ManagerScreenHeader [19] 
 export function Test_ManagerScreenHeader(){
   return (
     <T.YStack gap="$4">
@@ -30,17 +30,17 @@ export function Test_ScreenHeader(){
           alert("Go Back");
         }}
       controls={(
-          <T.Button>{"Control Button"}</T.Button>)}/>);
+          <T.Button>Control Button</T.Button>)}/>);
 }
 
-// statsui.basic.ui-manage-test/Test_SearchBar [48] 
+// statsui.basic.ui-manage-test/Test_SearchBar [47] 
 export function Test_SearchBar(){
   let [val,setVal] = React.useState("");
   return (
     <ui_manage.SearchBar value={val} onChangeText={setVal} placeholder="Search..."/>);
 }
 
-// statsui.basic.ui-manage-test/Test_FilterSelect [62] 
+// statsui.basic.ui-manage-test/Test_FilterSelect [60] 
 export function Test_FilterSelect(){
   let [val,setVal] = React.useState("all");
   return (
@@ -55,7 +55,7 @@ export function Test_FilterSelect(){
         ]}/>);
 }
 
-// statsui.basic.ui-manage-test/Test_CreateButton [79] 
+// statsui.basic.ui-manage-test/Test_CreateButton [76] 
 export function Test_CreateButton(){
   return (
     <ui_manage.CreateButton
@@ -65,7 +65,7 @@ export function Test_CreateButton(){
         }}/>);
 }
 
-// statsui.basic.ui-manage-test/Test_StatCard [91] 
+// statsui.basic.ui-manage-test/Test_StatCard [87] 
 export function Test_StatCard(){
   return (
     <T.XStack gap="$4">

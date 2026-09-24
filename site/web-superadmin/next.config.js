@@ -12,7 +12,7 @@ const disableExtraction =
 
 const plugins = [
   withTamagui({
-    config: '../../app-lib/config/src/tamagui.config.ts',
+    config: '../../packages/config/src/tamagui.config.ts',
     components: ['tamagui'],
     appDir: true,
     importsWhitelist: ['constants.js', 'colors.js'],
@@ -36,7 +36,7 @@ const configureWebpack = (config) => {
     worker_threads: false,
   }
   delete config.resolve.alias['@xtalk/db/net']
-  const xtNet = join(__dirname, '../../libs/xt-net')
+  const xtNet = join(__dirname, '../../packages/libs/xt-net')
   config.resolve.alias['@xtalk/net/net/http-fetch.js'] = join(xtNet, 'net/http-fetch.js')
   config.resolve.alias['@xtalk/net/net/ws-native.js'] = join(xtNet, 'net/ws-native.js')
   const optionalBackend = join(__dirname, 'src/browser-optional-backend.js')

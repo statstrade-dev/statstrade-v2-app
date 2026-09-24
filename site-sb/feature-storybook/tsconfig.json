@@ -1,9 +1,7 @@
 {
   "extends": "../../tsconfig.base",
   "include": [
-    "./src",
-    "../ui/src",
-    "./src/storybook"
+    "./src"
   ],
   "compilerOptions": {
     "composite": true,
@@ -13,15 +11,9 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@statstrade/component": ["../component/src/index"],
-      "@statstrade/component/*": ["../component/src/component/*"],
-      "@statstrade/feature": ["../feature/src/index"],
-      "@statstrade/feature/*": ["../feature/src/feature/*"],
-      "@statstrade/edge": ["../../app-gen/edge/src/index"],
-      "@statstrade/edge/*": ["../../app-gen/edge/src/edge/*", "../../app-gen/edge/src/lib/*"],
-      "@statstrade/web-main": [
-        "../../site/web-main/src/index"
-      ],
+      "@statstrade/component/*": ["../../packages/component/src/*"],
+      "@statstrade/feature/*": ["../../packages/feature/src/*"],
+      "@statstrade/edge/*": ["../../packages/edge/src/*"],
       "@statstrade/web-main/*": [
         "../../site/web-main/src/*"
       ],

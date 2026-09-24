@@ -15,22 +15,22 @@
         "./src/*"
       ],
       "@statstrade/component/*": [
-        "../../app-lib/component/src/*"
+        "../../packages/component/src/*"
       ],
       "@statstrade/config/*": [
-        "../../app-lib/config/src/*"
+        "../../packages/config/src/*"
       ],
       "@statstrade/edge/*": [
-        "../../app-gen/edge/src/*"
+        "../../packages/edge/src/*"
       ],
       "@statstrade/feature/*": [
-        "../../app-lib/feature/src/*"
+        "../../packages/feature/src/*"
       ],
       "@statstrade/group": [
-        "../../app-gen/group/src"
+        "../../packages/group/src"
       ],
       "@statstrade/group/*": [
-        "../../app-gen/group/src/*"
+        "../../packages/group/src/*"
       ]
     },
     "allowJs": true,

@@ -1,11 +1,11 @@
 import * as T from 'tamagui'
 
-import * as ui_background from '@statstrade/component/ui-background'
+import * as ui_background from '@statstrade/component/ui-background.jsx'
 
 // statsui.basic.ui-background-test/Metadata [12] 
 export var Metadata = {[title]:"Components/ui-background",[tags]:["autodoc"]};
 
-// statsui.basic.ui-background-test/Test_BackgroundLinearGradient [18] 
+// statsui.basic.ui-background-test/Test_BackgroundLinearGradient [19] 
 export function Test_BackgroundLinearGradient(){
   return (
     <T.YStack
@@ -19,7 +19,7 @@ export function Test_BackgroundLinearGradient(){
         themeColorsDark={["$blue2","$purple2"]}
         start={{"x":0,"y":0}}
         end={{"x":1,"y":1}}/>
-      <T.YStack flex={1} alignItems="center" justifyContent="center"><T.H4 color="white">{"Gradient Background"}</T.H4></T.YStack>
+      <T.YStack flex={1} alignItems="center" justifyContent="center"><T.H4 color="white">Gradient Background</T.H4></T.YStack>
     </T.YStack>);
 }
 

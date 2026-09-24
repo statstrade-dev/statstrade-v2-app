@@ -21,26 +21,30 @@ The repository does not currently contain a native Expo application under
 ## Repository layout
 
 ```text
-app/
-  nextjs/                  Next.js application and API routes
-
-app-gen/
+packages/
   edge/                    Shared generated edge, auth, and remote actions
   group/                   Shared generated group and Supabase actions
-  edge-storybook/          Storybook for the generated edge modules
-
-app-lib/
-  config/                  Tamagui configuration, themes, tokens, and fonts
-  config-eslint/           Shared ESLint configuration package
-  avatar/                  Three.js/VRM avatar components
   component/               Shared UI and management components
   feature/                 Reusable product features
+  config/                  Tamagui configuration, themes, tokens, and fonts
+  config-eslint/           Shared ESLint configuration package
+  libs/xt-*/               Generated XTalk runtime workspaces
+
+candidates/
+  avatar/                  Three.js/VRM avatar components
+
+site/
+  web-main/                Main Next.js web application
+  web-superadmin/          Superadmin Next.js web application
+
+site-sb/
   component-storybook/     Storybook stories for shared components
+  edge-storybook/          Storybook for generated edge modules
   feature-storybook/       Storybook stories for shared features
 ```
 
 The workspace package names are defined in the package manifests under
-`app-gen/`, `app-lib/`, and `app/nextjs/`.
+`packages/`, `site/`, `site-sb/`, and `candidates/`.
 
 ## Prerequisites
 
@@ -57,7 +61,7 @@ yarn install
 
 ## Environment
 
-Create `app/nextjs/.env.local` for local development, or configure these
+Create `site/web-main/.env.local` for local development, or configure these
 variables in the deployment environment. Set only the variables needed by the
 features you are using.
 
@@ -92,7 +96,7 @@ yarn workspace @statstrade/web-main dev
 For a production Next.js build and local server:
 
 ```sh
-yarn workspace @statstrade/nextjs build:app
+yarn workspace @statstrade/web-main build:app
 yarn start
 ```
 
@@ -114,7 +118,7 @@ Useful validation commands include:
 
 ```sh
 yarn check-tamagui
-yarn workspace @statstrade/nextjs lint
+yarn workspace @statstrade/web-main lint
 yarn build
 yarn build:all
 ```
@@ -147,7 +151,7 @@ yarn i18n:scan:watch   # Watch files while scanning translations
 yarn watch              # Watch workspace packages
 ```
 
-Deployment configuration is kept with the Next.js app in
-`app/nextjs/netlify.toml` and `app/nextjs/vercel.json`. Configure the
+Deployment configuration is kept with the Next.js apps in their respective
+`site/web-main/` and `site/web-superadmin/` directories. Configure the
 environment variables above in the selected hosting provider before
 deploying.

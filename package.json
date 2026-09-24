@@ -2,22 +2,11 @@
   "name": "statstrade-lite",
   "private": true,
   "workspaces": [
-    "./app-gen/edge",
-    "./app-gen/group",
-    "./app-gen/edge-storybook",
-    "./app-lib/avatar",
-    "./app-lib/component",
-    "./app-lib/component-storybook",
-    "./app-lib/config",
-    "./app-lib/config-eslint",
-    "./app-gen/edge",
-    "./app-gen/edge-storybook",
-    "./app-gen/group",
-    "./app-lib/feature",
-    "./app-lib/feature-storybook",
-    "./libs/xt-*",
-    "./site/web-main",
-    "./site/web-superadmin"
+    "./candidates/*",
+    "./packages/*",
+    "./packages/libs/*",
+    "./site/*",
+    "./site-sb/*"
   ],
   "scripts": {
     "dev": "yarn workspace @statstrade/web-main dev",

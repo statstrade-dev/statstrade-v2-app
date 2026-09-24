@@ -26,7 +26,7 @@ const config: StorybookConfig = {
         ...config.resolve,
         alias: {
           ...(config.resolve?.alias || {}),
-          '@statstrade/edge': path.resolve(__dirname, '../../edge/src'),
+          '@statstrade/edge': path.resolve(__dirname, '../../../packages/edge/src'),
           'react-native': 'react-native-web',
           'react-native-svg': 'react-native-svg-web',
           'react-native-video': path.resolve(__dirname, '../src/ext/shims/Video.tsx'),

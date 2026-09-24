@@ -2,12 +2,12 @@ import React from 'react'
 
 import * as T from 'tamagui'
 
-import * as ui_image from '@statstrade/component/ui-image'
+import * as ui_image from '@statstrade/component/ui-image.jsx'
 
 // statsui.basic.ui-image-test/Metadata [15] 
 export var Metadata = {[title]:"Components/ui-image",[tags]:["autodoc"]};
 
-// statsui.basic.ui-image-test/Test_ImageUpload [21] 
+// statsui.basic.ui-image-test/Test_ImageUpload [22] 
 export function Test_ImageUpload(){
   let [image,setImage] = React.useState(null);
   return (
@@ -17,7 +17,7 @@ export function Test_ImageUpload(){
         onImageSelected={setImage}
         width={200}
         height={200}/>
-      <T.Text>{"Click the placeholder to select an image."}</T.Text>
+      <T.Text>Click the placeholder to select an image.</T.Text>
     </T.YStack>);
 }
 
