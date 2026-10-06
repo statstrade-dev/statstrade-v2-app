@@ -5,7 +5,7 @@ import * as T from 'tamagui'
 import * as ui_image from '@statstrade/component/ui-image.jsx'
 
 // statsui.basic.ui-image-test/Metadata [15] 
-export var Metadata = {[title]:"Components/ui-image",[tags]:["autodoc"]};
+const Metadata = {title:"Components/ui-image",tags:["autodoc"]};
 
 // statsui.basic.ui-image-test/Test_ImageUpload [22] 
 export function Test_ImageUpload(){
@@ -21,4 +21,4 @@ export function Test_ImageUpload(){
     </T.YStack>);
 }
 
-export default Metadata
+export default Metadata;

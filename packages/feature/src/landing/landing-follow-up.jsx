@@ -71,8 +71,8 @@ export function LandingFollowUpForm(){
     <T.YStack gap="$6" width="100%" maxWidth={500} alignSelf="center">
       <T.YStack gap="$8">
         <T.H2
-          color="$color11"
-          fontWeight="100"
+          color="$color12"
+          fontWeight="700"
           fontSize="$10"
           letterSpacing={0}
           marginBottom="$2"

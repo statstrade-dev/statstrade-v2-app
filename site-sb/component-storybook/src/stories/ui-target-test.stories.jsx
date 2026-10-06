@@ -7,7 +7,7 @@ import * as ui_target from '@statstrade/component/ui-target.jsx'
 import * as ext_box from '@statstrade/edge/lib/js/react/ext-box.jsx'
 
 // statsui.basic.ui-target-test/Metadata [13] 
-export var Metadata = {[title]:"Components/ui-target",[tags]:["autodoc"]};
+const Metadata = {title:"Components/ui-target",tags:["autodoc"]};
 
 // statsui.basic.ui-target-test/Test_TargetScrollView [20] 
 export function Test_TargetScrollView(){
@@ -45,4 +45,4 @@ export function Test_TargetScrollView(){
     </T.YStack>);
 }
 
-export default Metadata
+export default Metadata;

@@ -14,46 +14,62 @@ export function IndexLandingHeroText(){
           "Statstrade lets your brand run live predictions that boost interaction, loyalty, and insights - all in one gamified experience."
         )}>
       <T.View
-        gap="$4"
-        flex={1}
+        gap="$3"
         width="100%"
-        alignItems="left"
+        alignItems="flex-start"
         flexDirection="row"
-        paddingHorizontal="0px"
-        $sm={{"alignItems":"center","flexDirection":"column"}}>
-        <landing_common.LandingButton href="/new-account" backgroundColor="$color" color="$color1">{ui.t("New Account")}</landing_common.LandingButton>
-        <landing_common.LandingButton href="/sign-in" color="$color12" backgroundColor="$accent1">{ui.t("Sign In")}</landing_common.LandingButton>
+        paddingHorizontal={0}
+        $sm={{"alignItems":"center","flexDirection":"column","width":"100%"}}>
+        <landing_common.LandingButton
+          href="/new-account"
+          backgroundColor="$accent8"
+          color="$white1">{ui.t("New Account")}
+        </landing_common.LandingButton>
+        <landing_common.LandingButton
+          href="/sign-in"
+          color="$color12"
+          backgroundColor="$color1"
+          borderWidth={1}
+          borderColor="$color5">{ui.t("Sign In")}
+        </landing_common.LandingButton>
       </T.View>
     </landing_common.LandingHeader>);
 }
 
-// statstrade-web.feature.landing.landing-hero/IndexLandingHeroImage [46] 
+// statstrade-web.feature.landing.landing-hero/IndexLandingHeroImage [47] 
 export function IndexLandingHeroImage({imageFull,imageMobile}){
   return (
     <T.View
+      maxWidth={650}
+      borderRadius="$6"
+      overflow="hidden"
+      width="100%"
+      flex={1}
+      paddingVertical="$3"
+      zIndex={0}
       display="block"
-      opacity={0.9}
-      width={1000}
-      height={800}
-      zIndex={-10}
-      paddingVertical="$4"
       $sm={{
           "width":"100%",
           "paddingHorizontal":"$2",
-          "maxWidth":"450px",
+          "maxWidth":"500px",
           "height":"auto",
-          "opacity":1
-        }}>
+          "backgroundColor":"transparent",
+          "overflow":"visible"
+        }}
+      backgroundColor="$color2"
+      height={480}>
       <ui.Image
         origHeight={1311}
         origWidth={2048}
         containerProps={{
-            "flex":1,
-            "width":"100%",
-            "marginLeft":"10px",
-            "marginTop":"20px",
+            "marginLeft":"12px",
+            "borderRadius":"$5",
             "overflow":"hidden",
-            "borderRadius":"10px",
+            "borderColor":"$color4",
+            "width":"100%",
+            "flex":1,
+            "marginTop":"12px",
+            "borderWidth":1,
             "display":"block",
             "$sm":{"display":"none"}
           }}
@@ -63,10 +79,11 @@ export function IndexLandingHeroImage({imageFull,imageMobile}){
           origHeight={1042}
           origWidth={800}
           containerProps={{
-              "width":"300px",
-              "marginTop":"30px",
+              "width":"100%",
+              "maxWidth":"300px",
+              "marginTop":"$4",
               "overflow":"hidden",
-              "borderRadius":"10px",
+              "borderRadius":"$5",
               "display":"none",
               "$sm":{"display":"block"}
             }}
@@ -75,26 +92,30 @@ export function IndexLandingHeroImage({imageFull,imageMobile}){
     </T.View>);
 }
 
-// statstrade-web.feature.landing.landing-hero/IndexLandingHero [91] 
+// statstrade-web.feature.landing.landing-hero/IndexLandingHero [100] 
 export function IndexLandingHero({imageFull,imageMobile}){
   return (
-    <T.YStack flex={1}>
+    <T.YStack flex={1} backgroundColor="$color1">
       <T.View
-        paddingBottom="60px"
-        paddingTop="40px"
+        alignSelf="center"
+        maxWidth={1280}
+        paddingBottom={64}
+        paddingTop={48}
         width="100%"
+        paddingHorizontal="$4"
         flex={1}
         flexDirection="row"
-        justifyContent="start"
+        justifyContent="space-between"
+        gap="$8"
         $sm={{
-            "paddingTop":"60px",
-            "marginHorizontal":0,
+            "paddingTop":44,
+            "paddingBottom":48,
+            "paddingHorizontal":"$3",
             "flexDirection":"column",
             "alignItems":"center",
             "justifyContent":"center"
           }}
-        marginHorizontal={50}
-        backgroundColor="$backgroundColor"
+        backgroundColor="$color1"
         alignItems="center">
         <IndexLandingHeroText/>
         <IndexLandingHeroImage imageFull={imageFull} imageMobile={imageMobile}/>

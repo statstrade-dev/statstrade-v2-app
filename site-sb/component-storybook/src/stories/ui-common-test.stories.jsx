@@ -7,7 +7,7 @@ import React from 'react'
 import * as ui from '@statstrade/component/ui-common.jsx'
 
 // statsui.basic.ui-common-test/Metadata [12] 
-export var Metadata = {[title]:"Components/ui-common",[tags]:["autodoc"]};
+const Metadata = {title:"Components/ui-common",tags:["autodoc"]};
 
 // statsui.basic.ui-common-test/Test_Badge [19] 
 export function Test_Badge(){
@@ -244,4 +244,4 @@ export function Test_DialogConfirm(){
     </T.YStack>);
 }
 
-export default Metadata
+export default Metadata;

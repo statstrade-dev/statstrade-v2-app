@@ -9,7 +9,7 @@ import * as ui_datepicker from '@statstrade/component/ui-datepicker.jsx'
 import * as ui from '@statstrade/component/ui-common.jsx'
 
 // statsui.basic.ui-datepicker-test/Metadata [14] 
-export var Metadata = {"title":"Components/ui-datepicker","tags":["autodoc"]};
+const Metadata = {"title":"Components/ui-datepicker","tags":["autodoc"]};
 
 // statsui.basic.ui-datepicker-test/Test_DatePicker [21] 
 export function Test_DatePicker(){
@@ -35,4 +35,4 @@ export function Test_DatePicker(){
     </T.YStack>);
 }
 
-export default Metadata
+export default Metadata;

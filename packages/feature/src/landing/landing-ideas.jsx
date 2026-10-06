@@ -2,8 +2,6 @@ import * as T from 'tamagui'
 
 import * as landing_common from '@statstrade/feature/landing/landing-common.jsx'
 
-import * as ui from '@statstrade/component/ui-common.jsx'
-
 // statstrade-web.feature.landing.landing-ideas/landingIdeasSteps [12] 
 export var landingIdeasSteps = [
   {
@@ -39,40 +37,48 @@ export var landingIdeasSteps = [
 // statstrade-web.feature.landing.landing-ideas/LandingIdeasCard [34] 
 export function LandingIdeasCard({data}){
   return (
-    <T.View position="relative">
+    <T.View position="relative" height="100%">
       <T.Card
-        cursor="pointer"
-        borderColor="$color1"
+        borderRadius="$5"
+        borderColor="$color4"
+        paddingHorizontal="$4"
+        hoverStyle={{"borderColor":"$color6","y":-2}}
+        borderWidth={1}
+        paddingVertical="$5"
+        gap="$4"
         backgroundColor="$color1"
-        paddingVertical={32}
-        paddingHorizontal={15}
-        height="100%"
-        gap="$3">
-        <T.YStack gap="$4" alignItems="start">
-          <T.XStack width="100%" alignItems="center">
-            <T.H4>{data.title}</T.H4>
-            <ui.Pad/>
-            <T.XStack width="150px">
-              <ui.ButtonNormal
-                size="$1"
-                tooltip={data.description}
-                padding="$2"
-                borderRadius="$3"
-                color="$color1"
-                backgroundColor="$color11">{data.industry}
-              </ui.ButtonNormal>
-            </T.XStack>
+        height="100%">
+        <T.YStack gap="$3" alignItems="start">
+          <T.XStack width="100%" alignItems="center" gap="$3">
+            <T.H4 fontWeight="600" color="$color12">{data.title}</T.H4>
+            <T.View flex={1}/>
+            <T.View
+              backgroundColor="$color3"
+              borderRadius="$3"
+              paddingHorizontal="$3"
+              paddingVertical="$2">
+              <T.Text fontSize="$2" fontWeight="600" color="$color10">{data.industry}</T.Text>
+            </T.View>
           </T.XStack>
-          <T.Text fontSize="$3" borderRadius="$4">{data.example}</T.Text>
+          <T.Text fontSize="$3" lineHeight={22} color="$color10">{data.description}</T.Text>
+          <T.View
+            backgroundColor="$color2"
+            borderLeftWidth={3}
+            borderLeftColor="$accent8"
+            borderRadius="$3"
+            paddingHorizontal="$3"
+            paddingVertical="$2">
+            <T.Text fontSize="$3" color="$color12">{data.example}</T.Text>
+          </T.View>
         </T.YStack>
       </T.Card>
     </T.View>);
 }
 
-// statstrade-web.feature.landing.landing-ideas/LandingIdeas [73] 
+// statstrade-web.feature.landing.landing-ideas/LandingIdeas [92] 
 export function LandingIdeas(){
   return (
-    <landing_common.LandingFrame maxWidth="800px">
+    <landing_common.LandingFrame maxWidth="1120px">
       <landing_common.LandingHeaderRow
         align="right"
         title1="Next Generation"
@@ -80,9 +86,10 @@ export function LandingIdeas(){
         paragraph="From product launches to trade shows, prediction markets deliver measurable results across every promotional channel."/>
       <T.View
         display="grid"
-        gap={10}
+        gap={16}
         gridTemplateColumns="repeat(2, minmax(0, 1fr))"
-        $md={{"gridTemplateColumns":"repeat(1, minmax(0, 1fr))"}}>
+        $md={{"gridTemplateColumns":"repeat(2, minmax(0, 1fr))"}}
+        $sm={{"gridTemplateColumns":"repeat(1, minmax(0, 1fr))"}}>
         {landingIdeasSteps.map(function (data,i){
           return (
             <LandingIdeasCard data={data} key={i}/>);

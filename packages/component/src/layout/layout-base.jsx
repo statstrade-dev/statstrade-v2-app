@@ -14,19 +14,22 @@ import * as ReactNative from 'react-native'
 
 import * as ReactQuery from '@tanstack/react-query'
 
+import * as common_client from '@xtalk/lang/common-client.js'
+
 import * as frame_toast from '@statstrade/component/layout/common/frame-toast.jsx'
 
 import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as devtool from '@statstrade/component/layout/common/frame-devtool.jsx'
 
-// statsui.basic.layout.layout-base/LayoutBaseOuter [21] 
+// statsui.basic.layout.layout-base/LayoutBaseOuter [22] 
 export function LayoutBaseOuter({children}){
   useServerInsertedHTML(function (){
     let rnwStyle = ReactNative.StyleSheet.getSheet();
     return (
       <React.Fragment>
         <link rel="stylesheet" href="/tamagui.css"/>
+        <link rel="stylesheet" href="/custom.css"/>
         <style
           dangerouslySetInnerHTML={{"id":rnwStyle.id,"__html":rnwStyle.textContent}}/>
         <style dangerouslySetInnerHTML={{"__html":config.getNewCSS()}}/>
@@ -51,7 +54,7 @@ export function LayoutBaseOuter({children}){
     </NextThemeProvider>);
 }
 
-// statsui.basic.layout.layout-base/useThemeStored [57] 
+// statsui.basic.layout.layout-base/useThemeStored [59] 
 export function useThemeStored(){
   let [current,setCurrent] = useRootTheme();
   let [mounted,setMounted] = React.useState(false);
@@ -78,7 +81,7 @@ export function useThemeStored(){
   return {current,setCurrent};
 }
 
-// statsui.basic.layout.layout-base/LayoutBaseInner [77] 
+// statsui.basic.layout.layout-base/LayoutBaseInner [79] 
 export function LayoutBaseInner({Component,children}){
   let themeCtx = useThemeStored();
   let queryClient = React.useRef(
@@ -95,8 +98,19 @@ export function LayoutBaseInner({Component,children}){
     </ReactQuery.QueryClientProvider>);
 }
 
-// statsui.basic.layout.layout-base/LayoutBase [100] 
-export function LayoutBase({children,showDevtool}){
+// statsui.basic.layout.layout-base/LayoutBaseDevWebsocket [102] 
+export function LayoutBaseDevWebsocket(){
+  React.useEffect(function (){
+    let conn = common_client.client_ws("localhost",29001,{});
+    return function (){
+      conn.close();
+    };
+  },[]);
+  return;
+}
+
+// statsui.basic.layout.layout-base/LayoutBase [109] 
+export function LayoutBase({showDevWebsocket,showDevtool,children}){
   let [mounted,setMounted] = React.useState(false);
   React.useEffect(function (){
     if(!mounted){
@@ -110,6 +124,8 @@ export function LayoutBase({children,showDevtool}){
           <devtool.FrameDevtoolProvider>
             {(process.env.NEXT_PUBLIC_DEV || showDevtool) ? (
               <devtool.FrameDevtoolPanel/>) : null}
+            {(process.env.NEXT_PUBLIC_DEV_WS || showDevWebsocket) ? (
+              <LayoutBaseDevWebsocket/>) : null}
             <TToast.ToastViewport left={10} top={10} zIndex={100000000}/>
             <frame_toast.FrameToast/>
             {children}

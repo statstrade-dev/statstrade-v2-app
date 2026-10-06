@@ -3,7 +3,8 @@ import path from 'path';
 
 const config: StorybookConfig = {
   stories: [
-    '../src/stories/**/*.csf.stories.@(js|jsx|ts|tsx|mdx)'
+    '../src/stories/ui-*.stories.jsx',
+    '../src/stories/**/*.csf.stories.@(js|jsx|ts|tsx|mdx)',
   ],
   addons: [
     // '@storybook/addon-react-native-web',
@@ -27,8 +28,15 @@ const config: StorybookConfig = {
         ...config.resolve,
         alias: {
           ...(config.resolve?.alias || {}),
+          // The component source imports the generated CommonJS runtime, but
+          // Storybook needs the browser-native ESM runtime for named imports.
+          '@xtalk/lang/common-data.js': path.resolve(__dirname, '../../../packages/edge/src/lib/xt/lang/common-data.jsx'),
+          '@xtalk/lang/common-lib.js': path.resolve(__dirname, '../../../packages/edge/src/lib/xt/lang/common-lib.jsx'),
+          '@xtalk/lang/common-sort-by.js': path.resolve(__dirname, '../../../packages/edge/src/lib/xt/lang/common-sort-by.jsx'),
+          '@xtalk/lang/common-string.js': path.resolve(__dirname, '../../../packages/edge/src/lib/xt/lang/common-string.jsx'),
           'react-native': 'react-native-web',
           'react-native-svg': 'react-native-svg-web',
+          '@s77rt/react-native-date-picker': path.resolve(__dirname, '../src/ext/shims/DatePicker.tsx'),
           'react-native-video': path.resolve(__dirname, '../src/ext/shims/Video.tsx'),
           'react-native-gesture-handler': path.resolve(__dirname, '../src/ext/shims/GestureHandler.tsx'),
           'react-native-device-info': path.resolve(__dirname, '../src/ext/shims/DeviceInfo.ts'),

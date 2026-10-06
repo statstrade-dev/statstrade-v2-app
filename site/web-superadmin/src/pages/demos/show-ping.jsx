@@ -1,10 +1,10 @@
 'use client'
 
+import * as T from 'tamagui'
+
 import React from 'react'
 
 import * as page_proxy from '@xtalk/substrate/page-proxy.js'
-
-import * as layout_super from '@statstrade/component/layout/layout-super.jsx'
 
 import * as runtime from '@xtalk/db/node/runtime.js'
 
@@ -12,62 +12,26 @@ import * as client_base from '@xtalk/db/node/client-base.js'
 
 import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
 
+import * as worker from '@statstrade/web-superadmin/worker.jsx'
+
+import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
+
 import * as devtool from '@statstrade/component/layout/common/frame-devtool.jsx'
 
-import * as substrate from '@xtalk/substrate/substrate.js'
+import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
-import * as browser_transport from '@xtalk/substrate/transport-browser.js'
-
-// statstrade-superadmin.pages.demos.show-ping/PING-RPC [24] 
+// statstrade-superadmin.pages.demos.show-ping/PING-RPC [25] 
 var PING_RPC = "ping";
 
-// statstrade-superadmin.pages.demos.show-ping/createWorkerSource [27] 
-function createWorkerSource(){
-  return browser_transport.sharedworker_url_source(
-    "/workers/web.sharedworker.js",
-    {"type":"module","name":"statstrade-superadmin"}
+// statstrade-superadmin.pages.demos.show-ping/initNode [28] 
+async function initNode(){
+  return await worker.initNode(
+    "statstrade-superadmin-demo-ping",
+    "/workers/web.sharedworker.js"
   );
 }
 
-// statstrade-superadmin.pages.demos.show-ping/createConfig [35] 
-function createConfig(){
-  let url = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL);
-  let secured = url.protocol == "https:";
-  let pathname = url.pathname;
-  return {
-    "site_map_url":"/worker/site-map/manifest.json",
-    "primary":{
-        "type":"supabase",
-        "defaults":{
-            "host":url.hostname,
-            "port":url.port ? url.port : (secured ? 443 : 80),
-            "secured":secured,
-            "basepath":(pathname == "/") ? "" : pathname,
-            "apikey":process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-          }
-      },
-    "caching":{"type":"sqlite","defaults":{"filename":":memory:"}}
-  };
-}
-
-// statstrade-superadmin.pages.demos.show-ping/createClient [53] 
-function createClient(){
-  return substrate.node_create({"id":"statstrade-superadmin-demo-ping"});
-}
-
-// statstrade-superadmin.pages.demos.show-ping/initState [57] 
-async function initState(client){
-  return await runtime.sharedworker_connect_state(client,createConfig(),{},{},createWorkerSource(),null);
-}
-
-// statstrade-superadmin.pages.demos.show-ping/initNode [69] 
-async function initNode(){
-  let client = createClient();
-  let state = await initState(client);
-  return {"client":client,"state":state};
-}
-
-// statstrade-superadmin.pages.demos.show-ping/attachPing [76] 
+// statstrade-superadmin.pages.demos.show-ping/attachPing [36] 
 async function attachPing(resource){
   let client = resource["client"];
   let page_args = {
@@ -86,23 +50,23 @@ async function attachPing(resource){
   return resource;
 }
 
-// statstrade-superadmin.pages.demos.show-ping/initPing [95] 
+// statstrade-superadmin.pages.demos.show-ping/initPing [55] 
 async function initPing(resource){
   return await attachPing(resource);
 }
 
-// statstrade-superadmin.pages.demos.show-ping/initProxy [99] 
+// statstrade-superadmin.pages.demos.show-ping/initProxy [59] 
 async function initProxy(resource){
   await page_proxy.group_open_proxy(resource["client"],"room/superadmin","system",{});
   return resource;
 }
 
-// statstrade-superadmin.pages.demos.show-ping/callPing [109] 
+// statstrade-superadmin.pages.demos.show-ping/callPing [69] 
 function callPing(resource){
   return page_proxy.model_proxy_call(resource["client"],"room/superadmin","system","ping",[],true,{});
 }
 
-// statstrade-superadmin.pages.demos.show-ping/closeNode [121] 
+// statstrade-superadmin.pages.demos.show-ping/closeNode [81] 
 async function closeNode(resource){
   if(resource && !resource["closed"]){
     resource["closed"] = true;
@@ -123,7 +87,7 @@ async function closeNode(resource){
   return true;
 }
 
-// statstrade-superadmin.pages.demos.show-ping/initPage [135] 
+// statstrade-superadmin.pages.demos.show-ping/initPage [95] 
 async function initPage(){
   let resource = await initNode();
   try{
@@ -137,7 +101,7 @@ async function initPage(){
   }
 }
 
-// statstrade-superadmin.pages.demos.show-ping/PingApp [146] 
+// statstrade-superadmin.pages.demos.show-ping/PingApp [106] 
 function PingApp({resource}){
   let client = resource["client"];
   devtool.useDevtoolSharedWorker(resource);
@@ -152,7 +116,7 @@ function PingApp({resource}){
         await callPing(resource);
       }
       catch(e){
-        setError("error");
+        setError("The ping failed. Please try again.");
       }
       finally{
         setBusy(false);
@@ -160,15 +124,45 @@ function PingApp({resource}){
     }
   };
   let output_text = ((typeof output) == "string") ? output : "ready";
-  return React.createElement("div",{},React.createElement(
-    "button",
-    {"disabled":busy,"onClick":onPing},
-    busy ? "Pinging..." : "Ping"
-  ),React.createElement("div",{},output_text),error ? React.createElement("div",{},error) : null);
+  return (
+    <T.YStack
+      gap="$4"
+      padding="$5"
+      borderWidth={1}
+      borderColor="$color4"
+      borderRadius="$4"
+      backgroundColor="$background">
+      <T.XStack
+        alignItems="center"
+        justifyContent="space-between"
+        gap="$3"
+        flexWrap="wrap">
+        <T.Text fontWeight="600" fontSize="$4">Service status</T.Text>
+        <T.Text
+          fontSize="$2"
+          fontWeight="600"
+          color={error ? "$red10" : ((output == "pong") ? "$green10" : "$color10")}>
+          {busy ? "Checking..." : (error ? "Failed" : ((output == "pong") ? "Connected" : "Ready"))}
+        </T.Text>
+      </T.XStack>
+      <T.YStack
+        gap="$2"
+        padding="$4"
+        borderRadius="$3"
+        backgroundColor="$color2"
+        accessibilityLiveRegion="polite">
+        <T.Text fontSize="$2" color="$color10">Response</T.Text>
+        <T.Text fontFamily="monospace" fontSize="$6" color="$color12">{output_text}</T.Text>
+      </T.YStack>
+      <T.Button size="$4" disabled={busy} onPress={onPing}>{busy ? "Pinging..." : "Send ping"}</T.Button>
+      {error ? (
+        <T.Text color="$red10" fontSize="$3" accessibilityRole="alert">{error}</T.Text>) : null}
+    </T.YStack>);
 }
 
-// statstrade-superadmin.pages.demos.show-ping/Page [187] 
+// statstrade-superadmin.pages.demos.show-ping/Page [174] 
 function Page(){
+  // 01ad4fee-ec81-46e0-a216-af95237904f9
   let [readyState,setReadyState] = React.useState("loading");
   let [resource,setResource] = React.useState(null);
   React.useEffect(function (){
@@ -200,13 +194,46 @@ function Page(){
     };
   },[]);
   return (
-    <layout_super.LayoutSuper>
-      {(readyState == "ready") ? React.createElement(PingApp,{"resource":resource}) : React.createElement(
-        "div",
-        {},
-        (readyState == "error") ? "XTalk ping: error" : "XTalk ping: loading"
-      )}
-    </layout_super.LayoutSuper>);
+    <layout_base.LayoutBase showDevtool={true}>
+      <T.YStack
+        minHeight="100vh"
+        width="100%"
+        padding="$5"
+        alignItems="center"
+        justifyContent="center"
+        backgroundColor="$background">
+        <T.YStack width="100%" maxWidth={560} gap="$5">
+          <T.XStack alignItems="center" gap="$2">
+            <logo.LogoStatstrade size={28}/>
+            <T.Text fontSize="$3" fontWeight="700" color="$color12">STATSTRADE</T.Text>
+          </T.XStack>
+          <T.YStack gap="$2">
+            <T.H2 color="$color12">Connection check</T.H2>
+            <T.Text color="$color10" fontSize="$4">Send a ping to check the service connection.</T.Text>
+          </T.YStack>
+          {(readyState == "ready") ? (
+            <PingApp resource={resource}/>) : (
+            <T.YStack
+              gap="$3"
+              padding="$5"
+              borderWidth={1}
+              borderColor="$color4"
+              borderRadius="$4"
+              backgroundColor="$background"
+              accessibilityLiveRegion="polite">
+              {(readyState == "error") ? (
+                <T.YStack gap="$2">
+                  <T.Text fontWeight="600" color="$red10" accessibilityRole="alert">Unable to connect</T.Text>
+                  <T.Text color="$color10">Refresh the page to try again.</T.Text>
+                </T.YStack>) : (
+                <T.XStack gap="$3" alignItems="center">
+                  <T.Spinner size="small" color="$color10"/>
+                  <T.Text color="$color10">Connecting to the service...</T.Text>
+                </T.XStack>)}
+            </T.YStack>)}
+        </T.YStack>
+      </T.YStack>
+    </layout_base.LayoutBase>);
 }
 
 export default Page

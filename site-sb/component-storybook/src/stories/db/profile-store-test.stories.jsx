@@ -143,7 +143,7 @@ vitest.describe("save-public-profile",function (){
     vitest.expect(result).toEqual({"id":"user-1"});
     vitest.expect(adapter.client.defaults.token).toBe("owner-token");
     vitest.expect(rpcSpy).toHaveBeenCalledWith(adapter,{
-      "id":"user_profile_update",
+      "id":"user_set_public",
       "schema":"stats_rpc",
       "input":[{"symbol":"m"}]
     },[payload],{});

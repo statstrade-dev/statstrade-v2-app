@@ -186,7 +186,7 @@ export function Image({origWidth = 1,origHeight = 1,source,containerProps,...pro
       flex={1}
       height={height}
       onLayout={handleLayout}
-      width={width}
+      width="100%"
       {...containerProps}>
       <ReactNative.Image
         source={source}
@@ -341,6 +341,7 @@ export function ButtonNormal({
           "opacity":BUTTON_PRESS_OPACITY,
           "scale":BUTTON_PRESS_SCALE
         }}
+      borderRadius="$4"
       hoverStyle={{
           "backgroundColor":secondaryColor,
           "color":primaryColor,
@@ -350,6 +351,7 @@ export function ButtonNormal({
         }}
       borderWidth={0}
       size="$4"
+      fontWeight="600"
       disabledStyle={{
           "backgroundColor":secondaryColor,
           "color":primaryColor,
@@ -361,7 +363,7 @@ export function ButtonNormal({
       {...props}/>));
 }
 
-// statsui.basic.ui-common/ButtonContrast [428] 
+// statsui.basic.ui-common/ButtonContrast [430] 
 export function ButtonContrast({
   color = "$color12",
   backgroundColor = "$color1",
@@ -382,6 +384,7 @@ export function ButtonContrast({
           "color":primaryColor,
           "opacity":BUTTON_PRESS_OPACITY
         }}
+      borderRadius="$4"
       variant="outlined"
       borderColor={borderColor}
       hoverStyle={{
@@ -394,6 +397,7 @@ export function ButtonContrast({
         }}
       borderWidth={1}
       size="$4"
+      fontWeight="600"
       disabledStyle={{
           "borderColor":primaryColor,
           "color":primaryColor,
@@ -404,7 +408,7 @@ export function ButtonContrast({
       {...props}/>));
 }
 
-// statsui.basic.ui-common/ButtonOutlined [469] 
+// statsui.basic.ui-common/ButtonOutlined [473] 
 export function ButtonOutlined({
   color = "$color11",
   backgroundColor = "$color1",
@@ -425,6 +429,7 @@ export function ButtonOutlined({
           "color":primaryColor,
           "opacity":BUTTON_PRESS_OPACITY
         }}
+      borderRadius="$4"
       variant="outlined"
       scale={BUTTON_HOVER_SCALE}
       borderColor={borderColor}
@@ -432,6 +437,7 @@ export function ButtonOutlined({
       size="$4"
       filter="brightness(1.1)"
       opacity={BUTTON_HOVER_OPACITY}
+      fontWeight="600"
       disabledStyle={{
           "borderColor":primaryColor,
           "color":primaryColor,
@@ -443,7 +449,7 @@ export function ButtonOutlined({
       {...props}/>));
 }
 
-// statsui.basic.ui-common/ButtonInverse [507] 
+// statsui.basic.ui-common/ButtonInverse [513] 
 export function ButtonInverse({
   color = "$color11",
   backgroundColor = "$color1",
@@ -464,6 +470,7 @@ export function ButtonInverse({
           "opacity":BUTTON_PRESS_OPACITY,
           "scale":BUTTON_PRESS_SCALE
         }}
+      borderRadius="$4"
       hoverStyle={{
           "backgroundColor":colorPrimary,
           "color":colorText,
@@ -472,13 +479,14 @@ export function ButtonInverse({
           "scale":BUTTON_HOVER_SCALE
         }}
       size="$4"
+      fontWeight="600"
       disabledStyle={{"opacity":0.3,"scale":1}}
       fontSize="15px"
       backgroundColor={colorPrimary}
       {...props}/>));
 }
 
-// statsui.basic.ui-common/ButtonLink [539] 
+// statsui.basic.ui-common/ButtonLink [547] 
 export function ButtonLink({
   href = "#",
   active,
@@ -517,7 +525,7 @@ export function ButtonLink({
     </T.Anchor>));
 }
 
-// statsui.basic.ui-common/ButtonSwitch [577] 
+// statsui.basic.ui-common/ButtonSwitch [585] 
 export function ButtonSwitch({
   checked,
   setChecked,
@@ -591,29 +599,29 @@ export function ButtonSwitch({
     </ReactNative.Pressable>));
 }
 
-// statsui.basic.ui-common/HomeAction [656] 
+// statsui.basic.ui-common/HomeAction [664] 
 export function HomeAction({href,tooltipProps,...props}){
   return (
     <Link href={href || "/"} cursor="pointer" marginTop={5} padding={0}><House color="$color12" {...props}/></Link>);
 }
 
-// statsui.basic.ui-common/ThemeGlobalContext [676] 
+// statsui.basic.ui-common/ThemeGlobalContext [684] 
 export var ThemeGlobalContext = React.createContext(null);
 
-// statsui.basic.ui-common/useThemeGlobal [679] 
+// statsui.basic.ui-common/useThemeGlobal [687] 
 export function useThemeGlobal(){
   return React.useContext(ThemeGlobalContext);
 }
 
-// statsui.basic.ui-common/ApiContext [686] 
+// statsui.basic.ui-common/ApiContext [694] 
 export var ApiContext = React.createContext(null);
 
-// statsui.basic.ui-common/useApiContext [688] 
+// statsui.basic.ui-common/useApiContext [696] 
 export function useApiContext(){
   return React.useContext(ApiContext);
 }
 
-// statsui.basic.ui-common/ThemeSwitch [694] 
+// statsui.basic.ui-common/ThemeSwitch [702] 
 export function ThemeSwitch({...props}){
   let {current,setCurrent} = useThemeGlobal();
   let changed = React.useMemo(function (){
@@ -633,13 +641,13 @@ export function ThemeSwitch({...props}){
       {...props}/>);
 }
 
-// statsui.basic.ui-common/Checkbox [725] 
+// statsui.basic.ui-common/Checkbox [733] 
 export function Checkbox({tooltip,tooltipProps,...props}){
   return withTooltip(tooltip,tooltipProps,(
     <T.Checkbox {...props}><T.Checkbox.Indicator><Check/></T.Checkbox.Indicator></T.Checkbox>));
 }
 
-// statsui.basic.ui-common/PopoverMenu [744] 
+// statsui.basic.ui-common/PopoverMenu [752] 
 export function PopoverMenu({
   open,
   onOpenChange,
@@ -681,7 +689,7 @@ export function PopoverMenu({
     </T.Popover>);
 }
 
-// statsui.basic.ui-common/Dropdown [786] 
+// statsui.basic.ui-common/Dropdown [794] 
 export function Dropdown({
   value,
   itemProps,
@@ -750,10 +758,10 @@ export function Dropdown({
     </T.Select>);
 }
 
-// statsui.basic.ui-common/useToastController [856] 
+// statsui.basic.ui-common/useToastController [864] 
 export var useToastController = TToast.useToastController;
 
-// statsui.basic.ui-common/Toast [859] 
+// statsui.basic.ui-common/Toast [867] 
 export function Toast({event,...props}){
   let toast = TToast.useToastController();
   let {width} = ReactNative.useWindowDimensions();
@@ -803,7 +811,7 @@ export function Toast({event,...props}){
     </TToast.Toast>);
 }
 
-// statsui.basic.ui-common/Dialog [925] 
+// statsui.basic.ui-common/Dialog [933] 
 export function Dialog({
   title,
   description,
@@ -866,7 +874,7 @@ export function Dialog({
     </T.Dialog>);
 }
 
-// statsui.basic.ui-common/DialogConfirm [988] 
+// statsui.basic.ui-common/DialogConfirm [996] 
 export function DialogConfirm({
   onConfirm,
   onCancel,

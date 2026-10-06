@@ -1,11 +1,11 @@
 const lib = require("@xtalk/lang/common-lib.js")
 
-function client_ws(host,port,opts){
-  let {path,secured} = opts;
+function client_ws(host,port,opts = {}){
+  let {path,secured,listeners = []} = opts || {};
   let conn = new WebSocket(
     "ws" + (secured ? "s" : "") + "://" + host + ":" + port + "/" + (path || "")
   );
-  let interval = window.setInterval(function (){
+  let interval = setInterval(function (){
     conn.send("ping");
   },30000);
   conn.addEventListener("message",function (msg){
@@ -19,6 +19,9 @@ function client_ws(host,port,opts){
   conn.addEventListener("close",function (){
     window.clearInterval(interval);
   });
+  for(let [tag,callback] of Object.entries(listeners)){
+    conn.addEventListener(tag,callback);
+  };
   return conn;
 }
 

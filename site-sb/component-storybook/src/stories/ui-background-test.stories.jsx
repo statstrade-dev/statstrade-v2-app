@@ -3,7 +3,7 @@ import * as T from 'tamagui'
 import * as ui_background from '@statstrade/component/ui-background.jsx'
 
 // statsui.basic.ui-background-test/Metadata [12] 
-export var Metadata = {[title]:"Components/ui-background",[tags]:["autodoc"]};
+const Metadata = {title:"Components/ui-background",tags:["autodoc"]};
 
 // statsui.basic.ui-background-test/Test_BackgroundLinearGradient [19] 
 export function Test_BackgroundLinearGradient(){
@@ -23,4 +23,4 @@ export function Test_BackgroundLinearGradient(){
     </T.YStack>);
 }
 
-export default Metadata
+export default Metadata;

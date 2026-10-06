@@ -35,12 +35,23 @@ export var FrameDevtoolContext = React.createContext();
 
 // statsui.basic.layout.common.frame-devtool/api-sign-in [33] 
 export function api_sign_in(user){
+  if(!user.password){
+    throw new Error("This account has no password configured.");
+  }
   gs.setStore(["dev","user"],user.handle);
   gs.setStore(["dev","sign-in"],true);
-  return sb.getClient().auth.signInWithPassword(user);
+  return sb.getClient().auth.signInWithPassword(user).then(function (response){
+    if(response.error){
+      throw response.error;
+    }
+    return response;
+  }).catch(function (error){
+    gs.setStore(["dev","sign-in"],false);
+    throw error;
+  });
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolLayout [51] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolLayout [60] 
 export function FrameDevtoolLayout({children,color}){
   return (
     <T.View
@@ -55,7 +66,7 @@ export function FrameDevtoolLayout({children,color}){
     </T.View>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolPopup [68] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolPopup [77] 
 export function FrameDevtoolPopup({arrowProps,children,color,contentProps,icon,placement}){
   let [open,setOpen] = React.useState(false);
   return (
@@ -85,7 +96,7 @@ export function FrameDevtoolPopup({arrowProps,children,color,contentProps,icon,p
     </ui.PopoverMenu>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolButton [94] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolButton [103] 
 export function FrameDevtoolButton({children,onPress,...props}){
   return (
     <ui.ButtonNormal
@@ -97,13 +108,13 @@ export function FrameDevtoolButton({children,onPress,...props}){
     </ui.ButtonNormal>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolIconButton [103] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolIconButton [112] 
 export function FrameDevtoolIconButton({children,...props}){
   return (
     <ui.ButtonNormal margin={0} padding="3px" size="$1" width="12px" {...props}>{children}</ui.ButtonNormal>);
 }
 
-// statsui.basic.layout.common.frame-devtool/frameDevtoolUserAccounts [116] 
+// statsui.basic.layout.common.frame-devtool/frameDevtoolUserAccounts [125] 
 export var frameDevtoolUserAccounts = [
   {
   "email":"super@statstrade.io",
@@ -131,10 +142,10 @@ export var frameDevtoolUserAccounts = [
   {"email":"zcaudate@outlook.com","handle":"zcaudate"}
 ];
 
-// statsui.basic.layout.common.frame-devtool/frameDevtoolUserAccountsLu [135] 
+// statsui.basic.layout.common.frame-devtool/frameDevtoolUserAccountsLu [144] 
 export var frameDevtoolUserAccountsLu = kd.arr_juxt(frameDevtoolUserAccounts,kd.key_fn("handle"),kl.identity);
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolUserRow [140] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolUserRow [149] 
 export function FrameDevtoolUserRow({user}){
   let {api,controls,page} = React.useContext(FrameDevtoolContext);
   let backgroundColor = "$color1";
@@ -169,20 +180,30 @@ export function FrameDevtoolUserRow({user}){
         flex={1}
         color={ncolor}
         backgroundColor={nbackgroundColor}
+        disabled={!user.password}
         onPress={function (){
             if(!auth){
               api.mutations.create_testuser.mutateAsync(user).then(function (res){
+                if(res.error){
+                  throw res.error;
+                }
                 page.toast.show(ui.t("User Created"),{"message":JSON.stringify(user)});
                 if(user.is_verified == false){
-                  console.log(res,user);
-                  controls.setSession(res.data);
                   return res;
                 }
                 return api.mutations.sign_in.mutateAsync(user);
+              }).catch(function (error){
+                page.toast.show(ui.t("User Setup Failed"),{
+                  "message":error.message || "Could not create or sign in to this test user."
+                });
               });
             }
             else if(!isCurrent){
-              api.mutations.sign_in.mutateAsync(user);
+              api.mutations.sign_in.mutateAsync(user).catch(function (error){
+                page.toast.show(ui.t("Sign In Failed"),{
+                  "message":error.message || "Check the test account credentials."
+                });
+              });
             }
           }}>{user.handle}
       </FrameDevtoolButton>
@@ -196,13 +217,14 @@ export function FrameDevtoolUserRow({user}){
     </T.XStack>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolUser [214] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolUser [232] 
 export function FrameDevtoolUser(){
   let {api,controls} = React.useContext(FrameDevtoolContext);
   React.useEffect(function (){
     api.queries.list_testusers.setInput({"emails":frameDevtoolUserAccounts.map(kd.key_fn("email"))});
   },[]);
   let users = kd.get_in(api.queries.list_testusers,["data","data"]) || [];
+  let userError = kd.get_in(api.queries.list_testusers,["error","message"]);
   return (
     <FrameDevtoolPopup
       icon={User}
@@ -210,17 +232,24 @@ export function FrameDevtoolUser(){
       placement="left-end"
       contentProps={{"backgroundColor":"$color12"}}
       arrowProps={{"backgroundColor":"$color12"}}>
-      {users.map(function (user,i){
-        user = kd.obj_assign(user,frameDevtoolUserAccounts[i]);
-        let key = i;
-        let color = "$color1";
-        return (
-          <FrameDevtoolUserRow user={user} key={key}/>);
-      })}
+      <T.YStack gap="$1">
+        {userError ? (
+          <T.Text fontSize="8px" color="$red8" maxWidth="190px">{"Could not load users: " + userError}</T.Text>) : null}
+        {frameDevtoolUserAccounts.map(function (account){
+          let auth_user = users.find(function (candidate){
+            return candidate.email == account.email;
+          });
+          let user = kd.obj_assign({},auth_user);
+          user = kd.obj_assign(user,account);
+          let key = account.handle;
+          return (
+            <FrameDevtoolUserRow user={user} key={key}/>);
+        })}
+      </T.YStack>
     </FrameDevtoolPopup>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolSharedWorker [242] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolSharedWorker [276] 
 export function FrameDevtoolSharedWorker(){
   let {controls,sharedWorker} = React.useContext(FrameDevtoolContext);
   let state = kd.get_in(sharedWorker,["state"]);
@@ -259,7 +288,7 @@ export function FrameDevtoolSharedWorker(){
     </FrameDevtoolPopup>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolActivity [300] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolActivity [334] 
 export function FrameDevtoolActivity(){
   let context = React.useContext(FrameDevtoolContext);
   let {controls} = context;
@@ -327,7 +356,7 @@ export function FrameDevtoolActivity(){
     </FrameDevtoolPopup>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolWrench [376] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolWrench [410] 
 export function FrameDevtoolWrench(){
   let {controls,page} = React.useContext(FrameDevtoolContext);
   let {current,setCurrent} = ui.useThemeGlobal();
@@ -374,9 +403,9 @@ export function FrameDevtoolWrench(){
     </FrameDevtoolPopup>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolInfo [432] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolInfo [466] 
 export function FrameDevtoolInfo(){
-  let {api,controls} = React.useContext(FrameDevtoolContext);
+  let {api,controls,page} = React.useContext(FrameDevtoolContext);
   let dims = ui.useWindowDimensions();
   let handle = kd.get_in(controls.session,["user","user_metadata","handle"]) || kd.get_in(controls.session,["user","email"]) || "anon";
   return (
@@ -392,7 +421,11 @@ export function FrameDevtoolInfo(){
               else{
                 api.mutations.sign_in.mutateAsync(
                   frameDevtoolUserAccountsLu[gs.getStore(["dev","user"]) || "super"]
-                );
+                ).catch(function (error){
+                  page.toast.show(ui.t("Sign In Failed"),{
+                    "message":error.message || "Check the test account credentials."
+                  });
+                });
               }
             }}>{handle}
         </FrameDevtoolButton>
@@ -404,12 +437,12 @@ export function FrameDevtoolInfo(){
     </T.XStack>);
 }
 
-// statsui.basic.layout.common.frame-devtool/frameDevtoolApi [475] 
+// statsui.basic.layout.common.frame-devtool/frameDevtoolApi [515] 
 export var frameDevtoolApi = {
   "queries":{
     "list_testusers":{
       "fn":api_debug.debug_get_users_by_email,
-      "args":[{"name":"input","keys":["email"]}]
+      "args":[{"name":"input","keys":["emails"]}]
     }
   },
   "mutations":{
@@ -430,7 +463,7 @@ export var frameDevtoolApi = {
   }
 };
 
-// statsui.basic.layout.common.frame-devtool/useFrameDevtoolContext [489] 
+// statsui.basic.layout.common.frame-devtool/useFrameDevtoolContext [529] 
 export function useFrameDevtoolContext(){
   let toast = ui.useToastController();
   let [session,setSession] = sb.useListenSession();
@@ -443,7 +476,7 @@ export function useFrameDevtoolContext(){
   return {api,controls,debugContent,page,setDebugContent,setSharedWorker,sharedWorker};
 }
 
-// statsui.basic.layout.common.frame-devtool/useDevtoolInjection [519] 
+// statsui.basic.layout.common.frame-devtool/useDevtoolInjection [559] 
 export function useDevtoolInjection(content){
   let {setDebugContent} = React.useContext(FrameDevtoolContext);
   React.useEffect(function (){
@@ -454,7 +487,7 @@ export function useDevtoolInjection(content){
   },[]);
 }
 
-// statsui.basic.layout.common.frame-devtool/useDevtoolSharedWorker [530] 
+// statsui.basic.layout.common.frame-devtool/useDevtoolSharedWorker [570] 
 export function useDevtoolSharedWorker(resource){
   let {setSharedWorker} = React.useContext(FrameDevtoolContext);
   React.useEffect(function (){
@@ -465,7 +498,7 @@ export function useDevtoolSharedWorker(resource){
   },[resource]);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolScreen [543] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolScreen [583] 
 export function FrameDevtoolScreen(){
   let {controls,debugContent} = React.useContext(FrameDevtoolContext);
   if(!debugContent){
@@ -481,7 +514,7 @@ export function FrameDevtoolScreen(){
     </FrameDevtoolPopup>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolProvider [558] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolProvider [598] 
 export function FrameDevtoolProvider({children}){
   let context = useFrameDevtoolContext();
   gu.usePathContext(["devtool"],context);
@@ -504,7 +537,7 @@ export function FrameDevtoolProvider({children}){
     <FrameDevtoolContext.Provider value={context}>{children}</FrameDevtoolContext.Provider>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolPanel [585] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolPanel [625] 
 export function FrameDevtoolPanel(){
   let context = React.useContext(FrameDevtoolContext);
   let {controls} = context;

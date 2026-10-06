@@ -7,7 +7,7 @@ import * as ui_section from '@statstrade/component/ui-section.jsx'
 import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
 // statsui.basic.ui-section-test/Metadata [17] 
-export var Metadata = {[title]:"Components/ui-section",[tags]:["autodoc"]};
+const Metadata = {title:"Components/ui-section",tags:["autodoc"]};
 
 // statsui.basic.ui-section-test/Test_FullScreenCentered [24] 
 export function Test_FullScreenCentered(){
@@ -98,4 +98,4 @@ export function Test_sectionContent(){
     </T.YStack>);
 }
 
-export default Metadata
+export default Metadata;

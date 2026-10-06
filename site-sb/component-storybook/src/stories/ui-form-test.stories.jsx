@@ -2,14 +2,14 @@ import * as T from 'tamagui'
 
 import React from 'react'
 
-import * as hook_form from '@statstrade/edge/lib/js/lib/react-hook-form'
+import * as hook_form from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
-import * as ui_form from '@statstrade/component/ui-form'
+import * as ui_form from '@statstrade/component/ui-form.jsx'
 
 // statsui.basic.ui-form-test/Metadata [16] 
-export var Metadata = {[title]:"Components/ui-form",[tags]:["autodoc"]};
+const Metadata = {title:"Components/ui-form",tags:["autodoc"]};
 
-// statsui.basic.ui-form-test/Test_FormInput [22] 
+// statsui.basic.ui-form-test/Test_FormInput [23] 
 export function Test_FormInput(){
   let {control,handleSubmit} = hook_form.useFormBase({"defaultValues":{"test_input":""}});
   return (
@@ -37,12 +37,12 @@ export function Test_FormInputTitle(){
         height={50}
         borderWidth={1}
         borderColor="$color8">
-        <ui_form.FormInputTitle>{"Static Title"}</ui_form.FormInputTitle>
+        <ui_form.FormInputTitle>Static Title</ui_form.FormInputTitle>
       </T.View>
     </T.YStack>);
 }
 
-// statsui.basic.ui-form-test/Test_FormInputPlaceholder [60] 
+// statsui.basic.ui-form-test/Test_FormInputPlaceholder [59] 
 export function Test_FormInputPlaceholder(){
   let [displaced,setDisplaced] = React.useState(false);
   return (
@@ -50,7 +50,7 @@ export function Test_FormInputPlaceholder(){
       <T.Button
         onPress={function (){
             setDisplaced(!displaced);
-          }}>{"Toggle Placeholder"}
+          }}>Toggle Placeholder
       </T.Button>
       <T.View
         position="relative"
@@ -58,12 +58,12 @@ export function Test_FormInputPlaceholder(){
         borderWidth={1}
         borderColor="$color8"
         width={300}>
-        <ui_form.FormInputPlaceholder displaced={displaced} inputLayout={{"height":60}}>{"Animated Placeholder"}</ui_form.FormInputPlaceholder>
+        <ui_form.FormInputPlaceholder displaced={displaced} inputLayout={{"height":60}}>Animated Placeholder</ui_form.FormInputPlaceholder>
       </T.View>
     </T.YStack>);
 }
 
-// statsui.basic.ui-form-test/Test_FormError [81] 
+// statsui.basic.ui-form-test/Test_FormError [79] 
 export function Test_FormError(){
   return (
     <T.YStack gap="$4">
@@ -71,19 +71,19 @@ export function Test_FormError(){
     </T.YStack>);
 }
 
-// statsui.basic.ui-form-test/Test_FormTagSelect [94] 
+// statsui.basic.ui-form-test/Test_FormTagSelect [91] 
 export function Test_FormTagSelect(){
   let [selected,setSelected] = React.useState({});
   let toggle = function (id){
     if(selected.has(id)){
       let new_set = new Set(selected);
       new_set.delete(id);
-      setSelected(new_set);
+      setSelected(new_set)
     }
     else{
       let new_set = new Set(selected);
       new_set.add(id);
-      setSelected(new_set);
+      setSelected(new_set)
     }
   };
   return (
@@ -98,18 +98,18 @@ export function Test_FormTagSelect(){
         ]}/>);
 }
 
-// statsui.basic.ui-form-test/Test_FormInputErrorCheck [119] 
+// statsui.basic.ui-form-test/Test_FormInputErrorCheck [115] 
 export function Test_FormInputErrorCheck(){
   return (
     <T.YStack gap="$4">
-      <T.Text>{"Error State:"}</T.Text>
+      <T.Text>Error State:</T.Text>
       <T.View position="relative" height={40} width={40} borderWidth={1}>
         <ui_form.FormInputErrorCheck
           error={{"message":"Error"}}
           fieldState={{"isTouched":true,"invalid":true}}
           focused={false}/>
       </T.View>
-      <T.Text>{"Success State:"}</T.Text>
+      <T.Text>Success State:</T.Text>
       <T.View position="relative" height={40} width={40} borderWidth={1}>
         <ui_form.FormInputErrorCheck
           error={{}}
@@ -119,7 +119,7 @@ export function Test_FormInputErrorCheck(){
     </T.YStack>);
 }
 
-// statsui.basic.ui-form-test/Test_FormInputErrorTag [142] 
+// statsui.basic.ui-form-test/Test_FormInputErrorTag [137] 
 export function Test_FormInputErrorTag(){
   return (
     <T.YStack gap="$4" height={100}>
@@ -129,7 +129,7 @@ export function Test_FormInputErrorTag(){
     </T.YStack>);
 }
 
-// statsui.basic.ui-form-test/Test_FormInputRender [157] 
+// statsui.basic.ui-form-test/Test_FormInputRender [151] 
 export function Test_FormInputRender(){
   let {control} = hook_form.useFormBase();
   return (
@@ -145,4 +145,4 @@ export function Test_FormInputRender(){
         }}/>);
 }
 
-export default Metadata
+export default Metadata;

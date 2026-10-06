@@ -5,7 +5,7 @@ import * as T from 'tamagui'
 import * as ui_manage from '@statstrade/component/ui-manage.jsx'
 
 // statsui.basic.ui-manage-test/Metadata [12] 
-export var Metadata = {[title]:"Components/ui-manage",[tags]:["autodoc"]};
+const Metadata = {title:"Components/ui-manage",tags:["autodoc"]};
 
 // statsui.basic.ui-manage-test/Test_ManagerScreenHeader [19] 
 export function Test_ManagerScreenHeader(){
@@ -74,4 +74,4 @@ export function Test_StatCard(){
     </T.XStack>);
 }
 
-export default Metadata
+export default Metadata;

@@ -15,11 +15,11 @@
       "api/ui.event" : true
     },
     "meta" : {
-      "columns" : [ "type", "color", "is-active", "is-onboarded", "first-name", "last-name", "country-code", "city", "location", "bio", "picture", "detail" ],
-      "table" : "statsdb.common.type-user/User",
       "api/ui.event" : true,
+      "columns" : [ "type", "color", "is-active", "is-onboarded", "first-name", "last-name", "country-code", "location", "bio", "picture", "detail" ],
       "db/module" : "statsdb.fn.user.user-manage-profile",
-      "sb/grant" : "auth"
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-user/User"
     }
   },
   "user-set-secret" : {
@@ -38,11 +38,11 @@
       "api/ui.event" : true
     },
     "meta" : {
-      "columns" : [ "gender", "gender-text", "pronouns", "dob", "language" ],
-      "table" : "statsdb.common.type-user/UserSecret",
       "api/ui.event" : true,
+      "columns" : [ "gender", "gender-text", "pronouns", "dob", "language" ],
       "db/module" : "statsdb.fn.user.user-manage-profile",
-      "sb/grant" : "auth"
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-user/UserSecret"
     }
   }
 }

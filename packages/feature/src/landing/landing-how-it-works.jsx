@@ -27,32 +27,30 @@ export var landingHowItWorksSteps = [
 // statstrade-web.feature.landing.landing-how-it-works/LandingHowItWorksCard [27] 
 export function LandingHowItWorksCard({data}){
   return (
-    <T.View position="relative">
+    <T.View position="relative" height="100%">
       <T.Card
-        backgroundColor="$color1"
+        borderRadius="$5"
+        borderColor="$color4"
+        paddingHorizontal="$4"
+        hoverStyle={{"borderColor":"$color6","y":-2}}
         borderWidth={1}
-        borderColor="$color1"
-        paddingVertical={32}
-        paddingHorizontal={15}
-        height="100%"
+        paddingVertical="$5"
         gap="$3"
-        $md={{"padding":15,"borderWidth":0}}>
-        <T.XStack
-          $md={{"flexDirection":"column","alignItems":"start"}}
-          gap="$4"
-          alignItems="center">
-          <T.H1 color="$color3">{data.number}</T.H1>
-          <T.H4>{data.title}</T.H4>
+        backgroundColor="$color1"
+        height="100%">
+        <T.XStack gap="$3" alignItems="center">
+          <T.Text fontSize={32} fontWeight="700" color="$accent8">{data.number}</T.Text>
+          <T.H4 fontWeight="600" color="$color12">{data.title}</T.H4>
         </T.XStack>
-        <T.Text color="$color11" fontSize="$3">{data.description}</T.Text>
+        <T.Text color="$color10" fontSize="$3" lineHeight={22}>{data.description}</T.Text>
       </T.Card>
     </T.View>);
 }
 
-// statstrade-web.feature.landing.landing-how-it-works/LandingHowItWorks [59] 
+// statstrade-web.feature.landing.landing-how-it-works/LandingHowItWorks [64] 
 export function LandingHowItWorks(){
   return (
-    <landing_common.LandingFrame maxWidth="800px">
+    <landing_common.LandingFrame maxWidth="1120px">
       <landing_common.LandingHeaderRow
         align="left"
         title1={ui.t("From Concept")}
@@ -63,7 +61,7 @@ export function LandingHowItWorks(){
       </landing_common.LandingHeaderRow>
       <T.View
         display="grid"
-        gap={10}
+        gap={16}
         gridTemplateColumns="repeat(3, minmax(0, 1fr))"
         $md={{"gridTemplateColumns":"repeat(1, minmax(0, 1fr))"}}>
         {landingHowItWorksSteps.map(function (data,i){

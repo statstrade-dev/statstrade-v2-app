@@ -20,96 +20,99 @@ export function TargetLink({tag,title}){
 export function LandingFrame({start,children,...props}){
   return (
     <T.YStack
+      alignSelf="center"
+      maxWidth={1200}
       borderTopWidth={start ? 0 : 1}
-      borderTopColor="$color5"
-      backgroundColor="$color1"
-      paddingVertical={128}
-      marginLeft={50}
-      marginRight={50}
-      $sm={{"paddingVertical":80,"marginLeft":10,"marginRight":10}}
+      width="100%"
+      paddingHorizontal="$4"
+      paddingVertical={96}
+      borderTopColor="$color4"
+      $sm={{"paddingVertical":64,"paddingHorizontal":"$3"}}
+      backgroundColor="$color2"
       {...props}>{children}
     </T.YStack>);
 }
 
-// statstrade-web.feature.landing.landing-common/LandingButton [47] 
+// statstrade-web.feature.landing.landing-common/LandingButton [48] 
 export function LandingButton({href,color = "$color11",backgroundColor = "$color2",...props}){
   return (
     <ui.Link href={href} style={{"textDecoration":"none"}}>
       <T.Button
-        elevation={10}
+        animation="quick"
         color={color}
         pressStyle={{"scale":0.98,"color":color,"backgroundColor":backgroundColor}}
-        width="300px"
-        hoverStyle={{"scale":1.02,"color":color,"backgroundColor":backgroundColor}}
+        borderRadius="$4"
+        minWidth="180px"
+        hoverStyle={{"scale":1.01,"color":color,"backgroundColor":backgroundColor}}
         borderWidth={0}
         size="$5"
-        fontWeight="100"
-        $sm={{"marginHorizontal":0,"width":"195px"}}
-        fontSize="$5"
+        fontWeight="600"
+        $sm={{"marginHorizontal":0,"width":"100%"}}
+        fontSize="$4"
         backgroundColor={backgroundColor}
         {...props}/>
     </ui.Link>);
 }
 
-// statstrade-web.feature.landing.landing-common/LandingHeader [78] 
+// statstrade-web.feature.landing.landing-common/LandingHeader [80] 
 export function LandingHeader({title1,title2,paragraph,children,align = "left"}){
+  let crossAxis = (align == "left") ? "flex-start" : "flex-end";
   return (
     <T.YStack
-      width="450px"
-      alignItems={(align == "left") ? "start" : "end"}
-      justifyContent={align}
-      gap="$5"
-      paddingBottom="30px"
+      width="100%"
+      maxWidth="540px"
+      alignItems={crossAxis}
+      gap="$4"
+      paddingBottom="$4"
       $sm={{
           "gap":"$3",
-          "width":"400px",
+          "width":"100%",
           "alignItems":"center",
           "justifyContent":"center",
-          "marginLeft":0,
-          "marginRight":0,
           "paddingBottom":0
         }}>
       <T.YStack gap="$2">
         {title1 ? (
           <T.H2
-            color="$accent3"
-            fontWeight="100"
+            color="$accent8"
+            fontWeight="700"
             fontSize="$10"
             letterSpacing={0}
             textAlign={align}
-            marginBottom="$2"
-            $sm={{"textAlign":"center","fontSize":"38px","marginBottom":0}}>{title1}
+            lineHeight={58}
+            $sm={{"textAlign":"center","fontSize":"38px","lineHeight":42}}>{title1}
           </T.H2>) : null}
         {title2 ? (
           <T.H2
-            color="$color11"
-            fontWeight="100"
+            color="$color12"
+            fontWeight="700"
             fontSize="$10"
             letterSpacing={0}
             textAlign={align}
-            marginBottom="$2"
-            $sm={{"textAlign":"center","fontSize":"38px","marginBottom":0}}>{title2}
+            lineHeight={58}
+            $sm={{"textAlign":"center","fontSize":"38px","lineHeight":42}}>{title2}
           </T.H2>) : null}
       </T.YStack>
-      <T.YStack gap="$6">
+      <T.YStack gap="$5">
         <T.Text
-          fontSize="$5"
-          color="$color11"
+          fontSize="$4"
+          color="$color10"
           textAlign={align}
-          maxWidth="450px"
-          padding={2}
-          $sm={{"textAlign":"center","padding":"$4"}}>{paragraph}
+          maxWidth="480px"
+          lineHeight={29}
+          $sm={{"textAlign":"center","paddingHorizontal":"$2"}}>{paragraph}
         </T.Text>
         {children}
       </T.YStack>
     </T.YStack>);
 }
 
-// statstrade-web.feature.landing.landing-common/LandingHeaderRow [141] 
+// statstrade-web.feature.landing.landing-common/LandingHeaderRow [140] 
 export function LandingHeaderRow({title1,title2,paragraph,children,align = "left",...props}){
+  let crossAxis = (align == "left") ? "flex-start" : "flex-end";
   return (
     <T.YStack
-      alignItems={(align == "left") ? "start" : "end"}
+      alignItems={crossAxis}
       $sm={{"alignItems":"center"}}
       {...props}>
       <LandingHeader
