@@ -115,15 +115,8 @@ export function LayoutUserProfile({controls}){
               {!isManager ? (
                 <React.Fragment>
                   <MenuIconLink
-                    icon={Trophy}
-                    link={"/u/" + controls.handle + "/achievements"}
-                    text="My Achievements"
-                    height={44}
-                    paddingHorizontal="$4"/>
-                  <MenuIconLink
-                    icon={Clock}
-                    link={"/u/" + controls.handle + "/history"}
-                    text="Point History"
+                    link="/profile"
+                    text="Edit Profile"
                     height={44}
                     paddingHorizontal="$4"/>
                 </React.Fragment>) : null}

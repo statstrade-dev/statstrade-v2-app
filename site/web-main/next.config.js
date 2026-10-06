@@ -29,6 +29,32 @@ const plugins = [
   }),
 ]
 
+const configureWebpack = (config) => {
+  config.resolve.alias = { ...(config.resolve.alias || {}) }
+  config.resolve.fallback = {
+    ...(config.resolve.fallback || {}),
+    worker_threads: false,
+  }
+  delete config.resolve.alias['@xtalk/db/net']
+  const xtNet = join(__dirname, '../../packages/libs/xt-net')
+  config.resolve.alias['@xtalk/net/net/http-fetch.js'] = join(xtNet, 'net/http-fetch.js')
+  config.resolve.alias['@xtalk/net/net/ws-native.js'] = join(xtNet, 'net/ws-native.js')
+  const optionalBackend = join(__dirname, 'src/browser-optional-backend.js')
+  config.resolve.alias['@xtalk/net/net/conn-sqlite.js'] = optionalBackend
+  config.resolve.alias['@xtalk/net/net/conn-postgres.js'] = optionalBackend
+  config.module.rules.push({
+    test: /\.js$/,
+    include: /node_modules\/@react-native\/assets-registry/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: ['next/babel', '@babel/preset-flow'],
+      },
+    },
+  })
+  return config
+}
+
 module.exports = () => {
   /** @type {import('next').NextConfig} */
   let config = {
@@ -63,6 +89,11 @@ module.exports = () => {
       '@statstrade/config-eslint',
       '@statstrade/edge',
       '@statstrade/feature',
+      '@xtalk/db',
+      '@xtalk/event',
+      '@xtalk/lang',
+      '@xtalk/net',
+      '@xtalk/substrate',
       '@haskkor/react-native-recaptchav3',
       '@react-native/assets-registry',
       '@s77rt/react-native-date-picker',
@@ -83,19 +114,6 @@ module.exports = () => {
       'expo-modules-core',
       'expo-router',
     ],
-    webpack: (config) => {
-      config.module.rules.push({
-        test: /\.js$/,
-        include: /node_modules\/@react-native\/assets-registry/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['next/babel', '@babel/preset-flow'],
-          },
-        },
-      })
-      return config;
-    },
     experimental: {
       scrollRestoration: true
     },
@@ -106,6 +124,14 @@ module.exports = () => {
       ...config,
       ...plugin(config),
     }
+  }
+
+  const pluginWebpack = config.webpack
+  config.webpack = (webpackConfig, options) => {
+    const nextConfig = pluginWebpack
+      ? pluginWebpack(webpackConfig, options)
+      : webpackConfig
+    return configureWebpack(nextConfig)
   }
 
   return config

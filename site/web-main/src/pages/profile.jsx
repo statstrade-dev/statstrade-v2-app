@@ -1,6 +1,11 @@
-import * as dashboard_profile from '@statstrade/feature/dashboard/dashboard-profile.jsx'
+import * as layout_full from '@statstrade/component/layout/layout-full.jsx'
 
-// statstrade-web.page.profile/Page [12] 
-export var Page = dashboard_profile.DashboardProfile;
+import * as profile_editor from '@statstrade/feature/profile/profile-editor.jsx'
+
+// statstrade-web.page.profile/Page [15] 
+export function Page(){
+  return (
+    <layout_full.LayoutFull><profile_editor.ProfileEditor/></layout_full.LayoutFull>);
+}
 
 export default Page

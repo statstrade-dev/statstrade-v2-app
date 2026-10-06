@@ -1,1 +1,23 @@
-{ }
+{
+  "Lock" : {
+    "position" : 0
+  },
+  "Rev" : {
+    "position" : 1
+  },
+  "Social" : {
+    "position" : 2
+  },
+  "Starred" : {
+    "position" : 3
+  },
+  "Wallet" : {
+    "position" : 4
+  },
+  "User" : {
+    "position" : 5
+  },
+  "UserSecret" : {
+    "position" : 6
+  }
+}
