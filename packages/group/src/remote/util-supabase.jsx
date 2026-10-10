@@ -223,7 +223,7 @@ export function callRemote(fstr,margs,options = {}){
 // statsui.edge.remote.util-supabase/callRemoteDebug [268] 
 export function callRemoteDebug(fstr,margs,options = {}){
   let {sbClient = getClient()} = options;
-  return sbClient.schema("szn_debug").rpc(fstr,margs);
+  return sbClient.schema("stats_debug").rpc(fstr,margs);
 }
 
 // statsui.edge.remote.util-supabase/callGraphql [283] 

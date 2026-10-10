@@ -8,13 +8,15 @@ import * as substrate from '@statstrade/web-superadmin/lib/substrate-bare.jsx'
 
 import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
 
+import * as page_base from '@xtalk/db/node/page-base.js'
+
 import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
 
 import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
-// statstrade-superadmin.pages.demos.show-ping/PING-PAGE [20] 
+// statstrade-superadmin.pages.demos.show-ping-test/PING-PAGE [21] 
 var PING_PAGE = {
-  "group_id":"demos/show-ping",
+  "group_id":"demos/show-ping-test",
   "models":{
     "ping":{
       "rpc":"ping",
@@ -23,9 +25,15 @@ var PING_PAGE = {
   }
 };
 
-// statstrade-superadmin.pages.demos.show-ping/usePingProps [30] 
+// statstrade-superadmin.pages.demos.show-ping-test/usePingProps [31] 
 function usePingProps(page){
-  let output = ext_page.listenPageModel(page,"ping","output",{});
+  let output = ext_page.listenModel(
+    page["client"],
+    page["space_id"],
+    ["demos/show-ping-test","ping"],
+    "output",
+    {}
+  );
   let [busy,setBusy] = React.useState(false);
   let [error,setError] = React.useState(null);
   let actions = {
@@ -34,10 +42,16 @@ function usePingProps(page){
           setBusy(true);
           setError(null);
           try{
-            await ext_page.callPageModel(page,"ping",[],true,{});
+            await ext_page.remoteCall(
+              page["client"],
+              page["space_id"],
+              ["demos/show-ping-test","ping"],
+              [],
+              true
+            );
           }
           catch(e){
-            setError("The ping failed. Please try again.");
+            setError("The live Supabase ping failed. Please try again.");
           }
           finally{
             setBusy(false);
@@ -54,7 +68,7 @@ function usePingProps(page){
   return {actions,views};
 }
 
-// statstrade-superadmin.pages.demos.show-ping/PingApp [59] 
+// statstrade-superadmin.pages.demos.show-ping-test/PingApp [67] 
 function PingApp({page}){
   let props = usePingProps(page);
   let {actions,views} = props;
@@ -73,7 +87,7 @@ function PingApp({page}){
         justifyContent="space-between"
         gap="$3"
         flexWrap="wrap">
-        <T.Text fontWeight="600" fontSize="$4">Service status</T.Text>
+        <T.Text fontWeight="600" fontSize="$4">Live Supabase status</T.Text>
         <T.Text
           fontSize="$2"
           fontWeight="600"
@@ -87,20 +101,58 @@ function PingApp({page}){
         borderRadius="$3"
         backgroundColor="$color2"
         accessibilityLiveRegion="polite">
-        <T.Text fontSize="$2" color="$color10">Response</T.Text>
+        <T.Text fontSize="$2" color="$color10">RPC response</T.Text>
         <T.Text fontFamily="monospace" fontSize="$6" color="$color12">{output_text}</T.Text>
       </T.YStack>
-      <T.Button size="$4" disabled={busy} onPress={ping}>{busy ? "Pinging..." : "Send ping"}</T.Button>
+      <T.Button size="$4" disabled={busy} onPress={ping}>{busy ? "Pinging..." : "Send live ping"}</T.Button>
       {error ? (
         <T.Text color="$red10" fontSize="$3" accessibilityRole="alert">{error}</T.Text>) : null}
     </T.YStack>);
 }
 
-// statstrade-superadmin.pages.demos.show-ping/PingContent [106] 
+// statstrade-superadmin.pages.demos.show-ping-test/usePingPage [114] 
+function usePingPage(resource){
+  let [page,setPage] = React.useState(null);
+  let [page_error,setPageError] = React.useState(null);
+  React.useEffect(function (){
+    let cancelled = false;
+    let page_node = null;
+    let attach = async function (){
+      if(resource){
+        try{
+          page_node = await page_base.page_attach(resource["client"],"db/primary","room/superadmin",PING_PAGE,{});
+          if(cancelled){
+            await page_base.page_detach(page_node,{});
+          }
+          else{
+            setPage(page_node);
+          }
+        }
+        catch(e){
+          if(!cancelled){
+            setPageError(e);
+          }
+        }
+      }
+    };
+    setPage(null);
+    setPageError(null);
+    attach();
+    return function (){
+      cancelled = true;
+      if(page_node){
+        page_base.page_detach(page_node,{});
+      }
+    };
+  },[resource]);
+  return {page,page_error};
+}
+
+// statstrade-superadmin.pages.demos.show-ping-test/PingContent [152] 
 function PingContent(){
   let state = substrate.useSubstrateContext();
   let resource = state["resource"];
-  let page_state = ext_page.usePage(resource,"db/primary","room/superadmin",PING_PAGE,{});
+  let page_state = usePingPage(resource);
   let page = page_state["page"];
   let page_error = page_state["error"];
   return (
@@ -118,8 +170,8 @@ function PingContent(){
             <T.Text fontSize="$3" fontWeight="700" color="$color12">STATSTRADE</T.Text>
           </T.XStack>
           <T.YStack gap="$2">
-            <T.H2 color="$color12">Connection check</T.H2>
-            <T.Text color="$color10" fontSize="$4">Send a ping to check the service connection.</T.Text>
+            <T.H2 color="$color12">Live Supabase ping test</T.H2>
+            <T.Text color="$color10" fontSize="$4">Send a ping against the live Supabase RPC.</T.Text>
           </T.YStack>
           {page ? (
             <PingApp page={page}/>) : (
@@ -133,12 +185,12 @@ function PingContent(){
               accessibilityLiveRegion="polite">
               {page_error ? (
                 <T.YStack gap="$2">
-                  <T.Text fontWeight="600" color="$red10" accessibilityRole="alert">Unable to connect</T.Text>
+                  <T.Text fontWeight="600" color="$red10" accessibilityRole="alert">Unable to connect to Supabase</T.Text>
                   <T.Text color="$color10">Refresh the page to try again.</T.Text>
                 </T.YStack>) : (
                 <T.XStack gap="$3" alignItems="center">
                   <T.Spinner size="small" color="$color10"/>
-                  <T.Text color="$color10">Connecting to the page...</T.Text>
+                  <T.Text color="$color10">Connecting to Supabase...</T.Text>
                 </T.XStack>)}
             </T.YStack>)}
         </T.YStack>
@@ -146,11 +198,13 @@ function PingContent(){
     </layout_base.LayoutBase>);
 }
 
-// statstrade-superadmin.pages.demos.show-ping/Page [167] 
+// statstrade-superadmin.pages.demos.show-ping-test/Page [207] 
 function Page(){
-  // 7a3e3915-1429-4fb1-aaf9-624c07231a0c
+  // 9c2f3ea4-a586-4b4e-be80-ead691c948ee
   return (
-    <substrate.SubstrateProvider options={{"client_id":"statstrade-superadmin-demo-ping"}}><PingContent/></substrate.SubstrateProvider>);
+    <substrate.SubstrateProvider
+      options={{"client_id":"statstrade-superadmin-demo-ping-test"}}><PingContent/>
+    </substrate.SubstrateProvider>);
 }
 
 export default Page

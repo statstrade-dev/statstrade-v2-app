@@ -209,7 +209,7 @@ export function SectionTabs({group,active,onSelect}){
 }
 
 // statsui.basic.layout.admin-page/AdminSection [259] 
-export function AdminSection({client,group,section,resource,onSection}){
+export function AdminSection({client,group,section,resource,global,onSection}){
   let metadata = routes.getSection(group,section);
   return (
     <T.YStack gap="$4" flex={1}>
@@ -219,7 +219,7 @@ export function AdminSection({client,group,section,resource,onSection}){
         <T.Text color="$color10">{metadata.description}</T.Text>
       </T.YStack>
       {(metadata.key == "home/dashboard") ? (
-        <PingPanel client={resource["client"]}/>) : ((metadata.key == "manage/organisation") ? (
+        <PingPanel client={resource["client"]}/>) : ((metadata.key == "admin/global") ? React.createElement(global,{"resource":resource}) : ((metadata.key == "manage/organisation") ? (
         <AdminOrganisationSection/>) : ((metadata.key == "settings/profile") ? (
         <profile.ProfileEditor/>) : (
         <T.YStack
@@ -232,12 +232,12 @@ export function AdminSection({client,group,section,resource,onSection}){
           <T.Text color="$color10">
             The modular page shell is active. Add the domain body for this section here.
           </T.Text>
-        </T.YStack>)))}
+        </T.YStack>))))}
     </T.YStack>);
 }
 
-// statsui.basic.layout.admin-page/AdminApp [293] 
-export function AdminApp({resource}){
+// statsui.basic.layout.admin-page/AdminApp [295] 
+export function AdminApp({resource,global}){
   let [group,setGroup] = React.useState(routes.F01_HOME);
   let [section,setSection] = React.useState("dashboard");
   let metadata = routes.getSection(group,section);
@@ -259,6 +259,7 @@ export function AdminApp({resource}){
         group={group}
         section={section}
         resource={resource}
+        global={global}
         onSection={onSection}/>
     </admin_layout.LayoutAdmin>);
 }

@@ -4,7 +4,7 @@
   "schema_url" : "/worker/site-map/schema.json",
   "lookup_url" : "/worker/site-map/lookup.json",
   "rpc_url" : "/worker/site-map/rpc.json",
-  "tables" : [ ],
-  "rpcs" : [ "ping" ],
-  "pages" : [ "statstrade-superadmin.pages.auth.forgot-password", "statstrade-superadmin.pages.auth.new-account", "statstrade-superadmin.pages.auth.sign-in", "statstrade-superadmin.pages.auth.verify-account", "statstrade-superadmin.pages.change-profile", "statstrade-superadmin.pages.demos.show-blank", "statstrade-superadmin.pages.demos.show-hello", "statstrade-superadmin.pages.demos.show-ping", "statstrade-superadmin.pages.demos.show-supabase-auth", "statstrade-superadmin.pages.index", "statstrade-superadmin.pages.new-account", "statstrade-superadmin.pages.settings.profile" ]
+  "tables" : [ "Rev", "Global" ],
+  "rpcs" : [ "ping", "site-globals", "super-compute-configuration-publish", "super-global-section-reset", "super-global-section-update" ],
+  "pages" : [ "statstrade-superadmin.pages.admin.manage-global", "statstrade-superadmin.pages.auth.forgot-password", "statstrade-superadmin.pages.auth.new-account", "statstrade-superadmin.pages.auth.sign-in", "statstrade-superadmin.pages.auth.verify-account", "statstrade-superadmin.pages.change-profile", "statstrade-superadmin.pages.demos.show-blank", "statstrade-superadmin.pages.demos.show-hello", "statstrade-superadmin.pages.demos.show-home-current", "statstrade-superadmin.pages.demos.show-ping", "statstrade-superadmin.pages.demos.show-ping-test", "statstrade-superadmin.pages.demos.show-supabase-auth", "statstrade-superadmin.pages.index", "statstrade-superadmin.pages.index-admin", "statstrade-superadmin.pages.new-account", "statstrade-superadmin.pages.settings.profile" ]
 }

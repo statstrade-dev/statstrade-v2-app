@@ -1,7 +1,5 @@
 import React from 'react'
 
-import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
-
 import * as ext_box from '@statstrade/edge/lib/js/react/ext-box.js'
 
 // statsui.edge.global-ui/GlobalUI [11] 

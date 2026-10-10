@@ -77,6 +77,7 @@ export function user_set_handle({handle},options = {}){
 
 // statsui.edge.remote.api-public/user-set-public [113] 
 export function user_set_public({
+  handle,
   type,
   color,
   is_active,
@@ -84,6 +85,7 @@ export function user_set_public({
   first_name,
   last_name,
   country_code,
+  city,
   location,
   bio,
   picture,
@@ -91,6 +93,7 @@ export function user_set_public({
 },options = {}){
   return sb.callRemote("user_set_public",{
     "m":{
+        handle,
         type,
         color,
         is_active,
@@ -98,6 +101,7 @@ export function user_set_public({
         first_name,
         last_name,
         country_code,
+        city,
         location,
         bio,
         picture,

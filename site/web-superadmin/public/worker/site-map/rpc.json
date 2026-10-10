@@ -10,5 +10,140 @@
     "meta" : {
       "sb/grant" : "all"
     }
+  },
+  "site-globals" : {
+    "id" : "site-globals",
+    "schema" : "stats_rpc",
+    "input" : [ ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  },
+  "super-compute-configuration-publish" : {
+    "id" : "super-compute-configuration-publish",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor-id",
+      "symbol" : "actor-id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "expected-revision",
+      "symbol" : "expected-revision",
+      "type" : "integer",
+      "modifiers" : [ "integer" ],
+      "role" : "payload"
+    }, {
+      "name" : "value",
+      "symbol" : "value",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    }, {
+      "name" : "reason",
+      "symbol" : "reason",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "value-json", "revision" ],
+      "db/module" : "statsdb.fn.super.super-manage-global",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-system-base/Global"
+    }
+  },
+  "super-global-section-reset" : {
+    "id" : "super-global-section-reset",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor-id",
+      "symbol" : "actor-id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "key",
+      "symbol" : "key",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "expected-revision",
+      "symbol" : "expected-revision",
+      "type" : "integer",
+      "modifiers" : [ "integer" ],
+      "role" : "payload"
+    }, {
+      "name" : "reason",
+      "symbol" : "reason",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "value-json", "revision" ],
+      "db/module" : "statsdb.fn.super.super-manage-global",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-system-base/Global"
+    }
+  },
+  "super-global-section-update" : {
+    "id" : "super-global-section-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor-id",
+      "symbol" : "actor-id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "key",
+      "symbol" : "key",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "expected-revision",
+      "symbol" : "expected-revision",
+      "type" : "integer",
+      "modifiers" : [ "integer" ],
+      "role" : "payload"
+    }, {
+      "name" : "value",
+      "symbol" : "value",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    }, {
+      "name" : "reason",
+      "symbol" : "reason",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "value-json", "revision" ],
+      "db/module" : "statsdb.fn.super.super-manage-global",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-system-base/Global"
+    }
   }
 }

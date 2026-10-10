@@ -1,7 +1,5 @@
 import React from 'react'
 
-import RNDatePicker from '@s77rt/react-native-date-picker'
-
 import * as ui from '@statstrade/component/ui-common.jsx'
 
 // statsui.basic.ui-datepicker/DatePicker [10] 

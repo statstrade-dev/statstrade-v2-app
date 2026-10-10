@@ -1,1 +1,538 @@
-{ }
+{
+  "Rev" : {
+    "class_context" : {
+      "ident" : "class_context",
+      "priority" : 3,
+      "primary" : "default",
+      "scope" : "hidden",
+      "order" : 2,
+      "type" : "enum",
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "topics" : {
+      "ident" : "topics",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "Topic",
+        "type" : "reverse",
+        "val" : "topics",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "Topic",
+          "module" : "statsdb.common.type-topic-base",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "feed_templates" : {
+      "ident" : "feed_templates",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "FeedTemplate",
+        "type" : "reverse",
+        "val" : "feed_templates",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "FeedTemplate",
+          "module" : "statsdb.common.type-feed-template",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "index" : {
+      "type" : "integer",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "info",
+      "order" : 4,
+      "ident" : "index",
+      "sql" : {
+        "default" : 0
+      }
+    },
+    "campaigns" : {
+      "ident" : "campaigns",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "Campaign",
+        "type" : "reverse",
+        "val" : "campaigns",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "Campaign",
+          "module" : "statsdb.common.type-org-campaign",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "primary" : "default",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id"
+    },
+    "class_ref" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "required" : true,
+      "priority" : 4,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "class_ref"
+    },
+    "rev_logs" : {
+      "ident" : "rev_logs",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "RevLog",
+        "type" : "reverse",
+        "val" : "rev_logs",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "RevLog",
+          "module" : "statsdb.common.type-system-base",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "primary" : "default",
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "op_created"
+    },
+    "users" : {
+      "ident" : "users",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "User",
+        "type" : "reverse",
+        "val" : "users",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "User",
+          "module" : "statsdb.common.type-user",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "orgs" : {
+      "ident" : "orgs",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "Org",
+        "type" : "reverse",
+        "val" : "orgs",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "Org",
+          "module" : "statsdb.common.type-org-base",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "current" : {
+      "type" : "map",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "current",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "globals" : {
+      "ident" : "globals",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "Global",
+        "type" : "reverse",
+        "val" : "globals",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "Global",
+          "module" : "statsdb.common.type-system-base",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "campaign_events" : {
+      "ident" : "campaign_events",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "CampaignEvent",
+        "type" : "reverse",
+        "val" : "campaign_events",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "CampaignEvent",
+          "module" : "statsdb.common.type-campaign-event",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "time_created"
+    },
+    "feeds" : {
+      "ident" : "feeds",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "Feed",
+        "type" : "reverse",
+        "val" : "feeds",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "Feed",
+          "module" : "statsdb.common.type-feed-base",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "campaign_contests" : {
+      "ident" : "campaign_contests",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "CampaignContest",
+        "type" : "reverse",
+        "val" : "campaign_contests",
+        "key" : "_rev",
+        "rval" : "rev",
+        "rkey" : "rev",
+        "rident" : "rev",
+        "link" : {
+          "id" : "CampaignContest",
+          "module" : "statsdb.common.type-campaign-contest",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    }
+  },
+  "Global" : {
+    "class_context" : {
+      "ignore" : true,
+      "ident" : "class_context",
+      "priority" : 3,
+      "scope" : "hidden",
+      "order" : 2,
+      "type" : "enum",
+      "foreign" : {
+        "rev" : {
+          "ns" : "Rev",
+          "column" : "class_context",
+          "link" : {
+            "id" : "Rev",
+            "module" : "statsdb.common.type-system-base",
+            "lang" : "postgres",
+            "section" : "code"
+          }
+        }
+      },
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "is_registered" : {
+      "type" : "boolean",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "is_registered",
+      "sql" : {
+        "default" : false
+      }
+    },
+    "rev" : {
+      "ident" : "rev",
+      "priority" : 99,
+      "scope" : "ref",
+      "order" : 15,
+      "required" : true,
+      "type" : "ref",
+      "ref" : {
+        "ns" : "Rev",
+        "link" : {
+          "id" : "Rev",
+          "module" : "statsdb.common.type-system-base",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "globals",
+        "type" : "forward",
+        "key" : "rev",
+        "val" : "rev",
+        "rkey" : "_rev",
+        "rident" : "globals"
+      },
+      "cardinality" : "one"
+    },
+    "time_updated" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 3,
+      "scope" : "data",
+      "order" : 19,
+      "ident" : "time_updated"
+    },
+    "key" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "unique" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "key"
+    },
+    "value_json" : {
+      "ident" : "value_json",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 5,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "schema" : {
+      "ident" : "schema",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 7,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "primary" : "default",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id"
+    },
+    "revision" : {
+      "type" : "integer",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "revision",
+      "sql" : {
+        "default" : 0
+      }
+    },
+    "class_table" : {
+      "ignore" : true,
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "foreign" : {
+        "rev" : {
+          "ns" : "Rev",
+          "column" : "class_table",
+          "link" : {
+            "id" : "Rev",
+            "module" : "statsdb.common.type-system-base",
+            "lang" : "postgres",
+            "section" : "code"
+          }
+        }
+      },
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "visibility" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-base/EnumGlobalVisibility"
+      },
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "visibility",
+      "sql" : {
+        "default" : "system"
+      }
+    },
+    "default_json" : {
+      "ident" : "default_json",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 6,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "value" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "value",
+      "sql" : {
+        "default" : ""
+      }
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 16,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-base/EnumGlobalStatus"
+      },
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "status",
+      "sql" : {
+        "default" : "reserved"
+      }
+    },
+    "op_updated" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 17,
+      "ident" : "op_updated"
+    },
+    "lifecycle" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-base/EnumGlobalLifecycle"
+      },
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "lifecycle",
+      "sql" : {
+        "default" : "runtime"
+      }
+    },
+    "title" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "title"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 2,
+      "scope" : "data",
+      "order" : 18,
+      "ident" : "time_created"
+    },
+    "description" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "description"
+    }
+  }
+}

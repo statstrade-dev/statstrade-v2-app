@@ -1,90 +1,60 @@
 'use client'
 
-import React from 'react'
-
 import * as T from 'tamagui'
 
-import * as kernel_supabase from '@xtalk/db/node/kernel-supabase.js'
+import React from 'react'
 
 import * as client_supabase from '@xtalk/db/node/client-supabase.js'
 
-import * as worker from '@statstrade/web-superadmin/worker.jsx'
+import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
 
-import * as db_main from '@xtalk/db/system/main.js'
+import * as substrate from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
 
 import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
 
-import * as substrate from '@xtalk/substrate/substrate.js'
+import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/SUPABASE-SERVICE-ID [21] 
-var SUPABASE_SERVICE_ID = "example/supabase-auth";
+// statstrade-superadmin.pages.demos.show-supabase-auth/SUPABASE-AUTH-PAGE [20] 
+var SUPABASE_AUTH_PAGE = {"group_id":"demos/show-supabase-auth"};
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/createNode [24] 
-function createNode(){
-  let node = substrate.node_create({"id":"statstrade-superadmin-demo-supabase-auth"});
-  let worker_config = worker.createWorkerConfig();
-  let primary = worker_config["primary"];
-  let defaults = primary["defaults"];
-  let impl = db_main.create_impl("supabase",defaults,null,null);
-  substrate.set_service(node,SUPABASE_SERVICE_ID,impl);
-  kernel_supabase.init_handlers(node);
-  return node;
-}
-
-// statstrade-superadmin.pages.demos.show-supabase-auth/closeNode [36] 
-async function closeNode(node){
-  if(node){
-    try{
-      let curr_session = await client_supabase.current_session(node,SUPABASE_SERVICE_ID,{});
-      if(curr_session){
-        await client_supabase.sign_out(
-          node,
-          SUPABASE_SERVICE_ID,
-          {"token":curr_session["access_token"]}
-        );
-      }
-    }
-    catch(e){
-      null;
-    }
-  }
-  return true;
-}
-
-// statstrade-superadmin.pages.demos.show-supabase-auth/signIn [53] 
-async function signIn(node,email,password){
-  return await client_supabase.sign_in(
-    node,
-    SUPABASE_SERVICE_ID,
-    {"email":email,"password":password},
-    {}
-  );
-}
-
-// statstrade-superadmin.pages.demos.show-supabase-auth/signOut [63] 
-async function signOut(node,curr_session){
-  return await client_supabase.sign_out(
-    node,
-    SUPABASE_SERVICE_ID,
-    {"token":curr_session["access_token"]}
-  );
-}
-
-// statstrade-superadmin.pages.demos.show-supabase-auth/AuthApp [71] 
-function AuthApp({node}){
+// statstrade-superadmin.pages.demos.show-supabase-auth/useAuthProps [23] 
+function useAuthProps(page){
+  let node = page["client"];
   let [email,setEmail] = React.useState("");
   let [password,setPassword] = React.useState("");
-  let [curr_session,setSession] = React.useState(null);
+  let [session,setSession] = React.useState(null);
   let [busy,setBusy] = React.useState(false);
   let [error,setError] = React.useState(null);
-  let user = curr_session ? curr_session["user"] : null;
+  React.useEffect(function (){
+    let cancelled = false;
+    let run = async function (){
+      try{
+        let result = await client_supabase.current_session(node,"db/primary",{});
+        if(!cancelled){
+          setSession(result);
+        }
+      }
+      catch(e){
+        if(!cancelled){
+          setError("Unable to load the current session.");
+        }
+      }
+    };
+    run();
+    return function (){
+      cancelled = true;
+    };
+  },[node]);
+  let user = session ? session["user"] : null;
   let current_email = user ? user["email"] : null;
-  let onSignIn = async function (){
+  let actions = {"setEmail":setEmail,"setPassword":setPassword};
+  actions["signIn"] = async function (){
     if(!busy){
       setBusy(true);
       setError(null);
       try{
-        let result = await signIn(node,email,password);
+        await client_supabase.sign_in(node,"db/primary",{"email":email,"password":password},{});
+        let result = await client_supabase.current_session(node,"db/primary",{});
         setSession(result);
       }
       catch(e){
@@ -95,13 +65,14 @@ function AuthApp({node}){
       }
     }
   };
-  let onSignOut = async function (){
-    if(!busy && curr_session){
+  actions["signOut"] = async function (){
+    if(!busy && session){
       setBusy(true);
       setError(null);
       try{
-        await signOut(node,curr_session);
-        setSession(null);
+        await client_supabase.sign_out(node,"db/primary",{});
+        let result = await client_supabase.current_session(node,"db/primary",{});
+        setSession(result);
       }
       catch(e){
         setError("Sign-out failed. Please try again.");
@@ -111,24 +82,61 @@ function AuthApp({node}){
       }
     }
   };
+  let views = {
+    "email":email,
+    "password":password,
+    "session":session,
+    "current_email":current_email,
+    "busy":busy,
+    "error":error,
+    "status":busy ? "busy" : (session ? "signed-in" : "ready")
+  };
+  return {actions,views};
+}
+
+// statstrade-superadmin.pages.demos.show-supabase-auth/AuthApp [107] 
+function AuthApp({actions,views}){
+  let {busy,current_email,email,error,password,session,status} = views;
+  let {setEmail,setPassword,signIn,signOut} = actions;
   return (
     <T.YStack
       width="100%"
-      maxWidth={480}
+      maxWidth={560}
       gap="$4"
       padding="$5"
       borderWidth={1}
       borderColor="$color4"
       borderRadius="$4"
       backgroundColor="$background">
-      <T.Text fontSize="$6" fontWeight="700" color="$color12">Supabase auth</T.Text>
-      {curr_session ? (
+      <T.XStack
+        alignItems="center"
+        justifyContent="space-between"
+        gap="$3"
+        flexWrap="wrap">
+        <T.Text fontWeight="600" fontSize="$4">Authentication status</T.Text>
+        <T.Text
+          fontSize="$2"
+          fontWeight="600"
+          color={error ? "$red10" : ((status == "signed-in") ? "$green10" : "$color10")}>
+          {busy ? "Working..." : (error ? "Failed" : ((status == "signed-in") ? "Signed in" : "Ready"))}
+        </T.Text>
+      </T.XStack>
+      {session ? (
         <T.YStack gap="$3">
-          <T.Text color="$color10">Signed in as</T.Text>
-          <T.Text fontWeight="600" color="$color12">{current_email ? current_email : "Authenticated user"}</T.Text>
-          <T.Button disabled={busy} onPress={onSignOut}>{busy ? "Signing out..." : "Sign out"}</T.Button>
+          <T.Text fontWeight="600" fontSize="$4">Current session</T.Text>
+          <T.YStack
+            gap="$2"
+            padding="$4"
+            borderRadius="$3"
+            backgroundColor="$color2"
+            accessibilityLiveRegion="polite">
+            <T.Text fontSize="$2" color="$color10">Authenticated user</T.Text>
+            <T.Text fontWeight="600" color="$color12">{current_email ? current_email : "Authenticated user"}</T.Text>
+          </T.YStack>
+          <T.Button size="$4" disabled={busy} onPress={signOut}>{busy ? "Signing out..." : "Sign out"}</T.Button>
         </T.YStack>) : (
         <T.YStack gap="$3">
+          <T.Text fontWeight="600" fontSize="$4">Sign in</T.Text>
           <T.Input
             value={email}
             onChangeText={setEmail}
@@ -142,42 +150,31 @@ function AuthApp({node}){
             placeholder="Password"
             secureTextEntry={true}
             autoComplete="current-password"/>
-          <T.Button disabled={busy || !email || !password} onPress={onSignIn}>{busy ? "Signing in..." : "Sign in"}</T.Button>
+          <T.Button
+            size="$4"
+            disabled={busy || !email || !password}
+            onPress={signIn}>{busy ? "Signing in..." : "Sign in"}
+          </T.Button>
         </T.YStack>)}
       {error ? (
-        <T.Text color="$red10" accessibilityRole="alert">{error}</T.Text>) : null}
+        <T.Text color="$red10" fontSize="$3" accessibilityRole="alert">{error}</T.Text>) : null}
     </T.YStack>);
 }
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/Page [156] 
-function Page(){
-  let [readyState,setReadyState] = React.useState("loading");
-  let [node,setNode] = React.useState(null);
-  React.useEffect(function (){
-    let cancelled = false;
-    let page_node = null;
-    try{
-      page_node = createNode();
-      if(cancelled){
-        closeNode(page_node);
-      }
-      else{
-        setNode(page_node);
-        setReadyState("ready");
-      }
-    }
-    catch(e){
-      if(!cancelled){
-        setReadyState("error");
-      }
-    }
-    return function (){
-      cancelled = true;
-      if(page_node){
-        closeNode(page_node);
-      }
-    };
-  },[]);
+// statstrade-superadmin.pages.demos.show-supabase-auth/AuthController [197] 
+function AuthController({page}){
+  let {actions,views} = useAuthProps(page);
+  return (
+    <AuthApp actions={actions} views={views}/>);
+}
+
+// statstrade-superadmin.pages.demos.show-supabase-auth/AuthContent [202] 
+function AuthContent(){
+  let state = substrate.useSubstrateContext();
+  let resource = state["resource"];
+  let page_state = ext_page.usePage(resource,"db/primary","room/superadmin",SUPABASE_AUTH_PAGE,{});
+  let page = page_state["page"];
+  let page_error = page_state["error"];
   return (
     <layout_base.LayoutBase showDevtool={true}>
       <T.YStack
@@ -187,19 +184,47 @@ function Page(){
         alignItems="center"
         justifyContent="center"
         backgroundColor="$background">
-        <T.YStack width="100%" maxWidth={480} gap="$4">
-          <T.Text fontSize="$7" fontWeight="700" color="$color12">Sign in and sign out</T.Text>
-          <T.Text fontSize="$4" color="$color10">
-            A small example using the Supabase kernel handlers and client calls.
-          </T.Text>
-          {(readyState == "ready") ? (
-            <AuthApp node={node}/>) : (
-            <T.Text color={(readyState == "error") ? "$red10" : "$color10"}>
-              {(readyState == "error") ? "Unable to initialize Supabase." : "Connecting to Supabase..."}
-            </T.Text>)}
+        <T.YStack width="100%" maxWidth={560} gap="$5">
+          <T.XStack alignItems="center" gap="$2">
+            <logo.LogoStatstrade size={28}/>
+            <T.Text fontSize="$3" fontWeight="700" color="$color12">STATSTRADE</T.Text>
+          </T.XStack>
+          <T.YStack gap="$2">
+            <T.H2 color="$color12">Supabase authentication</T.H2>
+            <T.Text fontSize="$4" color="$color10">Sign in and sign out through the provider-owned substrate.</T.Text>
+          </T.YStack>
+          {page ? (
+            <AuthController page={page}/>) : (
+            <T.YStack
+              gap="$3"
+              padding="$5"
+              borderWidth={1}
+              borderColor="$color4"
+              borderRadius="$4"
+              backgroundColor="$background"
+              accessibilityLiveRegion="polite">
+              {page_error ? (
+                <T.YStack gap="$2">
+                  <T.Text fontWeight="600" color="$red10" accessibilityRole="alert">Unable to connect</T.Text>
+                  <T.Text color="$color10">Refresh the page to try again.</T.Text>
+                </T.YStack>) : (
+                <T.XStack gap="$3" alignItems="center">
+                  <T.Spinner size="small" color="$color10"/>
+                  <T.Text color="$color10">Connecting to the page...</T.Text>
+                </T.XStack>)}
+            </T.YStack>)}
         </T.YStack>
       </T.YStack>
     </layout_base.LayoutBase>);
+}
+
+// statstrade-superadmin.pages.demos.show-supabase-auth/Page [263] 
+function Page(){
+  // 537707d4-8b83-410c-9070-9c031fd9af39
+  return (
+    <substrate.SubstrateProvider
+      options={{"client_id":"statstrade-superadmin-demo-supabase-auth"}}><AuthContent/>
+    </substrate.SubstrateProvider>);
 }
 
 export default Page

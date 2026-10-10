@@ -1,1 +1,8 @@
-{ }
+{
+  "Rev" : {
+    "position" : 0
+  },
+  "Global" : {
+    "position" : 1
+  }
+}
