@@ -14,6 +14,7 @@
   ],
   "scripts": {
     "test": "vitest run",
+    "test:impersonation:live": "REQUIRE_LIVE_SUPABASE_TESTS=1 vitest run test/super-impersonation.test.js",
     "test:watch": "vitest",
     "build": "echo 'no build'"
   },

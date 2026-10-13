@@ -10,11 +10,38 @@ import * as ui_section from '@statstrade/component/ui-section.jsx'
 
 import * as ui from '@statstrade/component/ui-common.jsx'
 
-// statstrade-web.feature.onboarding.onboarding-step-8-complete/OnboardingStep8CompleteScreen [16] 
+// statstrade-web.feature.onboarding.onboarding-step-8-complete/completeOnboarding [16] 
+export async function completeOnboarding(api,user_type){
+  let result = await api.mutations.user_set_public.mutateAsync({"type":user_type,"is_onboarded":true});
+  if(result.error){
+    throw result.error;
+  }
+  await Promise.all([
+    api.queries.user_get_profile.refetch(),
+    api.queries.get_user.refetch()
+  ]);
+  return result;
+}
+
+// statstrade-web.feature.onboarding.onboarding-step-8-complete/OnboardingStep8CompleteScreen [29] 
 export function OnboardingStep8CompleteScreen(){
   let context = React.useContext(common.IndexOnboardingContext);
   let {api,controls} = context;
   let themeColor = (controls.userType == "creator") ? "#000" : "$blue10";
+  let [completionError,setCompletionError] = React.useState(null);
+  let isBusy = api.mutations.user_set_public.isPending;
+  let handle_complete = async function (){
+    setCompletionError(null);
+    try{
+      await completeOnboarding(api,controls.userType);
+    }
+    catch(e){
+      console.error("Failed to complete onboarding",e);
+      setCompletionError(
+        e.message || "Could not complete onboarding. Please try again."
+      );
+    }
+  };
   return (
     <ui_section.MinFrameCenter>
       <T.YStack
@@ -49,11 +76,13 @@ export function OnboardingStep8CompleteScreen(){
               letterSpacing={-0.5}>Completed
             </T.H2>
             <T.Paragraph color="$color11" textAlign="center" size="$5" lineHeight="$8">
-              Your organisation has been created and you're ready to start engaging with your community.
+              {(controls.userType == "creator") ? "Your organisation is ready and you can start engaging with your community." : "Your profile and interests are ready. You can start exploring the community."}
             </T.Paragraph>
           </T.YStack>
         </T.YStack>
-        {api.mutations.user_set_public.isPending ? (
+        {completionError ? (
+          <T.Paragraph color="$red10" textAlign="center" marginTop="$4">{completionError}</T.Paragraph>) : null}
+        {isBusy ? (
           <T.YStack
             gap="$4"
             alignItems="center"
@@ -61,20 +90,14 @@ export function OnboardingStep8CompleteScreen(){
             animation="lazy"
             enterStyle={{"opacity":0}}>
             <T.Spinner size="large" color={themeColor}/>
-            <T.Text color="$color11" fontSize="$6" fontWeight="500">We are preparing your desktop...</T.Text>
+            <T.Text color="$color11" fontSize="$6" fontWeight="500">We are preparing your account...</T.Text>
           </T.YStack>) : (
           <ui.ButtonInverse
             animation="lazy"
             color={themeColor}
-            onPress={async function (){
-                try{
-                  await api.mutations.user_set_public.mutateAsync({"is_onboarded":true});
-                }
-                catch(e){
-                  console.error("Failed to set onboarded status",e);
-                }
-              }}
+            onPress={handle_complete}
             maxWidth={350}
+            disabled={isBusy}
             width="100%"
             marginTop="$8"
             size="$5"

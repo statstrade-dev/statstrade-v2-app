@@ -1,12 +1,12 @@
-import React from 'react'
-
 import * as T from 'tamagui'
 
-import * as auth from '@statstrade/edge/remote/util-supabase.jsx'
+import React from 'react'
+
+import * as client_auth from '@statstrade/edge/remote/util-supabase.jsx'
 
 import * as profile_store from '@statstrade/component/db/profile-store.jsx'
 
-// statstrade-web.feature.profile.profile-editor/profile-values [12] 
+// statstrade-web.feature.profile.profile-editor/profile-values [11] 
 export function profile_values(profile){
   let publicProfile = profile.public || {};
   let secretProfile = profile.secret || {};
@@ -25,7 +25,7 @@ export function profile_values(profile){
   };
 }
 
-// statstrade-web.feature.profile.profile-editor/public-profile-payload [29] 
+// statstrade-web.feature.profile.profile-editor/public-profile-payload [28] 
 export function public_profile_payload(values){
   let handle = (values.handle || "").trim().toLowerCase();
   let firstName = (values.first_name || "").trim();
@@ -51,7 +51,7 @@ export function public_profile_payload(values){
   };
 }
 
-// statstrade-web.feature.profile.profile-editor/secret-profile-payload [49] 
+// statstrade-web.feature.profile.profile-editor/secret-profile-payload [48] 
 export function secret_profile_payload(values){
   let gender = (values.gender || "").trim();
   let genderText = (values.gender_text || "").trim();
@@ -73,7 +73,7 @@ export function secret_profile_payload(values){
   };
 }
 
-// statstrade-web.feature.profile.profile-editor/ProfileField [67] 
+// statstrade-web.feature.profile.profile-editor/ProfileField [66] 
 export function ProfileField({hint,id,label,maxLength,onChange,type,value}){
   return (
     <T.YStack gap="$2" flex={1} minWidth={180}>
@@ -92,17 +92,10 @@ export function ProfileField({hint,id,label,maxLength,onChange,type,value}){
     </T.YStack>);
 }
 
-// statstrade-web.feature.profile.profile-editor/ProfileEditor [77] 
+// statstrade-web.feature.profile.profile-editor/ProfileEditor [76] 
 export function ProfileEditor(){
-  let authClient = auth.getClient();
-  let [session] = auth.useListenSession(authClient);
+  let [session,_setSession,loaded] = client_auth.useListenSession();
   let userId = session && session.user && session.user.id;
-  let adapter = React.useMemo(function (){
-    return profile_store.create_profile_adapter(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
-  },[]);
   let [values,setValues] = React.useState({});
   let [loading,setLoading] = React.useState(true);
   let [busy,setBusy] = React.useState(false);
@@ -110,30 +103,32 @@ export function ProfileEditor(){
   let [message,setMessage] = React.useState(null);
   React.useEffect(function (){
     let cancelled = false;
-    if(userId){
-      setLoading(true);
-      setError(null);
-      profile_store.load_owner_profile(adapter,session,userId).then(function (profile){
-        if(!cancelled){
-          setValues(profile_values(profile));
-        }
-      }).catch(function (e){
-        if(!cancelled){
-          setError(e.message || "Could not load your profile.");
-        }
-      }).finally(function (){
-        if(!cancelled){
-          setLoading(false);
-        }
-      });
-    }
-    if(!userId){
-      setLoading(false);
+    if(loaded){
+      if(userId){
+        setLoading(true);
+        setError(null);
+        profile_store.load_owner_profile(userId).then(function (profile){
+          if(!cancelled){
+            setValues(profile_values(profile));
+          }
+        }).catch(function (e){
+          if(!cancelled){
+            setError(e.message || "Could not load your profile.");
+          }
+        }).finally(function (){
+          if(!cancelled){
+            setLoading(false);
+          }
+        });
+      }
+      if(!userId){
+        setLoading(false);
+      }
     }
     return function (){
       cancelled = true;
     };
-  },[userId,session]);
+  },[userId,session,loaded]);
   let updateField = function (key,value){
     setValues(function (previous){
       return Object.assign({},previous,{[[key]]:value});
@@ -151,7 +146,7 @@ export function ProfileEditor(){
     setMessage(null);
     try{
       let payload = public_profile_payload(values);
-      await profile_store.save_public_profile(adapter,session,payload);
+      await profile_store.save_public_profile(payload);
       setValues(function (previous){
         return Object.assign({},previous,payload);
       });
@@ -174,7 +169,7 @@ export function ProfileEditor(){
     setMessage(null);
     try{
       let payload = secret_profile_payload(values);
-      await profile_store.save_secret_profile(adapter,session,payload);
+      await profile_store.save_secret_profile(payload);
       setValues(function (previous){
         return Object.assign({},previous,payload);
       });
@@ -195,7 +190,7 @@ export function ProfileEditor(){
           Update public information and private details in separate sections.
         </T.Text>
       </T.YStack>
-      {!session ? (
+      {(loaded && !session) ? (
         <T.YStack
           gap="$3"
           padding="$4"
@@ -208,7 +203,7 @@ export function ProfileEditor(){
         <T.Text role="status" color="$color10">Loading your profile…</T.Text>) : null}
       {error ? (
         <T.Text role="alert" color="$red10">{error}</T.Text>) : null}
-      {session ? (
+      {(loaded && session) ? (
         <form onSubmit={onSavePublic}>
           <T.YStack
             gap="$4"
@@ -273,7 +268,7 @@ export function ProfileEditor(){
             <T.Button type="submit" disabled={loading || busy}>Save public profile</T.Button>
           </T.YStack>
         </form>) : null}
-      {session ? (
+      {(loaded && session) ? (
         <form onSubmit={onSaveSecret}>
           <T.YStack
             gap="$4"

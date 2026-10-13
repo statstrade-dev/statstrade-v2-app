@@ -2,9 +2,9 @@ import
   {ArrowRight,Award,BarChart3,Building2,Check,ChevronDown,Globe,Headphones,HelpCircle,Rocket,Shield,Sparkles,TrendingUp,Users,X,Zap}
  from '@tamagui/lucide-icons'
 
-import React from 'react'
-
 import * as T from 'tamagui'
+
+import React from 'react'
 
 import * as landing_common from '@statstrade/feature/landing/landing-common.jsx'
 

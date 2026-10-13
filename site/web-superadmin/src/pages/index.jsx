@@ -4,13 +4,21 @@ import * as T from 'tamagui'
 
 import * as substrate from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
 
-import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
-
-// statstrade-superadmin.pages.index/Page [20] 
-function Page(){
-  let {readyState} = substrate.useSubstrateNode({});
+// statstrade-superadmin.pages.index/PageContent [18] 
+function PageContent(){
+  let state = substrate.useSubstrateContext();
+  let readyState = state["readyState"];
   return (
-    <layout_base.LayoutBase showDevWebsocket={true} showDevtool={true}><T.View><T.Text>{readyState}</T.Text></T.View></layout_base.LayoutBase>);
+    <T.YStack gap="$3" padding="$4">
+      <T.Text>{readyState}</T.Text>
+      <T.Anchor href="/adminweb" fontWeight="600">Open Adminweb v2</T.Anchor>
+    </T.YStack>);
+}
+
+// statstrade-superadmin.pages.index/Page [30] 
+function Page(){
+  return (
+    <PageContent/>);
 }
 
 export default Page

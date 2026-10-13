@@ -12,7 +12,49 @@ import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as api_general from '@statstrade/edge/remote/api-general.jsx'
 
-// statstrade-web.feature.onboarding.onboarding-step-3-organisation/OnboardingOrganisationForm [24] 
+// statstrade-web.feature.onboarding.onboarding-step-3-organisation/saveOnboardingOrganisation [24] 
+export async function saveOnboardingOrganisation(api,user,controls,form_values){
+  let payload = kd.obj_assign(form_values,{"tags":Array.from(controls.orgTags)});
+  if(controls.orgImage){
+    let user_id = user && user.id;
+    if(!user_id){
+      throw new Error("User not found");
+    }
+    let upload = await api_general.upload_image({
+      "image":controls.orgImage,
+      "file_path":user_id + "/organisations/" + Date.now(),
+      "bucket":"images"
+    });
+    if(upload.error){
+      throw upload.error;
+    }
+    payload = kd.obj_assign(payload,{"picture":{"uri":upload.data}});
+  }
+  let existing = controls.existingOrg && (controls.existingOrg.id != "new");
+  let result = existing ? await api.mutations.organisation_update.mutateAsync(
+    kd.obj_assign(payload,{"organisation_id":controls.existingOrg.id})
+  ) : await api.mutations.organisation_create.mutateAsync(payload);
+  if(result.error){
+    throw result.error;
+  }
+  let refreshed = await api.queries.user_list_member_organisations.refetch();
+  let organisations = (refreshed.data && refreshed.data.data) || api.queries.user_list_member_organisations.output || [];
+  let saved = organisations.find(function (organisation){
+    return existing ? (organisation.id == controls.existingOrg.id) : ((result.data && result.data.id && (organisation.id == result.data.id)) || (organisation.name == form_values.name));
+  });
+  let selected = saved || (result.data && result.data.id && result.data) || (result.data && {"id":result.data,"name":form_values.name});
+  if(!selected){
+    throw new Error("Organisation was saved but could not be loaded");
+  }
+  controls.setExistingOrg(
+    existing ? kd.obj_assign(controls.existingOrg,payload,selected) : selected
+  );
+  controls.setExistingOrgId(selected.id);
+  controls.setStep(4);
+  return result;
+}
+
+// statstrade-web.feature.onboarding.onboarding-step-3-organisation/OnboardingOrganisationForm [77] 
 export function OnboardingOrganisationForm(){
   let context = React.useContext(common.IndexOnboardingContext);
   let {api,controls,forms,user} = context;
@@ -30,7 +72,7 @@ export function OnboardingOrganisationForm(){
   };
   let nameValue = forms.organisation_create.watch("name");
   let orgsQuery = api.queries.user_list_member_organisations;
-  let orgs = (orgsQuery.data && orgsQuery.data.data) || [];
+  let orgs = orgsQuery.output || [];
   ui.useRemoteCheck({
     "form":forms.organisation_create,
     "field":"name",
@@ -47,59 +89,32 @@ export function OnboardingOrganisationForm(){
     orgsQuery.setInput({});
   },[]);
   React.useEffect(function (){
-    let {data,error} = orgsQuery;
+    let error = orgsQuery.error || (orgsQuery.data && orgsQuery.data.error);
     if(error){
       console.error("Error fetching organisations",error);
     }
     else{
-      if(data && data.data && (data.data.length > 0)){
+      if(orgsQuery.output.length > 0){
         setShowForm(false);
       }
     }
-  },[orgsQuery.data,orgsQuery.error]);
+  },[orgsQuery.output,orgsQuery.error,orgsQuery.data]);
   let handle_submit = async function (){
-    let formValues = forms.organisation_create.getValues();
-    let finalValues = kd.obj_assign(formValues,{"tags":Array.from(controls.orgTags)});
-    if(controls.orgImage){
-      try{
-        let filePath = user.id + "/organisations/" + Date.now();
-        let data = await api_general.upload_image({
-          "image":controls.orgImage,
-          "file_path":filePath,
-          "bucket":"images"
-        });
-        finalValues = kd.obj_assign(finalValues,{"picture_url":data.data})
-      }
-      catch(e){
-        console.error("Upload failed",e);
-      }
+    try{
+      await saveOnboardingOrganisation(api,user,controls,forms.organisation_create.getValues());
     }
-    null;
-    if(controls.existingOrg && (controls.existingOrg.id != "new")){
-      api.mutations.organisation_update.mutateAsync(
-        kd.obj_assign(finalValues,{"org_id":controls.existingOrg.id})
-      ).then(function ({data,error}){
-        console.log({data,error});
-        if(!error){
-          controls.setStep(4);
-        }
-      });
-    }
-    else{
-      api.mutations.organisation_create.mutateAsync(finalValues).then(function ({data,error}){
-        console.log({data,error});
-        if(!error){
-          controls.setExistingOrg(data);
-          controls.setStep(4);
-        }
-      });
+    catch(e){
+      console.error("Failed to save organisation",e);
+      alert("Could not save your organisation. Please try again.");
     }
   };
   let handle_selection = function (org){
     controls.setExistingOrg(org);
+    controls.setExistingOrgId(org.id);
   };
   let handle_edit = function (org){
     controls.setExistingOrg(org);
+    controls.setExistingOrgId(org.id);
     forms.organisation_create.reset({
       "name":org.name,
       "title":org.title,
@@ -135,6 +150,7 @@ export function OnboardingOrganisationForm(){
             }}
           onCreateNew={function (){
               controls.setExistingOrg({"id":"new","name":"New Organisation"});
+              controls.setExistingOrgId(null);
               forms.organisation_create.reset({"name":"","title":"","description":""});
               controls.setOrgTags(new Set());
               controls.setOrgImage(null);
@@ -163,7 +179,7 @@ export function OnboardingOrganisationForm(){
     </React.Fragment>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-step-3-organisation/OnboardingStep3OrganisationScreen [182] 
+// statstrade-web.feature.onboarding.onboarding-step-3-organisation/OnboardingStep3OrganisationScreen [219] 
 export function OnboardingStep3OrganisationScreen(){
   let context = React.useContext(common.IndexOnboardingContext);
   return (

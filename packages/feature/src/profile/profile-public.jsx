@@ -6,7 +6,7 @@ import * as ui_router from '@statstrade/component/ui-router.jsx'
 
 import * as profile_store from '@statstrade/component/db/profile-store.jsx'
 
-// statstrade-web.feature.profile.profile-public/profile-handle-from-path [12] 
+// statstrade-web.feature.profile.profile-public/profile-handle-from-path [11] 
 export function profile_handle_from_path(pathname){
   let parts = (pathname || "").split("/");
   let handle = parts[2] || "";
@@ -21,7 +21,7 @@ export function profile_handle_from_path(pathname){
   }
 }
 
-// statstrade-web.feature.profile.profile-public/profile-display-name [23] 
+// statstrade-web.feature.profile.profile-public/profile-display-name [22] 
 export function profile_display_name(profile){
   let firstName = (profile.first_name || "").trim();
   let lastName = (profile.last_name || "").trim();
@@ -31,7 +31,7 @@ export function profile_display_name(profile){
   return name || (profile.handle && ("@" + profile.handle)) || "";
 }
 
-// statstrade-web.feature.profile.profile-public/profile-location [35] 
+// statstrade-web.feature.profile.profile-public/profile-location [34] 
 export function profile_location(profile){
   let city = (profile.city || "").trim();
   let country = (profile.country_code || "").trim();
@@ -49,16 +49,10 @@ export function profile_location(profile){
   }
 }
 
-// statstrade-web.feature.profile.profile-public/PublicProfile [45] 
+// statstrade-web.feature.profile.profile-public/PublicProfile [44] 
 export function PublicProfile(){
   let pathname = ui_router.usePathname();
   let handle = profile_handle_from_path(pathname);
-  let adapter = React.useMemo(function (){
-    return profile_store.create_profile_adapter(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    );
-  },[]);
   let [profile,setProfile] = React.useState(null);
   let [loading,setLoading] = React.useState(true);
   let [error,setError] = React.useState(null);
@@ -68,7 +62,7 @@ export function PublicProfile(){
       setLoading(true);
       setProfile(null);
       setError(null);
-      profile_store.fetch_public_profile(adapter,handle).then(function (row){
+      profile_store.fetch_public_profile(handle).then(function (row){
         if(!cancelled){
           setProfile(row);
         }
@@ -88,7 +82,7 @@ export function PublicProfile(){
     return function (){
       cancelled = true;
     };
-  },[handle,adapter]);
+  },[handle]);
   return (
     <T.YStack
       gap="$4"

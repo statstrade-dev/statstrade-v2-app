@@ -1,3 +1,5 @@
+import React from 'react'
+
 import * as T from 'tamagui'
 
 import * as ui_target from '@statstrade/component/ui-target.jsx'
@@ -6,17 +8,45 @@ import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as gu from '@statstrade/edge/global-ui.jsx'
 
-// statstrade-web.feature.landing.landing-common/TargetLink [15] 
-export function TargetLink({tag,title}){
+// statstrade-web.feature.landing.landing-common/TargetLink [22] 
+export function TargetLink({tag,number,title,menuTitle}){
+  let numbered_title = number ? (number + " / " + title) : title;
+  let target_title = menuTitle || numbered_title;
   return (
-    <ui_target.TargetAnchor
-      box={globalThis["statsui_edge_global_ui$$GlobalUI"]}
-      tag={tag}
-      title={ui.t(title)}
-      path={["targets"]}/>);
+    <React.Fragment>
+      <ui_target.TargetAnchor
+        box={globalThis["statsui_edge_global_ui$$GlobalUI"]}
+        tag={tag}
+        title={ui.t(target_title)}
+        path={["targets"]}/>
+      <T.XStack
+        alignItems="center"
+        gap="$3"
+        width="100%"
+        maxWidth={1200}
+        alignSelf="center"
+        paddingHorizontal="$4"
+        paddingVertical="$3"
+        $sm={{"paddingHorizontal":"$3","paddingVertical":"$2"}}>
+        <T.Text
+          fontFamily="monospace"
+          fontSize="$3"
+          fontWeight="700"
+          color="$accent8">{number}
+        </T.Text>
+        <T.Text
+          fontSize="$2"
+          fontWeight="600"
+          letterSpacing={1}
+          color="$color10"
+          textTransform="uppercase">{title}
+        </T.Text>
+        <T.View flex={1} height={1} backgroundColor="$color4"/>
+      </T.XStack>
+    </React.Fragment>);
 }
 
-// statstrade-web.feature.landing.landing-common/LandingFrame [27] 
+// statstrade-web.feature.landing.landing-common/LandingFrame [62] 
 export function LandingFrame({start,children,...props}){
   return (
     <T.YStack
@@ -33,7 +63,7 @@ export function LandingFrame({start,children,...props}){
     </T.YStack>);
 }
 
-// statstrade-web.feature.landing.landing-common/LandingButton [48] 
+// statstrade-web.feature.landing.landing-common/LandingButton [83] 
 export function LandingButton({href,color = "$color11",backgroundColor = "$color2",...props}){
   return (
     <ui.Link href={href} style={{"textDecoration":"none"}}>
@@ -54,7 +84,7 @@ export function LandingButton({href,color = "$color11",backgroundColor = "$color
     </ui.Link>);
 }
 
-// statstrade-web.feature.landing.landing-common/LandingHeader [80] 
+// statstrade-web.feature.landing.landing-common/LandingHeader [115] 
 export function LandingHeader({title1,title2,paragraph,children,align = "left"}){
   let crossAxis = (align == "left") ? "flex-start" : "flex-end";
   return (
@@ -107,7 +137,7 @@ export function LandingHeader({title1,title2,paragraph,children,align = "left"})
     </T.YStack>);
 }
 
-// statstrade-web.feature.landing.landing-common/LandingHeaderRow [140] 
+// statstrade-web.feature.landing.landing-common/LandingHeaderRow [175] 
 export function LandingHeaderRow({title1,title2,paragraph,children,align = "left",...props}){
   let crossAxis = (align == "left") ? "flex-start" : "flex-end";
   return (

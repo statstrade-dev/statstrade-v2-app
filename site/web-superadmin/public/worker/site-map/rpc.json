@@ -1,4 +1,16 @@
 {
+  "check-is-super" : {
+    "id" : "check-is-super",
+    "schema" : "stats_rpc",
+    "input" : [ ],
+    "return" : "boolean",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  },
   "ping" : {
     "id" : "ping",
     "schema" : "stats_rpc",
@@ -11,30 +23,18 @@
       "sb/grant" : "all"
     }
   },
-  "site-globals" : {
-    "id" : "site-globals",
-    "schema" : "stats_rpc",
-    "input" : [ ],
-    "return" : "jsonb",
-    "flags" : {
-      "sb/grant" : "all"
-    },
-    "meta" : {
-      "sb/grant" : "all"
-    }
-  },
   "super-compute-configuration-publish" : {
     "id" : "super-compute-configuration-publish",
     "schema" : "stats_rpc",
     "input" : [ {
-      "name" : "actor-id",
-      "symbol" : "actor-id",
+      "name" : "actor_id",
+      "symbol" : "actor_id",
       "type" : "uuid",
       "modifiers" : [ "uuid" ],
       "role" : "payload"
     }, {
-      "name" : "expected-revision",
-      "symbol" : "expected-revision",
+      "name" : "expected_revision",
+      "symbol" : "expected_revision",
       "type" : "integer",
       "modifiers" : [ "integer" ],
       "role" : "payload"
@@ -66,8 +66,8 @@
     "id" : "super-global-section-reset",
     "schema" : "stats_rpc",
     "input" : [ {
-      "name" : "actor-id",
-      "symbol" : "actor-id",
+      "name" : "actor_id",
+      "symbol" : "actor_id",
       "type" : "uuid",
       "modifiers" : [ "uuid" ],
       "role" : "payload"
@@ -78,8 +78,8 @@
       "modifiers" : [ "citext" ],
       "role" : "payload"
     }, {
-      "name" : "expected-revision",
-      "symbol" : "expected-revision",
+      "name" : "expected_revision",
+      "symbol" : "expected_revision",
       "type" : "integer",
       "modifiers" : [ "integer" ],
       "role" : "payload"
@@ -105,8 +105,8 @@
     "id" : "super-global-section-update",
     "schema" : "stats_rpc",
     "input" : [ {
-      "name" : "actor-id",
-      "symbol" : "actor-id",
+      "name" : "actor_id",
+      "symbol" : "actor_id",
       "type" : "uuid",
       "modifiers" : [ "uuid" ],
       "role" : "payload"
@@ -117,8 +117,8 @@
       "modifiers" : [ "citext" ],
       "role" : "payload"
     }, {
-      "name" : "expected-revision",
-      "symbol" : "expected-revision",
+      "name" : "expected_revision",
+      "symbol" : "expected_revision",
       "type" : "integer",
       "modifiers" : [ "integer" ],
       "role" : "payload"

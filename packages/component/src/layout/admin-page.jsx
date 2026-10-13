@@ -28,22 +28,27 @@ export function userHref(user){
 
 // statsui.basic.layout.admin-page/loadAdminDirectory [32] 
 export async function loadAdminDirectory(){
-  let client = sb.getClient();
-  let organisations_response = await client.schema("stats_type").from("Org").select("id,name,title,description,picture").order("name");
-  if(organisations_response.error){
-    throw organisations_response.error;
+  let organisations_response = await sb.queryTable("Org",{
+    "select":"id,name,title,description,picture",
+    "order":[{"column":"name"}]
+  },{"schema":"stats_type"});
+  if(organisations_response["error"]){
+    throw organisations_response["error"];
   }
-  let users_response = await client.schema("stats_type").from("User").select("id,handle,first_name,last_name,picture,is_active,is_super").order("handle");
-  if(users_response.error){
-    throw users_response.error;
+  let users_response = await sb.queryTable("User",{
+    "select":"id,handle,first_name,last_name,picture,is_active,is_super",
+    "order":[{"column":"handle"}]
+  },{"schema":"stats_type"});
+  if(users_response["error"]){
+    throw users_response["error"];
   }
   return {
-    "organisations":organisations_response.data || [],
-    "users":users_response.data || []
+    "organisations":organisations_response["data"] || [],
+    "users":users_response["data"] || []
   };
 }
 
-// statsui.basic.layout.admin-page/DirectoryLink [57] 
+// statsui.basic.layout.admin-page/DirectoryLink [56] 
 export function DirectoryLink({href,title,detail}){
   return (
     <ui.Link
@@ -61,7 +66,7 @@ export function DirectoryLink({href,title,detail}){
     </ui.Link>);
 }
 
-// statsui.basic.layout.admin-page/OrganisationListSection [76] 
+// statsui.basic.layout.admin-page/OrganisationListSection [75] 
 export function OrganisationListSection({organisations}){
   let rows = (organisations.length > 0) ? (organisations || []).map(function (org){
     return (
@@ -76,7 +81,7 @@ export function OrganisationListSection({organisations}){
     <T.YStack gap="$2"><T.H3 fontSize="$5">Organisations</T.H3>{rows}</T.YStack>);
 }
 
-// statsui.basic.layout.admin-page/UserListSection [98] 
+// statsui.basic.layout.admin-page/UserListSection [97] 
 export function UserListSection({users}){
   let rows = (users.length > 0) ? (users || []).map(function (user){
     return (
@@ -91,7 +96,7 @@ export function UserListSection({users}){
     <T.YStack gap="$2"><T.H3 fontSize="$5">Users</T.H3>{rows}</T.YStack>);
 }
 
-// statsui.basic.layout.admin-page/AdminOrganisationSection [123] 
+// statsui.basic.layout.admin-page/AdminOrganisationSection [122] 
 export function AdminOrganisationSection(){
   let [directory,setDirectory] = React.useState(
     {"status":"loading","organisations":[],"users":[],"error":null}
@@ -141,7 +146,7 @@ export function AdminOrganisationSection(){
     </T.ScrollView>);
 }
 
-// statsui.basic.layout.admin-page/PingPanel [172] 
+// statsui.basic.layout.admin-page/PingPanel [171] 
 export function PingPanel({client}){
   let output = ext_page.listenModel(client,"room/superadmin",["system","ping"],"output",{});
   let [busy,setBusy] = React.useState(false);
@@ -188,7 +193,7 @@ export function PingPanel({client}){
     </T.YStack>);
 }
 
-// statsui.basic.layout.admin-page/SectionTabs [238] 
+// statsui.basic.layout.admin-page/SectionTabs [237] 
 export function SectionTabs({group,active,onSelect}){
   let sections = routes.sectionsFor(group);
   return (
@@ -208,7 +213,7 @@ export function SectionTabs({group,active,onSelect}){
     </T.XStack>);
 }
 
-// statsui.basic.layout.admin-page/AdminSection [259] 
+// statsui.basic.layout.admin-page/AdminSection [258] 
 export function AdminSection({client,group,section,resource,global,onSection}){
   let metadata = routes.getSection(group,section);
   return (
@@ -236,7 +241,7 @@ export function AdminSection({client,group,section,resource,global,onSection}){
     </T.YStack>);
 }
 
-// statsui.basic.layout.admin-page/AdminApp [295] 
+// statsui.basic.layout.admin-page/AdminApp [294] 
 export function AdminApp({resource,global}){
   let [group,setGroup] = React.useState(routes.F01_HOME);
   let [section,setSection] = React.useState("dashboard");

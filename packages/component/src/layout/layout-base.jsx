@@ -6,13 +6,15 @@ import {NextThemeProvider,useRootTheme} from '@tamagui/next-theme'
 
 import React from 'react'
 
+import * as ReactNative from 'react-native'
+
 import * as T from 'tamagui'
+
+import * as ReactQuery from '@tanstack/react-query'
 
 import * as TToast from '@tamagui/toast'
 
-import * as ReactNative from 'react-native'
-
-import * as ReactQuery from '@tanstack/react-query'
+import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
 
 import * as common_client from '@xtalk/lang/common-client.js'
 
@@ -22,7 +24,7 @@ import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as devtool from '@statstrade/component/layout/common/frame-devtool.jsx'
 
-// statsui.basic.layout.layout-base/LayoutBaseOuter [22] 
+// statsui.basic.layout.layout-base/LayoutBaseOuter [23] 
 export function LayoutBaseOuter({children}){
   useServerInsertedHTML(function (){
     let rnwStyle = ReactNative.StyleSheet.getSheet();
@@ -54,7 +56,7 @@ export function LayoutBaseOuter({children}){
     </NextThemeProvider>);
 }
 
-// statsui.basic.layout.layout-base/useThemeStored [59] 
+// statsui.basic.layout.layout-base/useThemeStored [60] 
 export function useThemeStored(){
   let [current,setCurrent] = useRootTheme();
   let [mounted,setMounted] = React.useState(false);
@@ -81,8 +83,8 @@ export function useThemeStored(){
   return {current,setCurrent};
 }
 
-// statsui.basic.layout.layout-base/LayoutBaseInner [79] 
-export function LayoutBaseInner({Component,children}){
+// statsui.basic.layout.layout-base/LayoutBaseInner [80] 
+export function LayoutBaseInner({Component,children,sharedWorkerEnabled}){
   let themeCtx = useThemeStored();
   let queryClient = React.useRef(
     new ReactQuery.QueryClient({"defaultOptions":{"queries":{"retry":0}}})
@@ -93,12 +95,16 @@ export function LayoutBaseInner({Component,children}){
         disableRootThemeClass={false}
         defaultTheme={themeCtx.current}
         config={config}>
-        <ui.ThemeGlobalContext.Provider value={themeCtx}><T.Theme name={themeCtx.current}>{children}</T.Theme></ui.ThemeGlobalContext.Provider>
+        <ui.ThemeGlobalContext.Provider value={themeCtx}>
+          <T.Theme name={themeCtx.current}>
+            <sb.SharedWorkerRuntime enabled={sharedWorkerEnabled}>{children}</sb.SharedWorkerRuntime>
+          </T.Theme>
+        </ui.ThemeGlobalContext.Provider>
       </T.TamaguiProvider>
     </ReactQuery.QueryClientProvider>);
 }
 
-// statsui.basic.layout.layout-base/LayoutBaseDevWebsocket [102] 
+// statsui.basic.layout.layout-base/LayoutBaseDevWebsocket [106] 
 export function LayoutBaseDevWebsocket(){
   React.useEffect(function (){
     let conn = common_client.client_ws("localhost",29001,{});
@@ -109,8 +115,8 @@ export function LayoutBaseDevWebsocket(){
   return;
 }
 
-// statsui.basic.layout.layout-base/LayoutBase [109] 
-export function LayoutBase({showDevWebsocket,showDevtool,children}){
+// statsui.basic.layout.layout-base/LayoutBase [113] 
+export function LayoutBase({showDevWebsocket,showDevtool,sharedWorkerEnabled,children}){
   let [mounted,setMounted] = React.useState(false);
   React.useEffect(function (){
     if(!mounted){
@@ -119,7 +125,7 @@ export function LayoutBase({showDevWebsocket,showDevtool,children}){
   },[]);
   return mounted ? (
     <LayoutBaseOuter>
-      <LayoutBaseInner>
+      <LayoutBaseInner sharedWorkerEnabled={sharedWorkerEnabled}>
         <TToast.ToastProvider>
           <devtool.FrameDevtoolProvider>
             {(process.env.NEXT_PUBLIC_DEV || showDevtool) ? (

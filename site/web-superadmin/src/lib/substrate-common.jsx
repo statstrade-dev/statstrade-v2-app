@@ -1,9 +1,11 @@
 import React from 'react'
 
-// statstrade-superadmin.lib.substrate-common/SubstrateContext [9] 
+import * as devtool from '@statstrade/component/layout/common/frame-devtool.jsx'
+
+// statstrade-superadmin.lib.substrate-common/SubstrateContext [10] 
 export var SubstrateContext = React.createContext(null);
 
-// statstrade-superadmin.lib.substrate-common/createConfig [11] 
+// statstrade-superadmin.lib.substrate-common/createConfig [12] 
 export function createConfig(cache_type,cache_defaults){
   let url = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL);
   let secured = url.protocol == "https:";
@@ -24,12 +26,12 @@ export function createConfig(cache_type,cache_defaults){
   };
 }
 
-// statstrade-superadmin.lib.substrate-common/useSubstrateContext [30] 
+// statstrade-superadmin.lib.substrate-common/useSubstrateContext [31] 
 export function useSubstrateContext(){
   return React.useContext(SubstrateContext);
 }
 
-// statstrade-superadmin.lib.substrate-common/useSubstrateNode [36] 
+// statstrade-superadmin.lib.substrate-common/useSubstrateNode [37] 
 export function useSubstrateNode(options,init_fn,close_fn){
   let settings = options || {};
   let client_id = settings["client_id"] || "statstrade-superadmin-client";
@@ -67,10 +69,11 @@ export function useSubstrateNode(options,init_fn,close_fn){
       }
     };
   },[client_id,worker_url,config,init_fn,close_fn]);
+  devtool.useDevtoolSharedWorker(resource);
   return {readyState,resource,error};
 }
 
-// statstrade-superadmin.lib.substrate-common/SubstrateProvider [77] 
+// statstrade-superadmin.lib.substrate-common/SubstrateProvider [79] 
 export function SubstrateProvider(children,options,init_fn,close_fn){
   let state = useSubstrateNode(options,init_fn,close_fn);
   let readyState = state["readyState"];

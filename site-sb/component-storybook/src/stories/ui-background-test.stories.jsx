@@ -23,4 +23,4 @@ export function Test_BackgroundLinearGradient(){
     </T.YStack>);
 }
 
-export default Metadata;
+export default Metadata

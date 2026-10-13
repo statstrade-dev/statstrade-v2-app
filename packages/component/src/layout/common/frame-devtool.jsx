@@ -1,10 +1,10 @@
-import 
-  {Activity,FlaskConical,LogIn,LogOut,Minus,Monitor,SquareMinus,SquarePlus,User,Wrench}
- from '@tamagui/lucide-icons'
+import React from 'react'
 
 import * as T from 'tamagui'
 
-import React from 'react'
+import 
+  {Activity,FlaskConical,LogIn,LogOut,Minus,Monitor,SquareMinus,SquarePlus,User,Wrench}
+ from '@tamagui/lucide-icons'
 
 import * as kd from '@xtalk/lang/common-data.js'
 
@@ -40,7 +40,7 @@ export function api_sign_in(user){
   }
   gs.setStore(["dev","user"],user.handle);
   gs.setStore(["dev","sign-in"],true);
-  return sb.getClient().auth.signInWithPassword(user).then(function (response){
+  return sb.signInWithPassword(sb.getClient(),user).then(function (response){
     if(response.error){
       throw response.error;
     }
@@ -384,11 +384,18 @@ export function FrameDevtoolWrench(){
       <FrameDevtoolButton
         backgroundColor={controls.color}
         onPress={function (){
-            let client = sb.getClient();
             let uid = kd.get_in(controls.session,["user","id"]);
             if(uid){
-              client.schema("szn_type").from("User").select("is_onboarded").eq("id",uid).single().then(function (res){
+              sb.queryTable("User",{
+                "select":"is_onboarded",
+                "filters":[{"column":"id","value":uid}],
+                "single":true
+              },{"schema":"szn_type"}).then(function (res){
                 let current = kd.get_in(res,["data","is_onboarded"]);
+                if(res["error"]){
+                  console.error(res["error"]);
+                  return null;
+                }
                 api_public.user_set_public({"is_onboarded":!current}).then(function (){
                   page.toast.show(
                     ui.t("Onboarding Toggled"),
@@ -403,7 +410,7 @@ export function FrameDevtoolWrench(){
     </FrameDevtoolPopup>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolInfo [466] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolInfo [468] 
 export function FrameDevtoolInfo(){
   let {api,controls,page} = React.useContext(FrameDevtoolContext);
   let dims = ui.useWindowDimensions();
@@ -437,7 +444,7 @@ export function FrameDevtoolInfo(){
     </T.XStack>);
 }
 
-// statsui.basic.layout.common.frame-devtool/frameDevtoolApi [515] 
+// statsui.basic.layout.common.frame-devtool/frameDevtoolApi [517] 
 export var frameDevtoolApi = {
   "queries":{
     "list_testusers":{
@@ -449,7 +456,7 @@ export var frameDevtoolApi = {
     "sign_in":{"fn":api_sign_in},
     "sign_out":{
       "fn":function (){
-        return sb.getClient().auth.signOut();
+        return sb.signOut(sb.getClient());
       }
     },
     "create_testuser":{
@@ -463,7 +470,7 @@ export var frameDevtoolApi = {
   }
 };
 
-// statsui.basic.layout.common.frame-devtool/useFrameDevtoolContext [529] 
+// statsui.basic.layout.common.frame-devtool/useFrameDevtoolContext [531] 
 export function useFrameDevtoolContext(){
   let toast = ui.useToastController();
   let [session,setSession] = sb.useListenSession();
@@ -476,7 +483,7 @@ export function useFrameDevtoolContext(){
   return {api,controls,debugContent,page,setDebugContent,setSharedWorker,sharedWorker};
 }
 
-// statsui.basic.layout.common.frame-devtool/useDevtoolInjection [559] 
+// statsui.basic.layout.common.frame-devtool/useDevtoolInjection [561] 
 export function useDevtoolInjection(content){
   let {setDebugContent} = React.useContext(FrameDevtoolContext);
   React.useEffect(function (){
@@ -487,18 +494,22 @@ export function useDevtoolInjection(content){
   },[]);
 }
 
-// statsui.basic.layout.common.frame-devtool/useDevtoolSharedWorker [570] 
+// statsui.basic.layout.common.frame-devtool/useDevtoolSharedWorker [572] 
 export function useDevtoolSharedWorker(resource){
-  let {setSharedWorker} = React.useContext(FrameDevtoolContext);
+  let context = React.useContext(FrameDevtoolContext);
+  let setSharedWorker = context ? context["setSharedWorker"] : null;
   React.useEffect(function (){
-    setSharedWorker(resource);
-    return function (){
-      setSharedWorker(null);
-    };
-  },[resource]);
+    if(setSharedWorker){
+      setSharedWorker(resource);
+      return function (){
+        setSharedWorker(null);
+      };
+    }
+    return null;
+  },[setSharedWorker,resource]);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolScreen [583] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolScreen [588] 
 export function FrameDevtoolScreen(){
   let {controls,debugContent} = React.useContext(FrameDevtoolContext);
   if(!debugContent){
@@ -514,7 +525,7 @@ export function FrameDevtoolScreen(){
     </FrameDevtoolPopup>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolProvider [598] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolProvider [603] 
 export function FrameDevtoolProvider({children}){
   let context = useFrameDevtoolContext();
   gu.usePathContext(["devtool"],context);
@@ -537,7 +548,7 @@ export function FrameDevtoolProvider({children}){
     <FrameDevtoolContext.Provider value={context}>{children}</FrameDevtoolContext.Provider>);
 }
 
-// statsui.basic.layout.common.frame-devtool/FrameDevtoolPanel [625] 
+// statsui.basic.layout.common.frame-devtool/FrameDevtoolPanel [630] 
 export function FrameDevtoolPanel(){
   let context = React.useContext(FrameDevtoolContext);
   let {controls} = context;
@@ -545,7 +556,8 @@ export function FrameDevtoolPanel(){
     <FrameDevtoolLayout color={controls.color}>
       <T.YStack gap="$1">
         <T.XStack gap="$1">
-          <FrameDevtoolUser/>
+          {(process.env.NODE_ENV == "development") ? (
+            <FrameDevtoolUser/>) : null}
           <FrameDevtoolWrench/>
           <FrameDevtoolScreen/>
           <FrameDevtoolSharedWorker/>

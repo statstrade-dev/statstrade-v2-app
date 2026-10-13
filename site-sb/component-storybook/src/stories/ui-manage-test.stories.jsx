@@ -1,6 +1,6 @@
-import React from 'react'
-
 import * as T from 'tamagui'
+
+import React from 'react'
 
 import * as ui_manage from '@statstrade/component/ui-manage.jsx'
 
@@ -74,4 +74,4 @@ export function Test_StatCard(){
     </T.XStack>);
 }
 
-export default Metadata;
+export default Metadata

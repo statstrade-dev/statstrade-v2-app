@@ -1,10 +1,10 @@
-import {schemaSignIn} from '@statstrade/edge/remote/group/common-auth-action'
-
-import {Github,Menu} from '@tamagui/lucide-icons'
+import React from 'react'
 
 import * as T from 'tamagui'
 
-import React from 'react'
+import {schemaSignIn} from '@statstrade/edge/remote/group/common-auth-action'
+
+import {Github,Menu} from '@tamagui/lucide-icons'
 
 import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
@@ -344,7 +344,7 @@ export function useLayoutGuestContext(){
   return {api,controls,forms};
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuest [402] 
+// statsui.basic.layout.layout-guest/LayoutGuest [404] 
 export function LayoutGuest({children}){
   let context = useLayoutGuestContext();
   return (

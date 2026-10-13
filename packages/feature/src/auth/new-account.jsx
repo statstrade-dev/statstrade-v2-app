@@ -1,8 +1,8 @@
-import {Github} from '@tamagui/lucide-icons'
+import React from 'react'
 
 import * as T from 'tamagui'
 
-import React from 'react'
+import {Github} from '@tamagui/lucide-icons'
 
 import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
@@ -12,7 +12,7 @@ import * as ui_router from '@statstrade/component/ui-router.jsx'
 
 import * as r from '@statstrade/edge/lib/js/react.jsx'
 
-import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
+import * as client_auth from '@statstrade/edge/remote/util-supabase.jsx'
 
 import * as ui_section from '@statstrade/component/ui-section.jsx'
 
@@ -98,7 +98,6 @@ export function NewAccountForm(){
 export function NewAccountScreenRegister(){
   let context = React.useContext(NewAccountContext);
   let {api,controls,pathPrefix} = context;
-  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   let isBusy = api.mutations.sign_up.isPending || api.mutations.sign_in_oauth.isPending;
   return (
     <React.Fragment>
@@ -115,7 +114,7 @@ export function NewAccountScreenRegister(){
               api.mutations.sign_in_oauth.mutateAsync({
                 "provider":"google",
                 "options":{
-                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                      "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
                     }
               });
             }}/>
@@ -128,7 +127,7 @@ export function NewAccountScreenRegister(){
               api.mutations.sign_in_oauth.mutateAsync({
                 "provider":"github",
                 "options":{
-                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                      "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
                     }
               });
             }}/>
@@ -144,27 +143,34 @@ export function NewAccountScreenRegister(){
       </T.YStack>
       <ui.Horizontal marginVertical="$2" borderColor="$color1"/>
       <T.YStack alignItems="center">
-        <ui.ButtonLink href={authPath + "sign-in"}>{ui.t("Already have an account?")}</ui.ButtonLink>
+        <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Already have an account?")}</ui.ButtonLink>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreenVerify [157] 
+// statstrade-web.feature.auth.new-account/markAccountVerifiedFromSession [158] 
+export function markAccountVerifiedFromSession(session,current,setVerified){
+  if(session && session["user"] && session["user"]["id"] && !current){
+    setVerified(true);
+    return true;
+  }
+  return false;
+}
+
+// statstrade-web.feature.auth.new-account/NewAccountScreenVerify [167] 
 export function NewAccountScreenVerify(){
   let router = ui_router.useRouter();
   let [current,setCurrent,{startCountdown,stopCountdown}] = r.useCountdown(30,null,{"interval":1000});
   let context = React.useContext(NewAccountContext);
   let {api,controls,forms,pathPrefix} = context;
-  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   let isBusy = api.mutations.sign_up.isPending || api.mutations.sign_in_oauth.isPending;
   let toast = ui.useToastController();
-  sb.useListeners({
-    "onSignedIn":function (){
-        if(!controls.isVerified){
-          controls.setIsVerified(true);
-        }
-      }
-  });
+  let [session,_setSession,loaded] = client_auth.useListenSession();
+  React.useEffect(function (){
+    if(loaded){
+      markAccountVerifiedFromSession(session,controls.isVerified,controls.setIsVerified);
+    }
+  },[session,loaded]);
   React.useEffect(function (){
     if(controls.isVerified){
       gs.setStore(["flags","sign-in"],true);
@@ -210,12 +216,12 @@ export function NewAccountScreenVerify(){
                 })}>Resend
             </ui.ButtonInverse>)}/>
       <T.YStack alignItems="center">
-        <ui.ButtonLink href={authPath + "sign-in"}>{ui.t("Sign In")}</ui.ButtonLink>
+        <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Sign In")}</ui.ButtonLink>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreenMain [228] 
+// statstrade-web.feature.auth.new-account/NewAccountScreenMain [238] 
 export function NewAccountScreenMain(){
   let context = React.useContext(NewAccountContext);
   let {controls} = context;
@@ -224,7 +230,7 @@ export function NewAccountScreenMain(){
     <ui_section.MinFrameCenter><Component/></ui_section.MinFrameCenter>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreen [242] 
+// statstrade-web.feature.auth.new-account/NewAccountScreen [252] 
 export function NewAccountScreen(props){
   let ctx = common_auth.useSignUpContext(props);
   let controls = hf.useControls([

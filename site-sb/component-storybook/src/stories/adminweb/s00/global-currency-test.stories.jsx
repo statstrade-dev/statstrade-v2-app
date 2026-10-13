@@ -1,9 +1,9 @@
 import * as T from 'tamagui'
 
-// statstrade-adminweb.a07-super.s00.global-currency-test/Metadata [12] 
+// statstrade-adminweb.a07-super.s00.global-currency-test/Metadata [11] 
 const Metadata = {title:"Admin/Global/Commodity",tags:["autodoc"]};
 
-// statstrade-adminweb.a07-super.s00.global-currency-test/Test_CommodityRecords [33] 
+// statstrade-adminweb.a07-super.s00.global-currency-test/Test_CommodityRecords [26] 
 export function Test_CommodityRecords(){
   return (
     <T.YStack gap="$3" padding="$4" width={640}>

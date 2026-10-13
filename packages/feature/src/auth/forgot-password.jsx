@@ -1,12 +1,14 @@
-import * as T from 'tamagui'
-
 import React from 'react'
+
+import * as T from 'tamagui'
 
 import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
 import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
 import * as r from '@statstrade/edge/lib/js/react.jsx'
+
+import * as client_auth from '@statstrade/edge/remote/util-supabase.jsx'
 
 import * as ui_section from '@statstrade/component/ui-section.jsx'
 
@@ -20,10 +22,10 @@ import * as ui_form from '@statstrade/component/ui-form.jsx'
 
 import * as gu from '@statstrade/edge/global-ui.jsx'
 
-// statstrade-web.feature.auth.forgot-password/ForgotPasswordContext [25] 
+// statstrade-web.feature.auth.forgot-password/ForgotPasswordContext [26] 
 export var ForgotPasswordContext = React.createContext({});
 
-// statstrade-web.feature.auth.forgot-password/ForgotPasswordForm [28] 
+// statstrade-web.feature.auth.forgot-password/ForgotPasswordForm [29] 
 export function ForgotPasswordForm(){
   let context = React.useContext(ForgotPasswordContext);
   let {api,controls,forms} = context;
@@ -81,11 +83,10 @@ export function ForgotPasswordForm(){
     </T.Form>);
 }
 
-// statstrade-web.feature.auth.forgot-password/ForgotPasswordScreenRequest [86] 
+// statstrade-web.feature.auth.forgot-password/ForgotPasswordScreenRequest [87] 
 export function ForgotPasswordScreenRequest(){
   let context = React.useContext(ForgotPasswordContext);
   let {pathPrefix} = context;
-  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   return (
     <React.Fragment>
       <ui_section.MinHeader
@@ -94,7 +95,7 @@ export function ForgotPasswordScreenRequest(){
       <T.YStack flex={1} justifyContent="center"><ForgotPasswordForm/></T.YStack>
       <T.View paddingTop="$2" marginVertical="$3"/>
       <T.YStack alignItems="center">
-        <ui.ButtonLink href={authPath + "sign-in"}>{ui.t("Back to Sign In")}</ui.ButtonLink>
+        <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Back to Sign In")}</ui.ButtonLink>
       </T.YStack>
     </React.Fragment>);
 }
@@ -104,7 +105,6 @@ export function ForgotPasswordScreenSuccess(){
   let [current,setCurrent,{startCountdown,stopCountdown}] = r.useCountdown(30,null,{"interval":1000});
   let context = React.useContext(ForgotPasswordContext);
   let {api,controls,forms,pathPrefix} = context;
-  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   let toast = ui.useToastController();
   let isBusy = api.mutations.password_reset.isPending;
   let email = kd.get_in(forms.password_reset.formState,["values","email"]) || kd.get_in(forms.password_reset.formState,["defaultValues","email"]);
@@ -152,13 +152,13 @@ export function ForgotPasswordScreenSuccess(){
           </ui.ButtonInverse>)}
         <T.Text>{ui.t("Check your inbox for instructions")}</T.Text>
         <T.YStack alignItems="center">
-          <ui.ButtonLink href={authPath + "sign-in"}>{ui.t("Back to Sign In")}</ui.ButtonLink>
+          <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Back to Sign In")}</ui.ButtonLink>
         </T.YStack>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.forgot-password/ForgotPasswordScreenMain [186] 
+// statstrade-web.feature.auth.forgot-password/ForgotPasswordScreenMain [185] 
 export function ForgotPasswordScreenMain(){
   let context = React.useContext(ForgotPasswordContext);
   let {controls} = context;
@@ -167,7 +167,7 @@ export function ForgotPasswordScreenMain(){
     <ui_section.MinFrameCenter><Component/></ui_section.MinFrameCenter>);
 }
 
-// statstrade-web.feature.auth.forgot-password/ForgotPasswordScreen [200] 
+// statstrade-web.feature.auth.forgot-password/ForgotPasswordScreen [199] 
 export function ForgotPasswordScreen(props){
   let context = props.context || Object.assign(common_auth.useForgotPasswordContext(props),{
     "controls":hf.useControls([["currentStage","initial"],"currentError"]),

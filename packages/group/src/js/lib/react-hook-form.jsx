@@ -1,20 +1,20 @@
-import {Controller,useForm} from 'react-hook-form'
+import * as HookForm from 'react-hook-form'
 
-import {z} from 'zod'
+import * as Zod from 'zod'
 
-import {zodResolver} from '@hookform/resolvers/zod'
+import * as HookFormResolver from '@hookform/resolvers/zod'
 
 // js.lib.react-hook-form/useFormBase [13] 
-export var useFormBase = useForm;
+export var useFormBase = HookForm["useForm"];
 
 // js.lib.react-hook-form/FormController [15] 
-export var FormController = Controller;
+export var FormController = HookForm["Controller"];
 
 // js.lib.react-hook-form/ZodResolver [17] 
-export var ZodResolver = zodResolver;
+export var ZodResolver = HookFormResolver["zodResolver"];
 
 // js.lib.react-hook-form/Z [19] 
-export var Z = z;
+export var Z = Zod["z"];
 
 // js.lib.react-hook-form/t [21] 
 export var t = function (x){

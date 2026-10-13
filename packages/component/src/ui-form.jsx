@@ -1,8 +1,8 @@
-import {Check,CircleAlert} from '@tamagui/lucide-icons'
-
 import React from 'react'
 
 import * as T from 'tamagui'
+
+import {Check,CircleAlert} from '@tamagui/lucide-icons'
 
 import * as kd from '@xtalk/lang/common-data.js'
 

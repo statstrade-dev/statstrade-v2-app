@@ -2,13 +2,13 @@ import {loadStripe} from '@stripe/stripe-js'
 
 import {Elements,PaymentElement,useElements,useStripe} from '@stripe/react-stripe-js'
 
-import 
-  {Building2,Check,ChevronDown,Circle,Info,Rocket,TrendingUp,Zap}
- from '@tamagui/lucide-icons'
-
 import React from 'react'
 
 import * as T from 'tamagui'
+
+import 
+  {Building2,Check,ChevronDown,Circle,Info,Rocket,TrendingUp,Zap}
+ from '@tamagui/lucide-icons'
 
 import * as element_billing from '@statstrade/component/element/element-billing.jsx'
 
@@ -19,13 +19,30 @@ import * as ui_section from '@statstrade/component/ui-section.jsx'
 import * as ui from '@statstrade/component/ui-common.jsx'
 
 // statstrade-web.feature.onboarding.onboarding-step-4-billing/stripePromise [19] 
-export var stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) : console.error(
-  "Stripe Publishable Key is missing. Check NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"
-);
-null;;
+export var stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) : null;
 
-// statstrade-web.feature.onboarding.onboarding-step-4-billing/PaymentForm [26] 
-export function PaymentForm({onCancel,onSuccess}){
+// statstrade-web.feature.onboarding.onboarding-step-4-billing/onboardingBillingOrganisationId [24] 
+export function onboardingBillingOrganisationId(existing_org,organisations){
+  if(existing_org && existing_org.id){
+    return existing_org.id;
+  }
+  if(Array.isArray(organisations) && (organisations.length > 0)){
+    return organisations[0].id;
+  }
+  return null;
+}
+
+// statstrade-web.feature.onboarding.onboarding-step-4-billing/onboardingStripeReturnUrl [34] 
+export function onboardingStripeReturnUrl(site_url,fallback_url,organisation_id){
+  let base = site_url || fallback_url || "";
+  if(base.endsWith("/")){
+    base = base.slice(0,-1);
+  }
+  return base + "/?step=5&org_id=" + encodeURIComponent(organisation_id || "");
+}
+
+// statstrade-web.feature.onboarding.onboarding-step-4-billing/PaymentForm [44] 
+export function PaymentForm({onCancel,onSuccess,orgId}){
   let stripe = useStripe();
   let elements = useElements();
   let [message,setMessage] = React.useState(null);
@@ -40,7 +57,7 @@ export function PaymentForm({onCancel,onSuccess}){
       "elements":elements,
       "redirect":"if_required",
       "confirmParams":{
-            "return_url":(process.env.NEXT_PUBLIC_SITE_URL || window.location.origin) + "/?step=5"
+            "return_url":onboardingStripeReturnUrl(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin,orgId)
           }
     });
     if(result.error){
@@ -78,7 +95,7 @@ export function PaymentForm({onCancel,onSuccess}){
     </form>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-step-4-billing/PaymentSuccessView [76] 
+// statstrade-web.feature.onboarding.onboarding-step-4-billing/PaymentSuccessView [96] 
 export function PaymentSuccessView({data,onContinue,org}){
   let receipt = data.receipt || {};
   let amount = receipt.amount || 0;
@@ -130,7 +147,7 @@ export function PaymentSuccessView({data,onContinue,org}){
     </T.YStack>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-step-4-billing/PaymentErrorView [113] 
+// statstrade-web.feature.onboarding.onboarding-step-4-billing/PaymentErrorView [133] 
 export function PaymentErrorView({error,onBack}){
   return (
     <T.YStack
@@ -166,7 +183,7 @@ export function PaymentErrorView({error,onBack}){
     </T.YStack>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-step-4-billing/PlanActiveView [131] 
+// statstrade-web.feature.onboarding.onboarding-step-4-billing/PlanActiveView [151] 
 export function PlanActiveView({onContinue,plan}){
   return (
     <T.YStack
@@ -199,7 +216,7 @@ export function PlanActiveView({onContinue,plan}){
     </T.YStack>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-step-4-billing/OnboardingStep4BillingScreen [147] 
+// statstrade-web.feature.onboarding.onboarding-step-4-billing/OnboardingStep4BillingScreen [167] 
 export function OnboardingStep4BillingScreen(){
   let context = React.useContext(common.IndexOnboardingContext);
   let {api,controls} = context;
@@ -212,22 +229,21 @@ export function OnboardingStep4BillingScreen(){
   let [paymentError,setPaymentError] = React.useState(null);
   let orgsQuery = api.queries.user_list_member_organisations;
   React.useEffect(function (){
-    if(!orgId){
-      let {data,error} = orgsQuery;
-      if(error){
-        console.error("Failed to fetch orgs",error);
-      }
-      else{
-        let orgs = data;
-        if(orgs && (orgs.length > 0)){
-          setOrgId(orgs[0].id);
-        }
-      }
+    let query_error = orgsQuery.error || (orgsQuery.data && orgsQuery.data.error);
+    let selected_id = onboardingBillingOrganisationId(controls.existingOrg,orgsQuery.output);
+    if(query_error){
+      setMessage("Could not load your organisations. Please try again.");
     }
-    return function (){
-      setClientSecret(null);
-    };
-  },[orgsQuery.data,orgsQuery.error]);
+    if(!query_error && selected_id && (selected_id != orgId) && !clientSecret){
+      setOrgId(selected_id);
+    }
+  },[
+    controls.existingOrg,
+    orgsQuery.output,
+    orgsQuery.error,
+    orgsQuery.data,
+    clientSecret
+  ]);
   let handleSelect = async function (planId){
     setMessage(null);
     if(planId == "professional"){
@@ -302,6 +318,7 @@ export function OnboardingStep4BillingScreen(){
             onCancel={function (){
                 setClientSecret(null);
               }}
+            orgId={orgId}
             onSuccess={function (paymentIntent){
                 api.mutations.stripe_status.mutateAsync(paymentIntent).then(function (res){
                   setSuccessData(res);

@@ -6,9 +6,9 @@ import * as xtd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 export function make_box(initial){
   let initialFn = initial;
   if(!("function" == (typeof initialFn))){
-    let initialData = initialFn;
+    let initialData = xtd.clone_nested(initialFn);
     initialFn = (function (){
-      return initialData;
+      return xtd.clone_nested(initialData);
     });
   }
   let data = initialFn();

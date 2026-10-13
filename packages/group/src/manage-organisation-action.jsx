@@ -19,21 +19,22 @@ export var organisationApi = {
   "mutations":{
     "organisation_create":{
       "fn":api_public.organisation_create,
-      "refresh":["organisations_list"]
+      "refresh":["organisations_list","user_list_member_organisations"]
     },
     "organisation_update":{
       "fn":api_public.organisation_update,
-      "refresh":["organisations_list"]
-    }
+      "refresh":["organisations_list","user_list_member_organisations"]
+    },
+    "organisation_invite_email_create":{"fn":api_public.organisation_invite_email_create}
   }
 };
 
-// statsui.group.manage-organisation-action/schemaOrganisationName [43] 
+// statsui.group.manage-organisation-action/schemaOrganisationName [46] 
 export var schemaOrganisationName = hf.Z.string().min(1,hf.t("ID is required.")).min(3,hf.t("ID must be at least 3 characters.")).regex(/^[a-z0-9_]+$/,hf.t(
   "ID can only contain lowercase letters, numbers, and underscores."
 ));
 
-// statsui.group.manage-organisation-action/schemaOrganisationCreate [50] 
+// statsui.group.manage-organisation-action/schemaOrganisationCreate [53] 
 export var schemaOrganisationCreate = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "name":schemaOrganisationName.pipe(hf.Z.refine(function (name){
@@ -42,13 +43,13 @@ export var schemaOrganisationCreate = hf.Z.object({
   "description":hf.Z.string().optional()
 });
 
-// statsui.group.manage-organisation-action/schemaOrganisationUpdate [63] 
+// statsui.group.manage-organisation-action/schemaOrganisationUpdate [66] 
 export var schemaOrganisationUpdate = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "description":hf.Z.string().optional()
 });
 
-// statsui.group.manage-organisation-action/formStateOrganisation [70] 
+// statsui.group.manage-organisation-action/formStateOrganisation [73] 
 export var formStateOrganisation = {
   "organisation_create":{
     "defaultValues":{"name":"","title":"","description":""},
@@ -60,14 +61,14 @@ export var formStateOrganisation = {
   }
 };
 
-// statsui.group.manage-organisation-action/useManageOrganisationContext [81] 
+// statsui.group.manage-organisation-action/useManageOrganisationContext [84] 
 export function useManageOrganisationContext({userId}){
   let api = rq.useApi(organisationApi);
   let forms = hf.useFormStateMap(formStateOrganisation);
   return {api,forms};
 }
 
-// statsui.group.manage-organisation-action/organisationAccessApi [96] 
+// statsui.group.manage-organisation-action/organisationAccessApi [99] 
 export var organisationAccessApi = {
   "queries":{
     "organisation_member_list":{
@@ -88,7 +89,7 @@ export var organisationAccessApi = {
   }
 };
 
-// statsui.group.manage-organisation-action/schemaOrganisationAddMember [110] 
+// statsui.group.manage-organisation-action/schemaOrganisationAddMember [113] 
 export var schemaOrganisationAddMember = hf.Z.object({
   "handle":hf.Z.string().min(1,hf.t("Handle is required.")).pipe(hf.Z.refine(function (handle){
     return api_public.check_handle_exists({handle});
@@ -97,7 +98,7 @@ export var schemaOrganisationAddMember = hf.Z.object({
   "scope":hf.Z.string().optional()
 });
 
-// statsui.group.manage-organisation-action/formStateOrganisationAccess [125] 
+// statsui.group.manage-organisation-action/formStateOrganisationAccess [128] 
 export var formStateOrganisationAccess = {
   "organisation_member_add":{
     "defaultValues":{"handle":"","level":"member","scope":""},
@@ -105,14 +106,14 @@ export var formStateOrganisationAccess = {
   }
 };
 
-// statsui.group.manage-organisation-action/useManageOrganisationAccessContext [132] 
+// statsui.group.manage-organisation-action/useManageOrganisationAccessContext [135] 
 export function useManageOrganisationAccessContext(){
   let api = rq.useApi(organisationAccessApi);
   let forms = formStateOrganisationAccess;
   return {api,forms};
 }
 
-// statsui.group.manage-organisation-action/organisationTokenApi [145] 
+// statsui.group.manage-organisation-action/organisationTokenApi [148] 
 export var organisationTokenApi = {
   "queries":{
     "organisation_token_list":{
@@ -192,7 +193,7 @@ export var organisationTokenApi = {
   }
 };
 
-// statsui.group.manage-organisation-action/schemaTokenCreate [171] 
+// statsui.group.manage-organisation-action/schemaTokenCreate [174] 
 export var schemaTokenCreate = hf.Z.object({
   "color":hf.Z.string().optional(),
   "symbol":hf.Z.string().optional(),
@@ -207,7 +208,7 @@ export var schemaTokenCreate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// statsui.group.manage-organisation-action/schemaTokenUpdate [186] 
+// statsui.group.manage-organisation-action/schemaTokenUpdate [189] 
 export var schemaTokenUpdate = hf.Z.object({
   "color":hf.Z.string().optional(),
   "symbol":hf.Z.string().optional(),
@@ -222,7 +223,7 @@ export var schemaTokenUpdate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// statsui.group.manage-organisation-action/formStateOrganisationToken [201] 
+// statsui.group.manage-organisation-action/formStateOrganisationToken [204] 
 export var formStateOrganisationToken = {
   "organisation_token_create":{
     "defaultValues":{
@@ -258,7 +259,7 @@ export var formStateOrganisationToken = {
   }
 };
 
-// statsui.group.manage-organisation-action/useManageOrganisationTokenContext [230] 
+// statsui.group.manage-organisation-action/useManageOrganisationTokenContext [233] 
 export function useManageOrganisationTokenContext({name}){
   let api = rq.useApi(
     organisationTokenApi,
@@ -268,7 +269,7 @@ export function useManageOrganisationTokenContext({name}){
   return {api,forms};
 }
 
-// statsui.group.manage-organisation-action/organisationCommodityApi [244] 
+// statsui.group.manage-organisation-action/organisationCommodityApi [247] 
 export var organisationCommodityApi = {
   "queries":{
     "list_organisation_commodities":{
@@ -289,7 +290,7 @@ export var organisationCommodityApi = {
   }
 };
 
-// statsui.group.manage-organisation-action/schemaCommodityCreate [257] 
+// statsui.group.manage-organisation-action/schemaCommodityCreate [260] 
 export var schemaCommodityCreate = hf.Z.object({
   "name":hf.Z.string().min(1,hf.t("Name is required.")),
   "code":hf.Z.string().min(1,hf.t("Code is required.")),
@@ -301,7 +302,7 @@ export var schemaCommodityCreate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// statsui.group.manage-organisation-action/schemaCommodityUpdate [269] 
+// statsui.group.manage-organisation-action/schemaCommodityUpdate [272] 
 export var schemaCommodityUpdate = hf.Z.object({
   "name":hf.Z.string().optional(),
   "code":hf.Z.string().optional(),
@@ -313,7 +314,7 @@ export var schemaCommodityUpdate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// statsui.group.manage-organisation-action/formStateOrganisationCommodity [281] 
+// statsui.group.manage-organisation-action/formStateOrganisationCommodity [284] 
 export var formStateOrganisationCommodity = {
   "organisation_commodity_create":{
     "defaultValues":{
@@ -343,7 +344,7 @@ export var formStateOrganisationCommodity = {
   }
 };
 
-// statsui.group.manage-organisation-action/useManageOrganisationCommodityContext [304] 
+// statsui.group.manage-organisation-action/useManageOrganisationCommodityContext [307] 
 export function useManageOrganisationCommodityContext({name}){
   let api = rq.useApi(
     organisationCommodityApi,
@@ -353,7 +354,7 @@ export function useManageOrganisationCommodityContext({name}){
   return {api,forms};
 }
 
-// statsui.group.manage-organisation-action/managerBillingApi [318] 
+// statsui.group.manage-organisation-action/managerBillingApi [321] 
 export var managerBillingApi = {
   "queries":{
     "list_invoices":{
@@ -375,7 +376,7 @@ export var managerBillingApi = {
   }
 };
 
-// statsui.group.manage-organisation-action/schemaBilling [328] 
+// statsui.group.manage-organisation-action/schemaBilling [331] 
 export var schemaBilling = hf.Z.object({
   "card_name":hf.Z.string().min(1,hf.t("Cardholder Name is required")),
   "card_number":hf.Z.string().min(16,hf.t("Invalid Card Number")),
@@ -383,7 +384,7 @@ export var schemaBilling = hf.Z.object({
   "cvc":hf.Z.string().min(3,hf.t("CVC is required"))
 });
 
-// statsui.group.manage-organisation-action/formStateBilling [336] 
+// statsui.group.manage-organisation-action/formStateBilling [339] 
 export var formStateBilling = {
   "billing_new":{
     "defaultValues":{"card_name":"","card_number":"","expiry":"","cvc":""},
@@ -391,14 +392,14 @@ export var formStateBilling = {
   }
 };
 
-// statsui.group.manage-organisation-action/useManageBillingContext [341] 
+// statsui.group.manage-organisation-action/useManageBillingContext [344] 
 export function useManageBillingContext(){
   let api = rq.useApi(managerBillingApi);
   let forms = hf.useFormStateMap(formStateBilling);
   return {api,forms};
 }
 
-// statsui.group.manage-organisation-action/manageInviteApi [353] 
+// statsui.group.manage-organisation-action/manageInviteApi [356] 
 export var manageInviteApi = {
   "queries":{
     "organisation_invite_list":{
@@ -415,14 +416,14 @@ export var manageInviteApi = {
   }
 };
 
-// statsui.group.manage-organisation-action/schemaInviteCreate [365] 
+// statsui.group.manage-organisation-action/schemaInviteCreate [368] 
 export var schemaInviteCreate = hf.Z.object({
   "channel":hf.Z.string().min(1,"Channel is required"),
   "campaign":hf.Z.string().optional(),
   "emails":hf.Z.string().optional()
 });
 
-// statsui.group.manage-organisation-action/formStateInvite [372] 
+// statsui.group.manage-organisation-action/formStateInvite [375] 
 export var formStateInvite = {
   "invite_create":{
     "defaultValues":{"channel":"generic","campaign":"","emails":""},
@@ -430,14 +431,14 @@ export var formStateInvite = {
   }
 };
 
-// statsui.group.manage-organisation-action/useManageInviteContext [377] 
+// statsui.group.manage-organisation-action/useManageInviteContext [380] 
 export function useManageInviteContext(){
   let api = rq.useApi(manageInviteApi);
   let forms = hf.useFormStateMap(formStateInvite);
   return {api,forms};
 }
 
-// statsui.group.manage-organisation-action/managerSettingsApi [389] 
+// statsui.group.manage-organisation-action/managerSettingsApi [392] 
 export var managerSettingsApi = {
   "queries":{
     "get_settings":{
@@ -461,14 +462,14 @@ export var managerSettingsApi = {
   }
 };
 
-// statsui.group.manage-organisation-action/settingsSchema [399] 
+// statsui.group.manage-organisation-action/settingsSchema [402] 
 export var settingsSchema = hf.Z.object({
   "orgName":hf.Z.string().min(1,"Name is required"),
   "email":hf.Z.string().min(1,"Email is required"),
   "website":hf.Z.string().optional()
 });
 
-// statsui.group.manage-organisation-action/formStateSettings [406] 
+// statsui.group.manage-organisation-action/formStateSettings [409] 
 export var formStateSettings = {
   "settings_profile":{
     "defaultValues":{"orgName":"","email":"","website":""},
@@ -476,7 +477,7 @@ export var formStateSettings = {
   }
 };
 
-// statsui.group.manage-organisation-action/useSettingsContext [411] 
+// statsui.group.manage-organisation-action/useSettingsContext [414] 
 export function useSettingsContext(){
   let api = rq.useApi(managerSettingsApi);
   let forms = hf.useFormStateMap(formStateSettings);

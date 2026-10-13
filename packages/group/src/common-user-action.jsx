@@ -21,7 +21,10 @@ export var userApi = {
     }
   },
   "mutations":{
-    "user_set_public":{"fn":api_public.user_set_public,"refresh":["get_user"]},
+    "user_set_public":{
+      "fn":api_public.user_set_public,
+      "refresh":["get_user","user_get_profile"]
+    },
     "stripe_checkout":{"fn":api_route.stripe_checkout},
     "stripe_status":{
       "fn":api_route.stripe_status,
@@ -39,7 +42,7 @@ export var schemaUserProfile = hf.Z.object({
   "first_name":hf.Z.string().min(1,hf.t("First name is required.")),
   "last_name":hf.Z.string().optional(),
   "bio":hf.Z.string().optional(),
-  "country":hf.Z.string().optional(),
+  "country_code":hf.Z.string().optional(),
   "location":hf.Z.object({"city":hf.Z.string().optional()})
 });
 
@@ -51,7 +54,7 @@ export var formStateUser = {
       "first_name":"",
       "last_name":"",
       "bio":"",
-      "country":"",
+      "country_code":"",
       "location":{"city":""}
     },
     "schema":schemaUserProfile

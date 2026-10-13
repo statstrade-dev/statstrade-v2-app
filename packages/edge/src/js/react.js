@@ -12,7 +12,7 @@ import * as math from '@statstrade/edge/lib/xt/lang/common-math.jsx'
 
 import * as str from '@statstrade/edge/lib/xt/lang/common-string.jsx'
 
-// js.react/getDOMRoot [179] 
+// js.react/getDOMRoot [178] 
 export function getDOMRoot(domNode){
   let internalKey = xtd.arr_find(xtd.obj_keys(domNode),function (key){
     return key.startsWith("__reactContainer$");
@@ -23,7 +23,7 @@ export function getDOMRoot(domNode){
   return null;
 }
 
-// js.react/renderDOMRoot [190] 
+// js.react/renderDOMRoot [189] 
 export function renderDOMRoot(id,Component){
   let rootElement = document.getElementById(id);
   let root = getDOMRoot(rootElement);
@@ -35,13 +35,13 @@ export function renderDOMRoot(id,Component){
   return true;
 }
 
-// js.react/useStateFor [199] 
+// js.react/useStateFor [198] 
 export function useStateFor(controls,key){
   let setterKey = "set" + str.capitalize(key);
   return [controls[key],controls[setterKey]];
 }
 
-// js.react/Try [206] 
+// js.react/Try [205] 
 export class Try extends React.Component{
   constructor(props) {
     super(props);
@@ -60,13 +60,13 @@ export class Try extends React.Component{
   }
 }
 
-// js.react/id [224] 
+// js.react/id [223] 
 export function id(n){
   // eslint-disable-next-line react-hooks/rules-of-hooks
   return React.useRef(Math.random().toString(36).substr(2,n || 6)).current;
 }
 
-// js.react/useStep [237] 
+// js.react/useStep [236] 
 export function useStep(f){
   let [done,setDone] = React.useState();
   React.useEffect(function (){
@@ -77,7 +77,7 @@ export function useStep(f){
   return [done,setDone];
 }
 
-// js.react/makeLazy [247] 
+// js.react/makeLazy [246] 
 export function makeLazy(component){
   if("function" == (typeof component)){
     return component;
@@ -89,7 +89,7 @@ export function makeLazy(component){
   }
 }
 
-// js.react/useLazy [255] 
+// js.react/useLazy [254] 
 export function useLazy(component){
   if("function" == (typeof component)){
     return component;
@@ -102,7 +102,7 @@ export function useLazy(component){
   }
 }
 
-// js.react/useRefresh [268] 
+// js.react/useRefresh [267] 
 export function useRefresh(){
   let [flag,setFlag] = React.useState(true);
   let refresh = function (){
@@ -111,7 +111,7 @@ export function useRefresh(){
   return refresh;
 }
 
-// js.react/useGetCount [276] 
+// js.react/useGetCount [275] 
 export function useGetCount(n){
   let counterRef = React.useRef(n || 0);
   React.useEffect(function (){
@@ -123,7 +123,7 @@ export function useGetCount(n){
   return getCount;
 }
 
-// js.react/useFollowRef [286] 
+// js.react/useFollowRef [285] 
 export function useFollowRef(value,f){
   f = (f || k.identity);
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -135,7 +135,7 @@ export function useFollowRef(value,f){
   return valueRef;
 }
 
-// js.react/useIsMounted [302] 
+// js.react/useIsMounted [301] 
 export function useIsMounted(){
   let mountedRef = React.useRef(true);
   let isMounted = React.useRef(function (){
@@ -149,7 +149,7 @@ export function useIsMounted(){
   return isMounted;
 }
 
-// js.react/useIsMountedWrap [313] 
+// js.react/useIsMountedWrap [312] 
 export function useIsMountedWrap(){
   let isMounted = useIsMounted();
   return function (f){
@@ -161,7 +161,7 @@ export function useIsMountedWrap(){
   };
 }
 
-// js.react/useMountedCallback [324] 
+// js.react/useMountedCallback [323] 
 export function useMountedCallback(cb){
   let cbRef = useFollowRef(cb);
   React.useEffect(function (){
@@ -176,7 +176,7 @@ export function useMountedCallback(cb){
   },[]);
 }
 
-// js.react/useFollowDelayed [336] 
+// js.react/useFollowDelayed [335] 
 export function useFollowDelayed(value,delay,isMounted){
   if(0 == delay){
     return [value,k.noop];
@@ -204,7 +204,7 @@ export function useFollowDelayed(value,delay,isMounted){
   return [delayed,setDelayed];
 }
 
-// js.react/useStablized [352] 
+// js.react/useStablized [351] 
 export function useStablized(input,isStabilized){
   let [output,setOutput] = React.useState(input);
   React.useEffect(function (){
@@ -215,7 +215,7 @@ export function useStablized(input,isStabilized){
   return isStabilized ? output : input;
 }
 
-// js.react/runIntervalStop [368] 
+// js.react/runIntervalStop [367] 
 export function runIntervalStop(intervalRef){
   let interval = intervalRef.current;
   if(null != interval){
@@ -225,7 +225,7 @@ export function runIntervalStop(intervalRef){
   return interval;
 }
 
-// js.react/runIntervalStart [378] 
+// js.react/runIntervalStart [377] 
 export function runIntervalStart(fRef,msRef,intervalRef){
   let prev = runIntervalStop(intervalRef);
   if(null != msRef.current){
@@ -238,7 +238,7 @@ export function runIntervalStart(fRef,msRef,intervalRef){
   return [prev];
 }
 
-// js.react/useInterval [392] 
+// js.react/useInterval [391] 
 export function useInterval(f,ms){
   let fRef = useFollowRef(f);
   let msRef = useFollowRef(ms);
@@ -256,7 +256,7 @@ export function useInterval(f,ms){
   return {startInterval,stopInterval};
 }
 
-// js.react/runTimeoutStop [415] 
+// js.react/runTimeoutStop [414] 
 export function runTimeoutStop(timeoutRef){
   let timeout = timeoutRef.current;
   if(null != timeout){
@@ -266,7 +266,7 @@ export function runTimeoutStop(timeoutRef){
   return timeout;
 }
 
-// js.react/runTimeoutStart [425] 
+// js.react/runTimeoutStart [424] 
 export function runTimeoutStart(fRef,msRef,timeoutRef){
   let prev = runTimeoutStop(timeoutRef);
   let curr = setTimeout(function (){
@@ -276,7 +276,7 @@ export function runTimeoutStart(fRef,msRef,timeoutRef){
   return [prev,curr];
 }
 
-// js.react/useTimeout [437] 
+// js.react/useTimeout [436] 
 export function useTimeout(f,ms,init){
   let fRef = useFollowRef(f);
   let msRef = useFollowRef(ms);
@@ -296,7 +296,7 @@ export function useTimeout(f,ms,init){
   return {startTimeout,stopTimeout};
 }
 
-// js.react/useCountdown [459] 
+// js.react/useCountdown [458] 
 export function useCountdown(initial,onComplete,opts){
   let {interval = 1000,step = 1,to = 0} = opts || {};
   let [current,setCurrent] = React.useState(initial);
@@ -318,7 +318,7 @@ export function useCountdown(initial,onComplete,opts){
   ];
 }
 
-// js.react/useNow [487] 
+// js.react/useNow [486] 
 export function useNow(interval){
   let [now,setNow] = React.useState(Date.now());
   let {startInterval,stopInterval} = useInterval(function (){
@@ -327,7 +327,7 @@ export function useNow(interval){
   return [now,{"startNow":startInterval,"stopNow":stopInterval}];
 }
 
-// js.react/useSubmit [504] 
+// js.react/useSubmit [503] 
 export function useSubmit({
   result,
   delay = 200,
@@ -338,7 +338,7 @@ export function useSubmit({
   return null;
 }),
   onError = (function (res){
-  console.log(" js.react/useSubmit 512\n\n","ERRORED",res);
+  console.log(" js.react/useSubmit 511\n\n","ERRORED",res);
   return res["body"];
 }),
   onSuccess = k.identity,
@@ -379,7 +379,7 @@ export function useSubmit({
   return {errored,onAction,setWaiting,waiting};
 }
 
-// js.react/useSubmitResult [544] 
+// js.react/useSubmitResult [543] 
 export function useSubmitResult({onError,onResult,onSubmit,onSuccess,result,setResult}){
   let isMounted = useIsMounted();
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -397,7 +397,7 @@ export function useSubmitResult({onError,onResult,onSubmit,onSuccess,result,setR
     }};
 }
 
-// js.react/convertIndex [583] 
+// js.react/convertIndex [582] 
 export function convertIndex({data,value,setValue,allowNotFound,valueFn = k.identity}){
   let forwardFn = function (idx){
     let out = data && data[idx || 0];
@@ -417,7 +417,7 @@ export function convertIndex({data,value,setValue,allowNotFound,valueFn = k.iden
   return {index,items,setIndex};
 }
 
-// js.react/convertModular [606] 
+// js.react/convertModular [605] 
 export function convertModular({data,value,setValue,valueFn = k.identity,indexFn}){
   let forwardFn = function (idx){
     let out = data && data[math.mod_pos(idx || 0,data.length)];
@@ -439,7 +439,7 @@ export function convertModular({data,value,setValue,valueFn = k.identity,indexFn
   return {index,items,setIndex};
 }
 
-// js.react/convertIndices [639] 
+// js.react/convertIndices [638] 
 export function convertIndices({data,values,setValues,valueFn = k.identity}){
   let forwardFn = function (indices){
     let out = [];
@@ -466,7 +466,7 @@ export function convertIndices({data,values,setValues,valueFn = k.identity}){
   return {indices,items,setIndices};
 }
 
-// js.react/convertPosition [665] 
+// js.react/convertPosition [664] 
 export function convertPosition({length,max,min,step}){
   let divisions = Math.floor((max - min) / step);
   let unit = length / divisions;
@@ -483,7 +483,7 @@ export function convertPosition({length,max,min,step}){
   return {forwardFn,reverseFn};
 }
 
-// js.react/useChanging [685] 
+// js.react/useChanging [684] 
 export function useChanging(data,f,state){
   f = (f || xtd.first);
   data = (data || []);
@@ -499,7 +499,7 @@ export function useChanging(data,f,state){
   return [value,setValue];
 }
 
-// js.react/useTree [702] 
+// js.react/useTree [701] 
 export function useTree({branchesFn,displayFn,formatFn,initial,parents,root,setInitial,targetFn,tree}){
   branchesFn = (branchesFn || (function (tree,_parents,_root){
     if(tree){

@@ -1,10 +1,10 @@
 import {Elements,PaymentElement,useElements,useStripe} from '@stripe/react-stripe-js'
 
-import {Check,Circle,Info,TrendingUp} from '@tamagui/lucide-icons'
+import React from 'react'
 
 import * as T from 'tamagui'
 
-import React from 'react'
+import {Check,Circle,Info,TrendingUp} from '@tamagui/lucide-icons'
 
 import * as ui from '@statstrade/component/ui-common.jsx'
 

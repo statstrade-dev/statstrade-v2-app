@@ -1,8 +1,8 @@
 import {Link2,X} from '@tamagui/lucide-icons'
 
-import React from 'react'
-
 import * as T from 'tamagui'
+
+import React from 'react'
 
 import * as ui from '@statstrade/component/ui-common.jsx'
 

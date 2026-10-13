@@ -1,8 +1,230 @@
 {
+  "TokenSupply" : {
+    "position" : 73
+  },
+  "ComputeUsage" : {
+    "position" : 30
+  },
+  "Campaign" : {
+    "position" : 23
+  },
+  "OrgSettings" : {
+    "position" : 50
+  },
+  "ComplianceRecord" : {
+    "position" : 27
+  },
+  "Commodity" : {
+    "position" : 26
+  },
+  "OrgRewardLedger" : {
+    "position" : 49
+  },
+  "ContestEntry" : {
+    "position" : 31
+  },
+  "Social" : {
+    "position" : 3
+  },
+  "ContestLeaderboardEntry" : {
+    "position" : 33
+  },
+  "ItemTx" : {
+    "position" : 40
+  },
+  "Country" : {
+    "position" : 35
+  },
+  "Asset" : {
+    "position" : 15
+  },
+  "ContestLeaderboard" : {
+    "position" : 32
+  },
+  "SupportCase" : {
+    "position" : 68
+  },
+  "ComputeConnection" : {
+    "position" : 28
+  },
+  "ProspectStakeTx" : {
+    "position" : 59
+  },
   "Rev" : {
+    "position" : 2
+  },
+  "ProspectMarketSnapshot" : {
+    "position" : 54
+  },
+  "AccessInviteInternal" : {
+    "position" : 7
+  },
+  "ProspectStake" : {
+    "position" : 57
+  },
+  "McpApproval" : {
+    "position" : 43
+  },
+  "McpConnection" : {
+    "position" : 42
+  },
+  "Activity" : {
+    "position" : 10
+  },
+  "User" : {
+    "position" : 6
+  },
+  "IntegrationEvent" : {
+    "position" : 38
+  },
+  "Manifest" : {
+    "position" : 24
+  },
+  "OrgRewardBudget" : {
+    "position" : 47
+  },
+  "Topic" : {
+    "position" : 52
+  },
+  "BillingAccount" : {
+    "position" : 21
+  },
+  "ContestAward" : {
+    "position" : 34
+  },
+  "ComputeTopup" : {
+    "position" : 29
+  },
+  "WalletAddress" : {
+    "position" : 75
+  },
+  "Org" : {
+    "position" : 20
+  },
+  "TokenErc20Option" : {
+    "position" : 72
+  },
+  "CampaignContest" : {
+    "position" : 25
+  },
+  "Op" : {
+    "position" : 44
+  },
+  "SocialAsset" : {
+    "position" : 63
+  },
+  "OrgBillingInvoice" : {
+    "position" : 45
+  },
+  "OrgBillingPayment" : {
+    "position" : 46
+  },
+  "TopicCall" : {
+    "position" : 74
+  },
+  "SystemPlatformApproval" : {
+    "position" : 70
+  },
+  "Access" : {
     "position" : 0
   },
-  "Global" : {
+  "SocialPublication" : {
+    "position" : 67
+  },
+  "IntegrationProvider" : {
+    "position" : 37
+  },
+  "PlatformGrant" : {
+    "position" : 51
+  },
+  "Playable" : {
+    "position" : 13
+  },
+  "SystemCatalogItem" : {
+    "position" : 69
+  },
+  "TaskProvider" : {
+    "position" : 19
+  },
+  "LockLog" : {
+    "position" : 41
+  },
+  "ApikeyProvider" : {
+    "position" : 12
+  },
+  "AccessRole" : {
+    "position" : 9
+  },
+  "FeedProvider" : {
+    "position" : 22
+  },
+  "Audit" : {
+    "position" : 17
+  },
+  "Prospect" : {
+    "position" : 53
+  },
+  "AuditLog" : {
+    "position" : 18
+  },
+  "SafetyCaseEvent" : {
+    "position" : 61
+  },
+  "SocialVariant" : {
+    "position" : 66
+  },
+  "Wallet" : {
+    "position" : 5
+  },
+  "SafetyCase" : {
+    "position" : 60
+  },
+  "TopicAllocation" : {
+    "position" : 58
+  },
+  "SocialConnection" : {
+    "position" : 64
+  },
+  "Lock" : {
     "position" : 1
+  },
+  "TokenAllowance" : {
+    "position" : 71
+  },
+  "ProspectOrder" : {
+    "position" : 55
+  },
+  "ActivityLog" : {
+    "position" : 11
+  },
+  "Item" : {
+    "position" : 39
+  },
+  "Token" : {
+    "position" : 14
+  },
+  "Global" : {
+    "position" : 36
+  },
+  "SocialHandle" : {
+    "position" : 65
+  },
+  "Task" : {
+    "position" : 48
+  },
+  "Starred" : {
+    "position" : 4
+  },
+  "AccessRequest" : {
+    "position" : 8
+  },
+  "ProspectOrderStrike" : {
+    "position" : 56
+  },
+  "SocialContent" : {
+    "position" : 62
+  },
+  "AssetTx" : {
+    "position" : 16
   }
 }

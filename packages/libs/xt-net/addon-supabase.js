@@ -39,6 +39,26 @@ function cmd_query_table(table_name,query,opts){
   return Object.assign({"path":path,"method":"GET"},opts);
 }
 
+function cmd_storage_upload(bucket,object_path,data,opts){
+  let segments = object_path.split("/");
+  let encoded_parts = [];
+  for(let segment of segments){
+    encoded_parts.push(encodeURIComponent(segment));
+  };
+  let content_type = opts["content-type"] || opts["contentType"];
+  let headers = Object.assign({},opts["headers"]);
+  headers["x-upsert"] = String(true == opts["upsert"]);
+  if(content_type){
+    headers["Content-Type"] = content_type;
+  }
+  return Object.assign(opts,{
+    "path":"/storage/v1/object/" + encodeURIComponent(bucket) + "/" + encoded_parts.join("/"),
+    "method":"POST",
+    "body":data,
+    "headers":headers
+  });
+}
+
 function cmd_health(opts){
   return Object.assign({"path":"/auth/v1/health","method":"GET"},opts);
 }
@@ -183,6 +203,7 @@ module.exports = {
   ["middleware_supabase"]:middleware_supabase,
   ["cmd_rpc_call"]:cmd_rpc_call,
   ["cmd_query_table"]:cmd_query_table,
+  ["cmd_storage_upload"]:cmd_storage_upload,
   ["cmd_health"]:cmd_health,
   ["cmd_signup"]:cmd_signup,
   ["cmd_admin_create_user"]:cmd_admin_create_user,

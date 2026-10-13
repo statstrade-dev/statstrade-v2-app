@@ -1,4 +1,4 @@
-import {Plus,Trash,Users} from '@tamagui/lucide-icons'
+import {Users} from '@tamagui/lucide-icons'
 
 import React from 'react'
 
@@ -12,16 +12,16 @@ import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as element_invitation from '@statstrade/component/element/element-invitation.jsx'
 
-// statstrade-web.feature.onboarding.onboarding-step-7-invitations/OnboardingStep7InvitationsScreen [17] 
+// statstrade-web.feature.onboarding.onboarding-step-7-invitations/OnboardingStep7InvitationsScreen [15] 
 export function OnboardingStep7InvitationsScreen(){
   let context = React.useContext(common.IndexOnboardingContext);
   let {api,controls,forms} = context;
   let [showPreview,setShowPreview] = React.useState(false);
-  let [message,setMessage] = React.useState(
-    "Hey! I'd like to invite you to join my organisation on Statstrade."
-  );
+  let [feedback,setFeedback] = React.useState(null);
+  let isBusy = api.mutations.organisation_invite_email_create.isPending;
+  let organisation_id = controls.existingOrg && (controls.existingOrg.id != "new") && controls.existingOrg.id;
   let handle_add = function (values,inputRef){
-    let email = values.email;
+    let email = values.email.toLowerCase();
     if(email && !controls.invitees.includes(email)){
       controls.setInvitees([...(controls.invitees || []),email]);
       forms.invitations.reset();
@@ -41,9 +41,56 @@ export function OnboardingStep7InvitationsScreen(){
       return i !== idx;
     }));
   };
+  let handle_send = async function (){
+    setFeedback(null);
+    if(!organisation_id){
+      setFeedback(
+        "Select or create an organisation before sending invitations."
+      );
+    }
+    else{
+      try{
+        let result = await common.sendOnboardingInvitations(
+          api.mutations.organisation_invite_email_create,
+          organisation_id,
+          controls.invitees
+        );
+        controls.setInvitees(result.failed.map(function (failure){
+          return failure.email;
+        }));
+        if(result.failed.length > 0){
+          setFeedback(
+            "Could not send " + result.failed.length + " invitation(s). The failed addresses are ready to retry."
+          );
+        }
+        else{
+          controls.setStep(6);
+        }
+      }
+      catch(e){
+        console.error("Failed to send invitations",e);
+        setFeedback(
+          e.message || "Failed to send invitations. Please try again."
+        );
+      }
+    }
+  };
   return (
     <ui_section.MinFrameCenter maxWidth={500}>
-      {!showPreview ? (
+      {!organisation_id ? (
+        <T.YStack alignItems="center" gap="$5" width="100%">
+          <ui_section.MinHeader
+            title="Invite Team"
+            paragraph="Create or select an organisation before inviting team members."/>
+          <ui.ButtonInverse
+            size="$5"
+            fontSize="$5"
+            width="100%"
+            onPress={function (){
+                controls.setStep(6);
+              }}>Continue
+          </ui.ButtonInverse>
+        </T.YStack>) : (!showPreview ? (
         <React.Fragment>
           <ui_section.MinHeader
             logo={(
@@ -64,6 +111,8 @@ export function OnboardingStep7InvitationsScreen(){
               field="email"
               onAdd={handle_add}/>
             <element_invitation.InvitationList invitees={controls.invitees} onRemove={handle_remove}/>
+            {feedback ? (
+              <T.Paragraph color="$red10" textAlign="center">{feedback}</T.Paragraph>) : null}
           </T.YStack>
           <T.XStack
             gap="$4"
@@ -90,18 +139,19 @@ export function OnboardingStep7InvitationsScreen(){
         <React.Fragment>
           <ui_section.MinHeader
             title="Preview Message"
-            paragraph="Personalise the message sent to your invitees."/>
+            paragraph="Invitation emails use the standard Statstrade message."/>
           <T.YStack gap="$4" width="100%" marginTop="$4">
-            <T.TextArea
-              borderRadius="$4"
-              onChangeText={setMessage}
-              focusStyle={{"borderColor":"$purple10"}}
-              borderColor="$borderColor"
-              value={message}
-              size="$5"
+            <T.Paragraph
               padding="$4"
-              numberOfLines={6}
-              backgroundColor="$background"/>
+              borderWidth={1}
+              borderColor="$borderColor"
+              borderRadius="$4"
+              backgroundColor="$background">
+              Hey! I'd like to invite you to join my organisation on Statstrade.
+            </T.Paragraph>
+            <element_invitation.InvitationList invitees={controls.invitees} onRemove={handle_remove}/>
+            {feedback ? (
+              <T.Paragraph color="$red10" textAlign="center">{feedback}</T.Paragraph>) : null}
             <T.XStack
               gap="$4"
               width="100%"
@@ -111,34 +161,19 @@ export function OnboardingStep7InvitationsScreen(){
                 flex={4}
                 size="$5"
                 fontSize="$5"
-                onPress={function (){
-                    let orgId = controls.existingOrg && controls.existingOrg.id;
-                    if(orgId){
-                      api.mutations.organisation_invite_via_email.mutateAsync({
-                        "org_id":orgId,
-                        "emails":controls.invitees,
-                        "subject":"Invitation to join",
-                        "template_id":"INVITE_ORG"
-                      }).then(function (){
-                        setInvitees([]);
-                        controls.setStep(6);
-                      });
-                    }
-                    else{
-                      controls.setStep(6);
-                    }
-                  }}
-                disabled={api.mutations.organisation_invite_via_email.isPending}
-                icon={api.mutations.organisation_invite_via_email.isPending ? (function (){
+                onPress={handle_send}
+                disabled={isBusy || _eq(controls.invitees.length,0)}
+                icon={isBusy ? (function (){
                     return (
                       <T.Spinner/>);
                   }) : null}
-                color="$color12">{ui.t("Send Invites")}
+                color="$color12">{isBusy ? ui.t("Sending...") : ui.t("Send Invites")}
               </ui.ButtonInverse>
               <ui.ButtonNormal
                 flex={4}
                 size="$5"
                 fontSize="$5"
+                disabled={isBusy}
                 onPress={function (){
                     setShowPreview(false);
                   }}
@@ -147,6 +182,6 @@ export function OnboardingStep7InvitationsScreen(){
               </ui.ButtonNormal>
             </T.XStack>
           </T.YStack>
-        </React.Fragment>)}
+        </React.Fragment>))}
     </ui_section.MinFrameCenter>);
 }

@@ -17,7 +17,7 @@ function client_ws(host,port,opts = {}){
     conn.send(JSON.stringify({"id":id,"status":"ok","body":out}))
   });
   conn.addEventListener("close",function (){
-    window.clearInterval(interval);
+    clearInterval(interval);
   });
   for(let [tag,callback] of Object.entries(listeners)){
     conn.addEventListener(tag,callback);

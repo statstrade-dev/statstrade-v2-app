@@ -1,14 +1,16 @@
-import {Github} from '@tamagui/lucide-icons'
+import React from 'react'
 
 import * as T from 'tamagui'
 
-import React from 'react'
+import {Github} from '@tamagui/lucide-icons'
 
 import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
 import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
 import * as ui_router from '@statstrade/component/ui-router.jsx'
+
+import * as client_auth from '@statstrade/edge/remote/util-supabase.jsx'
 
 import * as ui_section from '@statstrade/component/ui-section.jsx'
 
@@ -24,10 +26,10 @@ import * as gu from '@statstrade/edge/global-ui.jsx'
 
 import * as logo_google from '@statstrade/component/logo/logo-google.jsx'
 
-// statstrade-web.feature.auth.sign-in/SignInContext [28] 
+// statstrade-web.feature.auth.sign-in/SignInContext [29] 
 export var SignInContext = React.createContext({});
 
-// statstrade-web.feature.auth.sign-in/SignInForm [31] 
+// statstrade-web.feature.auth.sign-in/SignInForm [32] 
 export function SignInForm(){
   let context = React.useContext(SignInContext);
   let {api,controls,forms} = context;
@@ -91,11 +93,10 @@ export function SignInForm(){
     </T.Form>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenLogin [101] 
+// statstrade-web.feature.auth.sign-in/SignInScreenLogin [102] 
 export function SignInScreenLogin(){
   let context = React.useContext(SignInContext);
   let {api,controls,forms,pathPrefix} = context;
-  let authPath = pathPrefix ? (pathPrefix + "/") : "/";
   let isBusy = api.mutations.sign_in.isPending || api.mutations.sign_in_oauth.isPending;
   return (
     <React.Fragment>
@@ -112,7 +113,7 @@ export function SignInScreenLogin(){
               api.mutations.sign_in_oauth.mutateAsync({
                 "provider":"google",
                 "options":{
-                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                      "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
                     }
               });
             }}/>
@@ -125,7 +126,7 @@ export function SignInScreenLogin(){
               api.mutations.sign_in_oauth.mutateAsync({
                 "provider":"github",
                 "options":{
-                      "redirectTo":process.env.NEXT_PUBLIC_SITE_URL || window.location.origin
+                      "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
                     }
               });
             }}/>
@@ -140,15 +141,15 @@ export function SignInScreenLogin(){
         <SignInForm/>
         <ui.Horizontal marginVertical="$2" borderColor="$color1"/>
         <T.XStack gap="$3">
-          <ui.ButtonLink href={authPath + "forgot-password"}>{ui.t("Forgot Password")}</ui.ButtonLink>
+          <ui.ButtonLink href={client_auth.authHref(pathPrefix,"forgot-password")}>{ui.t("Forgot Password")}</ui.ButtonLink>
           <T.View flex={1}/>
-          <ui.ButtonLink href={authPath + "new-account"}>{ui.t("New Account")}</ui.ButtonLink>
+          <ui.ButtonLink href={client_auth.authHref(pathPrefix,"new-account")}>{ui.t("New Account")}</ui.ButtonLink>
         </T.XStack>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenSuccess [168] 
+// statstrade-web.feature.auth.sign-in/SignInScreenSuccess [170] 
 export function SignInScreenSuccess(){
   let router = ui_router.useRouter();
   let context = React.useContext(SignInContext);
@@ -177,7 +178,7 @@ export function SignInScreenSuccess(){
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenMain [200] 
+// statstrade-web.feature.auth.sign-in/SignInScreenMain [202] 
 export function SignInScreenMain(){
   let context = React.useContext(SignInContext);
   let {controls} = context;
@@ -186,7 +187,7 @@ export function SignInScreenMain(){
     <ui_section.MinFrameCenter><Component/></ui_section.MinFrameCenter>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreen [213] 
+// statstrade-web.feature.auth.sign-in/SignInScreen [215] 
 export function SignInScreen(props){
   let ctx = common_auth.useSignInContext(props);
   let controls = hf.useControls([

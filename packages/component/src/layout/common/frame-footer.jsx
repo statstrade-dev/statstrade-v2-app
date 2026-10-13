@@ -1,8 +1,8 @@
-import {Github,Instagram,Linkedin} from '@tamagui/lucide-icons'
-
 import * as T from 'tamagui'
 
 import React from 'react'
+
+import {Github,Instagram,Linkedin} from '@tamagui/lucide-icons'
 
 import * as ui_router from '@statstrade/component/ui-router.jsx'
 

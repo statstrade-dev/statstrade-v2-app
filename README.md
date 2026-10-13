@@ -61,23 +61,26 @@ yarn install
 
 ## Environment
 
-Create `site/web-main/.env.local` for local development, or configure these
-variables in the deployment environment. Set only the variables needed by the
-features you are using.
+Create `site/web-main/.env.local` or `site/web-superadmin/.env.local` for local
+development. Set only the variables needed by the features you are using. The
+test-user debug route is available only in Next.js development mode and reads
+its server credentials from the app that is running it.
 
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Public Supabase URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public Supabase anonymous key |
-| `NEXT_SERVER_SUPABASE_URL` | Supabase URL for the server-only debug route |
-| `NEXT_SERVER_SUPABASE_KEY` | Server-only Supabase key for the debug route |
+| `NEXT_SERVER_SUPABASE_URL` | Supabase URL for the local server-only test-user route |
+| `NEXT_SERVER_SUPABASE_KEY` | Server-only Supabase key for the local test-user route |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Stripe browser integration |
 | `NEXT_PUBLIC_SITE_URL` | Site URL used for billing return URLs |
 | `NEXT_PUBLIC_CONTACT_US_URL` | Destination used by the contact feature |
 
 Never expose `NEXT_SERVER_SUPABASE_KEY` to the browser or commit environment
-files. This repository does not include a local backend bootstrap script; the
-Supabase service must be configured separately.
+files. The test-user route returns 404 outside development, so these server
+credentials are not needed in deployed environments. This repository does not
+include a local backend bootstrap script; the Supabase service must be
+configured separately.
 
 ## Development
 
@@ -152,6 +155,6 @@ yarn watch              # Watch workspace packages
 ```
 
 Deployment configuration is kept with the Next.js apps in their respective
-`site/web-main/` and `site/web-superadmin/` directories. Configure the
-environment variables above in the selected hosting provider before
-deploying.
+`site/web-main/` and `site/web-superadmin/` directories. Configure the public
+integration variables needed by the app in the selected hosting provider
+before deploying.

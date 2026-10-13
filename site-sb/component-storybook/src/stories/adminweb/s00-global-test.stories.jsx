@@ -2,10 +2,10 @@ import React from 'react'
 
 import * as T from 'tamagui'
 
-// statstrade-adminweb.a07-super.s00-global-test/Metadata [13] 
+// statstrade-adminweb.a07-super.s00-global-test/Metadata [12] 
 const Metadata = {title:"Admin/Global",tags:["autodoc"]};
 
-// statstrade-adminweb.a07-super.s00-global-test/Test_GlobalAdminNavigation [49] 
+// statstrade-adminweb.a07-super.s00-global-test/Test_GlobalAdminNavigation [30] 
 export function Test_GlobalAdminNavigation(){
   let [active,setActive] = React.useState("Global");
   let sections = ["Global","Commodity","Country","Token"];

@@ -17,28 +17,37 @@ function ready_eventp(event,opts){
 }
 
 function await_ready(state){
-  let {ready} = state;
+  let {ready,timeout_ms,wait_count} = state;
+  if(((null != ready) && ("object" == (typeof ready)) && !Array.isArray(ready)) && (ready["signal"] == "error")){
+    throw ready["error"] || new Error("Worker script failed to start.");
+  }
   if(null != ready){
     return Promise.resolve().then(function (){
       return ready;
     });
   }
   else{
-    return new Promise(function (resolve,reject){
-      setTimeout(function (){
-        new Promise(function (inner_resolve){
-          inner_resolve((function (){
-            return null;
-          })());
-        }).then(function (value){
-          resolve(value);
-        }).catch(function (err){
-          reject(err);
-        });
-      },10);
-    }).then(function (_){
-      return await_ready(state);
-    });
+    if((wait_count * 10) >= timeout_ms){
+      throw new Error("Worker connection timed out waiting for its ready signal.");
+    }
+    else{
+      state["wait_count"] = (wait_count + 1);
+      return new Promise(function (resolve,reject){
+        setTimeout(function (){
+          new Promise(function (inner_resolve){
+            inner_resolve((function (){
+              return null;
+            })());
+          }).then(function (value){
+            resolve(value);
+          }).catch(function (err){
+            reject(err);
+          });
+        },10);
+      }).then(function (_){
+        return await_ready(state);
+      });
+    }
   }
 }
 
@@ -70,7 +79,7 @@ function wrap_ready_endpoint(endpoint,state,opts){
       return Object.assign(Object.assign({},endpoint),{
         "start_fn":function (listener){
                 return start_fn(function (event,ctx){
-                  if(ready_eventp(event,opts)){
+                  if((((null != event) && ("object" == (typeof event)) && !Array.isArray(event)) && (event["signal"] == "error")) || ready_eventp(event,opts)){
                     state["ready"] = event;
                     return event;
                   }
@@ -116,7 +125,11 @@ function source_endpoint(source,kind){
 
 function connect_endpoint(node,transport_id,endpoint,opts){
   let config = opts || {};
-  let state = {"ready":null};
+  let state = {
+    "ready":null,
+    "wait_count":0,
+    "timeout_ms":config["ready_timeout"] || 15000
+  };
   let wait_ready = (null != config["wait_ready"]) ? config["wait_ready"] : true;
   return main.attach_transport(node,transport_id,wrap_ready_endpoint(endpoint,state,config)).then(function (_){
     if(wait_ready){
@@ -127,6 +140,12 @@ function connect_endpoint(node,transport_id,endpoint,opts){
     else{
       return connection_record(node,transport_id,null);
     }
+  }).catch(function (error){
+    return main.detach_transport(node,transport_id).catch(function (_){
+      return null;
+    }).then(function (_){
+      throw error;
+    });
   });
 }
 
@@ -370,10 +389,27 @@ function sharedworker_url_source(url,opts){
     "create_fn":function (listener){
         let shared = new SharedWorker(url,worker_opts);
         let {port} = shared;
-        port.start();
+        port["sharedworker"] = shared;
+        shared.addEventListener("error",function (event){
+          listener({
+            "signal":"error",
+            "error":new Error(
+                    event["message"] || "SharedWorker script failed to load or initialize."
+                  )
+          });
+          return null;
+        },false);
         port.addEventListener("message",function (e){
           return listener(e["data"]);
         },false);
+        port.addEventListener("messageerror",function (_){
+          listener({
+            "signal":"error",
+            "error":new Error("SharedWorker message could not be read.")
+          });
+          return null;
+        },false);
+        port.start();
         return port;
       }
   };

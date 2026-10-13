@@ -14,6 +14,8 @@ const supabase_ws = require("@xtalk/db/system/impl-supabase-ws.js")
 
 const http_fetch = require("@xtalk/net/http-fetch.js")
 
+const str = require("@xtalk/lang/common-string.js")
+
 const http_util = require("@xtalk/net/http-util.js")
 
 function ImplSupabase(client,schema,lookup,state,listeners,opts,metadata){
@@ -104,7 +106,7 @@ function cmd_rpc_call_async(impl,rpc_spec,args,opts){
     headers["Accept-Profile"] = schema;
   }
   return addon.cmd_rpc_call(
-    rpc_spec["id"],
+    str.replace(rpc_spec["id"],"-","_"),
     body,
     Object.assign(Object.assign({},opts),{"headers":headers})
   );

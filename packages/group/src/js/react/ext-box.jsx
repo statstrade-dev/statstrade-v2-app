@@ -49,13 +49,14 @@ export function attachLocalStorage(storage_key,box,listener_id,path){
   if(((typeof localStorage) != "undefined") && localStorage.getItem){
     let stored = localStorage.getItem(storage_key);
     if(stored){
+      let stored_data = initial;
       try{
-        stored = JSON.parse(stored);
+        stored_data = xtd.get_in(JSON.parse(stored),path);
       }
       catch(e){
-        stored = initial;
+        stored_data = initial;
       }
-      event_box.set_data(box,path,stored);
+      event_box.set_data(box,path,stored_data);
     }
     event_box.add_listener(box,listener_id,path,function (__unused0,payload,__unused1,__unused2){
       Promise.resolve().then(function (){
@@ -66,29 +67,29 @@ export function attachLocalStorage(storage_key,box,listener_id,path){
   return box;
 }
 
-// js.react.ext-box/listenBox [82] 
+// js.react.ext-box/listenBox [83] 
 export var listenBox = useListenBox;
 
-// js.react.ext-box/getData [84] 
+// js.react.ext-box/getData [85] 
 export var getData = event_box.get_data;
 
-// js.react.ext-box/setData [87] 
+// js.react.ext-box/setData [88] 
 export var setData = event_box.set_data;
 
-// js.react.ext-box/delData [90] 
+// js.react.ext-box/delData [91] 
 export var delData = event_box.del_data;
 
-// js.react.ext-box/resetData [93] 
+// js.react.ext-box/resetData [94] 
 export var resetData = event_box.reset_data;
 
-// js.react.ext-box/mergeData [96] 
+// js.react.ext-box/mergeData [97] 
 export var mergeData = event_box.merge_data;
 
-// js.react.ext-box/appendData [99] 
+// js.react.ext-box/appendData [100] 
 export var appendData = event_box.append_data;
 
-// js.react.ext-box/addListener [102] 
+// js.react.ext-box/addListener [103] 
 export var addListener = event_box.add_listener;
 
-// js.react.ext-box/removeListener [105] 
+// js.react.ext-box/removeListener [106] 
 export var removeListener = event_box.remove_listener;

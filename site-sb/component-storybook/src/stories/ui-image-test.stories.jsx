@@ -21,4 +21,4 @@ export function Test_ImageUpload(){
     </T.YStack>);
 }
 
-export default Metadata;
+export default Metadata

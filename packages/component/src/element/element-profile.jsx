@@ -4,7 +4,7 @@ import * as T from 'tamagui'
 
 import React from 'react'
 
-import * as kd from '@xtalk/lang/common-data.js'
+import * as kd from '@xtalk/lang/common-data.jsx'
 
 import * as ui_image from '@statstrade/component/ui-image.jsx'
 
@@ -22,10 +22,10 @@ export function calc_profile_defaults(profile,user,userMeta){
   if(profile){
     values = {
       "handle":profile.handle || "",
-      "first_name":profile.first_name || "",
+      "first_name":profile.first_name || profile.first_name || "",
       "last_name":profile.last_name || "",
       "bio":profile.bio || "",
-      "country":profile.country_code || "",
+      "country_code":profile.country_code || profile.country_code || "",
       "location":{"city":kd.get_in(profile,["location","city"]) || ""}
     };
   }
@@ -33,7 +33,7 @@ export function calc_profile_defaults(profile,user,userMeta){
     if(userMeta){
       let candidate_handle = userMeta.preferred_username || userMeta.user_name || (userMeta.full_name && userMeta.full_name.replace(/ /,"").toLowerCase()) || (userMeta.first_name && userMeta.first_name.toLowerCase()) || (user && user.email && kd.first(user.email.split("@")));
       values = {
-        "first_name":userMeta.first_name || userMeta.full_name || "",
+        "first_name":userMeta.first_name || userMeta.first_name || userMeta.full_name || "",
         "last_name":userMeta.last_name || "",
         "handle":candidate_handle || ""
       };
@@ -42,7 +42,15 @@ export function calc_profile_defaults(profile,user,userMeta){
   return values;
 }
 
-// statsui.basic.element.element-profile/ProfileForm [43] 
+// statsui.basic.element.element-profile/uploadedImageUrl [43] 
+export function uploadedImageUrl(response){
+  if(response.error){
+    throw response.error;
+  }
+  return response.data;
+}
+
+// statsui.basic.element.element-profile/ProfileForm [50] 
 export function ProfileForm({api,form,isBusy,labels,onSkip,onSubmit,profileImage,setProfileImage,user,userType}){
   let [isUploading,setIsUploading] = React.useState(false);
   let handleValue = form.watch("handle");
@@ -65,7 +73,7 @@ export function ProfileForm({api,form,isBusy,labels,onSkip,onSubmit,profileImage
         let response = await fetch("https://ipapi.co/json/");
         let data = await response.json();
         if(data.country_code){
-          form.setValue("country",data.country_code);
+          form.setValue("country_code",data.country_code);
         }
         if(data.city){
           form.setValue("location.city",data.city);
@@ -77,7 +85,7 @@ export function ProfileForm({api,form,isBusy,labels,onSkip,onSubmit,profileImage
     };
     let init = async function (){
       let currentValues = form.getValues();
-      if(!currentValues.country){
+      if(!currentValues.country_code){
         await fetchLocation();
       }
     };
@@ -93,8 +101,8 @@ export function ProfileForm({api,form,isBusy,labels,onSkip,onSubmit,profileImage
           throw new Error("User not found");
         }
         let filePath = userId + "/" + Date.now() + ".jpg";
-        let data = await api_common.upload_image({"image":image,"file_path":filePath,"bucket":"images"});
-        setProfileImage({"uri":data});
+        let result = await api_common.upload_image({"image":image,"file_path":filePath,"bucket":"images"});
+        setProfileImage({"uri":uploadedImageUrl(result)});
       }
       catch(e){
         console.error("Auto upload failed",e);
@@ -121,9 +129,9 @@ export function ProfileForm({api,form,isBusy,labels,onSkip,onSubmit,profileImage
           throw new Error("User not found");
         }
         let filePath = userId + "/" + Date.now() + ".jpg";
-        let data = isRemote ? uri : await api_common.upload_image(
+        let data = isRemote ? uri : uploadedImageUrl(await api_common.upload_image(
           {"image":profileImage,"file_path":filePath,"bucket":"images"}
-        );
+        ));
         finalValues = kd.obj_assign(finalValues,{"picture":{"uri":data}})
       }
       await onSubmit(finalValues);

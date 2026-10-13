@@ -52,6 +52,15 @@ function query_table(node,service_id,table_name,query,opts){
   );
 }
 
+function storage_upload(node,service_id,bucket,object_path,data,opts){
+  return proxy_util.request_client(
+    node,
+    "@xt.supabase/storage-upload",
+    [service_id,bucket,object_path,data,opts || {}],
+    opts
+  );
+}
+
 function attach_model(node,service_id,page_args,supabase_handler,model,opts){
   return proxy_util.request_client(
     node,
@@ -196,6 +205,7 @@ module.exports = {
   ["current_session"]:current_session,
   ["rpc_call"]:rpc_call,
   ["query_table"]:query_table,
+  ["storage_upload"]:storage_upload,
   ["attach_model"]:attach_model,
   ["health"]:health,
   ["admin_create_user"]:admin_create_user,

@@ -1,6 +1,6 @@
-import * as T from 'tamagui'
-
 import React from 'react'
+
+import * as T from 'tamagui'
 
 import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 

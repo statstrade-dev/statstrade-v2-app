@@ -145,4 +145,4 @@ export function Test_FormInputRender(){
         }}/>);
 }
 
-export default Metadata;
+export default Metadata

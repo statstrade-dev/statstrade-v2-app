@@ -1,8 +1,8 @@
+import * as T from 'tamagui'
+
 import 
   {Activity,Coins,Crown,MoreVertical,Plus,TrendingUp,UserPlus,Users,Zap}
  from '@tamagui/lucide-icons'
-
-import * as T from 'tamagui'
 
 import React from 'react'
 

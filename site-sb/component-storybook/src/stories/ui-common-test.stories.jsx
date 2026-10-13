@@ -1,6 +1,6 @@
-import * as T from 'tamagui'
-
 import * as TToast from '@tamagui/toast'
+
+import * as T from 'tamagui'
 
 import React from 'react'
 
@@ -244,4 +244,4 @@ export function Test_DialogConfirm(){
     </T.YStack>);
 }
 
-export default Metadata;
+export default Metadata

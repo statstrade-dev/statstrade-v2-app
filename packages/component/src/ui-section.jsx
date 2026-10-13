@@ -1,6 +1,6 @@
-import * as T from 'tamagui'
-
 import React from 'react'
+
+import * as T from 'tamagui'
 
 import * as k from '@xtalk/lang/common-lib.js'
 

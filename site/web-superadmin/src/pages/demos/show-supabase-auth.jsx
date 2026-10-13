@@ -1,25 +1,19 @@
 'use client'
 
-import * as T from 'tamagui'
-
 import React from 'react'
+
+import * as T from 'tamagui'
 
 import * as client_supabase from '@xtalk/db/node/client-supabase.js'
 
-import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
-
 import * as substrate from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
-
-import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
 
 import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/SUPABASE-AUTH-PAGE [20] 
-var SUPABASE_AUTH_PAGE = {"group_id":"demos/show-supabase-auth"};
-
-// statstrade-superadmin.pages.demos.show-supabase-auth/useAuthProps [23] 
+// statstrade-superadmin.pages.demos.show-supabase-auth/useAuthProps [18] 
 function useAuthProps(page){
   let node = page["client"];
+  let primary_id = page["primary-id"] || "db/primary/GUEST";
   let [email,setEmail] = React.useState("");
   let [password,setPassword] = React.useState("");
   let [session,setSession] = React.useState(null);
@@ -29,7 +23,7 @@ function useAuthProps(page){
     let cancelled = false;
     let run = async function (){
       try{
-        let result = await client_supabase.current_session(node,"db/primary",{});
+        let result = await client_supabase.current_session(node,primary_id,{});
         if(!cancelled){
           setSession(result);
         }
@@ -53,8 +47,8 @@ function useAuthProps(page){
       setBusy(true);
       setError(null);
       try{
-        await client_supabase.sign_in(node,"db/primary",{"email":email,"password":password},{});
-        let result = await client_supabase.current_session(node,"db/primary",{});
+        await client_supabase.sign_in(node,primary_id,{"email":email,"password":password},{});
+        let result = await client_supabase.current_session(node,primary_id,{});
         setSession(result);
       }
       catch(e){
@@ -70,8 +64,8 @@ function useAuthProps(page){
       setBusy(true);
       setError(null);
       try{
-        await client_supabase.sign_out(node,"db/primary",{});
-        let result = await client_supabase.current_session(node,"db/primary",{});
+        await client_supabase.sign_out(node,primary_id,{});
+        let result = await client_supabase.current_session(node,primary_id,{});
         setSession(result);
       }
       catch(e){
@@ -94,7 +88,7 @@ function useAuthProps(page){
   return {actions,views};
 }
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/AuthApp [107] 
+// statstrade-superadmin.pages.demos.show-supabase-auth/AuthApp [103] 
 function AuthApp({actions,views}){
   let {busy,current_email,email,error,password,session,status} = views;
   let {setEmail,setPassword,signIn,signOut} = actions;
@@ -161,70 +155,48 @@ function AuthApp({actions,views}){
     </T.YStack>);
 }
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/AuthController [197] 
+// statstrade-superadmin.pages.demos.show-supabase-auth/AuthController [193] 
 function AuthController({page}){
   let {actions,views} = useAuthProps(page);
   return (
     <AuthApp actions={actions} views={views}/>);
 }
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/AuthContent [202] 
+// statstrade-superadmin.pages.demos.show-supabase-auth/AuthContent [198] 
 function AuthContent(){
   let state = substrate.useSubstrateContext();
   let resource = state["resource"];
-  let page_state = ext_page.usePage(resource,"db/primary","room/superadmin",SUPABASE_AUTH_PAGE,{});
-  let page = page_state["page"];
-  let page_error = page_state["error"];
+  let page = {
+    "client":resource["client"],
+    "primary-id":resource["config"]["primary"]["id"] || "db/primary/GUEST"
+  };
   return (
-    <layout_base.LayoutBase showDevtool={true}>
-      <T.YStack
-        minHeight="100vh"
-        width="100%"
-        padding="$5"
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="$background">
-        <T.YStack width="100%" maxWidth={560} gap="$5">
-          <T.XStack alignItems="center" gap="$2">
-            <logo.LogoStatstrade size={28}/>
-            <T.Text fontSize="$3" fontWeight="700" color="$color12">STATSTRADE</T.Text>
-          </T.XStack>
-          <T.YStack gap="$2">
-            <T.H2 color="$color12">Supabase authentication</T.H2>
-            <T.Text fontSize="$4" color="$color10">Sign in and sign out through the provider-owned substrate.</T.Text>
-          </T.YStack>
-          {page ? (
-            <AuthController page={page}/>) : (
-            <T.YStack
-              gap="$3"
-              padding="$5"
-              borderWidth={1}
-              borderColor="$color4"
-              borderRadius="$4"
-              backgroundColor="$background"
-              accessibilityLiveRegion="polite">
-              {page_error ? (
-                <T.YStack gap="$2">
-                  <T.Text fontWeight="600" color="$red10" accessibilityRole="alert">Unable to connect</T.Text>
-                  <T.Text color="$color10">Refresh the page to try again.</T.Text>
-                </T.YStack>) : (
-                <T.XStack gap="$3" alignItems="center">
-                  <T.Spinner size="small" color="$color10"/>
-                  <T.Text color="$color10">Connecting to the page...</T.Text>
-                </T.XStack>)}
-            </T.YStack>)}
+    <T.YStack
+      minHeight="100vh"
+      width="100%"
+      padding="$5"
+      alignItems="center"
+      justifyContent="center"
+      backgroundColor="$background">
+      <T.YStack width="100%" maxWidth={560} gap="$5">
+        <T.XStack alignItems="center" gap="$2">
+          <logo.LogoStatstrade size={28}/>
+          <T.Text fontSize="$3" fontWeight="700" color="$color12">STATSTRADE</T.Text>
+        </T.XStack>
+        <T.YStack gap="$2">
+          <T.H2 color="$color12">Supabase authentication</T.H2>
+          <T.Text fontSize="$4" color="$color10">Sign in and sign out through the provider-owned substrate.</T.Text>
         </T.YStack>
+        <AuthController page={page}/>
       </T.YStack>
-    </layout_base.LayoutBase>);
+    </T.YStack>);
 }
 
-// statstrade-superadmin.pages.demos.show-supabase-auth/Page [263] 
+// statstrade-superadmin.pages.demos.show-supabase-auth/Page [230] 
 function Page(){
-  // 537707d4-8b83-410c-9070-9c031fd9af39
+  // 45cc2703-4ef4-4f0b-8e38-577674501731
   return (
-    <substrate.SubstrateProvider
-      options={{"client_id":"statstrade-superadmin-demo-supabase-auth"}}><AuthContent/>
-    </substrate.SubstrateProvider>);
+    <AuthContent/>);
 }
 
 export default Page

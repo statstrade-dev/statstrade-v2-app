@@ -13,3 +13,4 @@ vi.mock('@statstrade/edge/lib/js/react/ext-box', () => ({
 vi.mock('@supabase/supabase-js', () => ({
   createClient: vi.fn(),
 }))
+

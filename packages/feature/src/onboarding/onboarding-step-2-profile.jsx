@@ -10,7 +10,32 @@ import * as ui from '@statstrade/component/ui-common.jsx'
 
 import * as element_profile from '@statstrade/component/element/element-profile.jsx'
 
-// statstrade-web.feature.onboarding.onboarding-step-2-profile/OnboardingProfileForm [28] 
+// statstrade-web.feature.onboarding.onboarding-step-2-profile/onboardingProfilePayload [27] 
+export function onboardingProfilePayload(values,userType){
+  return {
+    "handle":values.handle,
+    "first_name":values.first_name,
+    "last_name":values.last_name,
+    "bio":values.bio,
+    "country_code":values.country_code,
+    "location":values.location,
+    "picture":values.picture,
+    "type":userType
+  };
+}
+
+// statstrade-web.feature.onboarding.onboarding-step-2-profile/saveOnboardingProfile [39] 
+export async function saveOnboardingProfile(api,values,userType,setStep){
+  let result = await api.mutations.user_set_public.mutateAsync(onboardingProfilePayload(values,userType));
+  if(result.error){
+    throw result.error;
+  }
+  await api.queries.user_get_profile.refetch();
+  setStep(3);
+  return result;
+}
+
+// statstrade-web.feature.onboarding.onboarding-step-2-profile/OnboardingProfileForm [53] 
 export function OnboardingProfileForm(){
   let context = React.useContext(common.IndexOnboardingContext);
   let {api,controls,forms,user} = context;
@@ -32,24 +57,13 @@ export function OnboardingProfileForm(){
     }
   },[userQuery.data,user]);
   let handle_submit = async function (finalValues){
-    api.mutations.user_set_public.mutateAsync({
-      "handle":finalValues.handle,
-      "first_name":finalValues.first_name,
-      "last_name":finalValues.last_name,
-      "bio":finalValues.bio,
-      "country_id":finalValues.country,
-      "location":finalValues.location,
-      "picture":finalValues.picture,
-      "type":finalValues.type
-    }).then(function ({data,error}){
-      if(error){
-        alert("Error saving profile");
-      }
-      else{
-        api.queries.user_get_profile.refetch();
-        controls.setStep(3);
-      }
-    });
+    try{
+      await saveOnboardingProfile(api,finalValues,controls.userType,controls.setStep);
+    }
+    catch(e){
+      console.error("Error saving profile",e);
+      alert("Error saving profile");
+    }
   };
   return (
     <element_profile.ProfileForm
@@ -72,7 +86,7 @@ export function OnboardingProfileForm(){
       userType={controls.userType}/>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-step-2-profile/OnboardingStep2ProfileScreen [95] 
+// statstrade-web.feature.onboarding.onboarding-step-2-profile/OnboardingStep2ProfileScreen [113] 
 export function OnboardingStep2ProfileScreen(){
   let context = React.useContext(common.IndexOnboardingContext);
   let {controls} = context;

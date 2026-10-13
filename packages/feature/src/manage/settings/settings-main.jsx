@@ -1,6 +1,6 @@
-import React from 'react'
-
 import * as T from 'tamagui'
+
+import React from 'react'
 
 import * as ui_manage from '@statstrade/component/ui-manage.jsx'
 

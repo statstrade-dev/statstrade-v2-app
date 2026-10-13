@@ -1,8 +1,8 @@
 import {Clock,Coins,LogOut,Menu,RotateCcw,Trophy,User} from '@tamagui/lucide-icons'
 
-import React from 'react'
-
 import * as T from 'tamagui'
+
+import React from 'react'
 
 import * as kd from '@xtalk/lang/common-data.js'
 

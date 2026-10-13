@@ -1,6 +1,6 @@
-import {Check,Mail,Plus,Users,X} from '@tamagui/lucide-icons'
-
 import * as T from 'tamagui'
+
+import {Check,Mail,Plus,Users,X} from '@tamagui/lucide-icons'
 
 import React from 'react'
 

@@ -1,8 +1,8 @@
+import * as T from 'tamagui'
+
 import 
   {BarChart,Bell,Check,ChevronDown,ChevronLeft,ChevronRight,Clock,CreditCard,House,LayoutList,MoreHorizontal,Package,Plus,Rocket,Settings,Sun,Terminal,Users,Wallet}
  from '@tamagui/lucide-icons'
-
-import * as T from 'tamagui'
 
 import React from 'react'
 

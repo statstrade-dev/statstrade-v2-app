@@ -147,6 +147,19 @@ function supabase_query_table_handler(space,args,request,node){
   return supabase_request(node,service_id,addon.cmd_query_table(table_name,query,opts));
 }
 
+function supabase_storage_upload_handler(space,args,request,node){
+  let service_id = args[0];
+  let bucket = args[1];
+  let object_path = args[2];
+  let data = args[3];
+  let opts = args[4] || {};
+  return supabase_request(
+    node,
+    service_id,
+    addon.cmd_storage_upload(bucket,object_path,data,opts)
+  );
+}
+
 function supabase_health_handler(space,args,request,node){
   let service_id = args[0];
   let opts = args[1] || {};
@@ -325,6 +338,12 @@ function init_handlers(node){
     supabase_query_table_handler,
     null
   );
+  substrate.register_handler(
+    node,
+    "@xt.supabase/storage-upload",
+    supabase_storage_upload_handler,
+    null
+  );
   substrate.register_handler(node,"@xt.supabase/health",supabase_health_handler,null);
   substrate.register_handler(
     node,
@@ -406,6 +425,7 @@ module.exports = {
   ["supabase_current_session_handler"]:supabase_current_session_handler,
   ["supabase_rpc_call_handler"]:supabase_rpc_call_handler,
   ["supabase_query_table_handler"]:supabase_query_table_handler,
+  ["supabase_storage_upload_handler"]:supabase_storage_upload_handler,
   ["supabase_health_handler"]:supabase_health_handler,
   ["supabase_admin_create_user_handler"]:supabase_admin_create_user_handler,
   ["supabase_admin_delete_user_handler"]:supabase_admin_delete_user_handler,

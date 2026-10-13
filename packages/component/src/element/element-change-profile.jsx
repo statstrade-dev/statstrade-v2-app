@@ -43,23 +43,23 @@ export function validateProfile(values){
 
 // statsui.basic.element.element-change-profile/loadProfile [34] 
 export async function loadProfile(client,user){
-  let response = await client.schema("stats_type").from("User").select("id,handle,first_name,last_name,picture").eq("id",user.id).maybeSingle();
-  if(response.error){
-    throw response.error;
+  let response = await sb.queryTable("User",{
+    "select":"id,handle,first_name,last_name,picture",
+    "filters":[{"column":"id","operator":"eq","value":user.id}],
+    "maybe_single":true
+  },{"schema":"stats_type"});
+  if(response["error"]){
+    throw response["error"];
   }
-  return profileValues(user,response.data);
+  return profileValues(user,response["data"]);
 }
 
-// statsui.basic.element.element-change-profile/saveProfile [43] 
+// statsui.basic.element.element-change-profile/saveProfile [46] 
 export async function saveProfile(client,original,input){
   let values = validateProfile(input);
   let handleChanged = values.handle != original.handle;
   if(handleChanged){
-    let availability = await sb.callRemote(
-      "check_handle_exists",
-      {"handle":values.handle},
-      {"sbClient":client}
-    );
+    let availability = await sb.callRemote("check_handle_exists",{"handle":values.handle});
     if(availability.error){
       throw availability.error;
     }
@@ -73,16 +73,12 @@ export async function saveProfile(client,original,input){
         "last_name":values.last_name,
         "picture":values.avatar ? {"uri":values.avatar} : {}
       }
-  },{"sbClient":client});
+  });
   if(response.error){
     throw response.error;
   }
   if(handleChanged){
-    let handleResponse = await sb.callRemote(
-      "user_set_handle",
-      {"handle":values.handle},
-      {"sbClient":client}
-    );
+    let handleResponse = await sb.callRemote("user_set_handle",{"handle":values.handle});
     if(handleResponse.error){
       throw new Error(
         "Your name and avatar were saved, but the handle could not be changed: " + (handleResponse.error.message || "Please try again.")
@@ -92,16 +88,16 @@ export async function saveProfile(client,original,input){
   return values;
 }
 
-// statsui.basic.element.element-change-profile/changeEmail [65] 
+// statsui.basic.element.element-change-profile/changeEmail [67] 
 export async function changeEmail(client,email){
-  let response = await client.auth.updateUser({"email":email.trim()});
-  if(response.error){
-    throw response.error;
+  let response = await sb.updateUser(client,{"email":email.trim()});
+  if(response["error"]){
+    throw response["error"];
   }
-  return response.data.user;
+  return response["data"]["user"];
 }
 
-// statsui.basic.element.element-change-profile/ProfileField [71] 
+// statsui.basic.element.element-change-profile/ProfileField [73] 
 export function ProfileField({autoComplete,disabled,hint,id,label,maxLength,onChange,type,value}){
   return (
     <T.YStack gap="$2" flex={1} minWidth={180}>
@@ -122,12 +118,12 @@ export function ProfileField({autoComplete,disabled,hint,id,label,maxLength,onCh
     </T.YStack>);
 }
 
-// statsui.basic.element.element-change-profile/Notice [81] 
+// statsui.basic.element.element-change-profile/Notice [83] 
 export function Notice({error,message}){
   return (error || message) ? (
     <T.Text
       role={error ? "alert" : "status"}
-      ariaLive="polite"
+      aria-live="polite"
       fontSize="$3"
       color={error ? "$red10" : "$green10"}
       padding="$3"
@@ -136,7 +132,7 @@ export function Notice({error,message}){
     </T.Text>) : null;
 }
 
-// statsui.basic.element.element-change-profile/ProfileEditor [91] 
+// statsui.basic.element.element-change-profile/ProfileEditor [93] 
 export function ProfileEditor(){
   let client = sb.getClient();
   let [session] = sb.useListenSession(client);

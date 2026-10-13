@@ -2,9 +2,11 @@ import React from 'react'
 
 import * as frame from '@statstrade/component/layout/common/frame-base.jsx'
 
+import * as auth_runtime from '@statstrade/web-main/lib/auth-runtime.jsx'
+
 import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
 
-// statstrade-web.page._app/AppLayout [25] 
+// statstrade-web.page._app/AppLayout [26] 
 export function AppLayout({Component,pageProps}){
   React.useEffect(function (){
     
@@ -27,7 +29,9 @@ export function AppLayout({Component,pageProps}){
           httpEquiv="Content-Security-Policy"
           content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob:; connect-src * 'unsafe-inline' data: blob:; img-src * data: blob: 'unsafe-inline'; frame-src * data: blob: ; style-src * data: blob: 'unsafe-inline';"/>
       </frame.NextHead>
-      <layout_base.LayoutBase><Component>{pageProps}</Component></layout_base.LayoutBase>
+      <layout_base.LayoutBase sharedWorkerEnabled={false}>
+        <auth_runtime.AuthRuntimeProvider><Component>{pageProps}</Component></auth_runtime.AuthRuntimeProvider>
+      </layout_base.LayoutBase>
     </React.Fragment>);
 }
 

@@ -10,10 +10,14 @@ import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
 
 // statsui.basic.ui-select-country/list-countries [18] 
 export function list_countries(){
-  return sb.getClient().schema("szn_type").from("Country").select("*").order("title");
+  return sb.queryTable(
+    "Country",
+    {"select":"*","order":[{"column":"title"}]},
+    {"schema":"szn_type"}
+  );
 }
 
-// statsui.basic.ui-select-country/SelectCountryBase [29] 
+// statsui.basic.ui-select-country/SelectCountryBase [28] 
 export function SelectCountryBase({value,onChange,queryFn = list_countries}){
   let countriesQuery = ReactQuery.useQuery({
     "queryKey":["list_countries"],
@@ -54,5 +58,5 @@ export function SelectCountryBase({value,onChange,queryFn = list_countries}){
     </T.Select>);
 }
 
-// statsui.basic.ui-select-country/SelectCountry [86] 
+// statsui.basic.ui-select-country/SelectCountry [85] 
 export var SelectCountry = React.memo(SelectCountryBase);

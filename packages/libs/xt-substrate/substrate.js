@@ -16,8 +16,6 @@ const base_util = require("@xtalk/substrate/base-util.js")
 
 const page = require("@xtalk/substrate/page-core.js")
 
-const view = require("@xtalk/substrate/view.js")
-
 const node_space = require("@xtalk/substrate/base-space.js")
 
 var create_space = node_space.create_space;
@@ -63,28 +61,6 @@ var page_group_trigger = page.group_trigger;
 var page_model_trigger = page.model_trigger;
 
 var page_space_trigger_all = page.space_trigger_all;
-
-var view_spec = view.view_spec;
-
-var view_node = view.node;
-
-var view_action = view.action;
-
-var view_event_value = view.event_value;
-
-var view_validate = view.validate;
-
-var view_state_get = view.state_get;
-
-var view_state_set = view.state_set;
-
-var view_snapshot = view.snapshot;
-
-var view_subscribe = view.subscribe;
-
-var view_unsubscribe = view.unsubscribe;
-
-var view_dispatch = view.dispatch;
 
 var page_raw_callback_add = page.raw_callback_add;
 
@@ -395,17 +371,6 @@ module.exports = {
   ["page_group_trigger"]:page_group_trigger,
   ["page_model_trigger"]:page_model_trigger,
   ["page_space_trigger_all"]:page_space_trigger_all,
-  ["view_spec"]:view_spec,
-  ["view_node"]:view_node,
-  ["view_action"]:view_action,
-  ["view_event_value"]:view_event_value,
-  ["view_validate"]:view_validate,
-  ["view_state_get"]:view_state_get,
-  ["view_state_set"]:view_state_set,
-  ["view_snapshot"]:view_snapshot,
-  ["view_subscribe"]:view_subscribe,
-  ["view_unsubscribe"]:view_unsubscribe,
-  ["view_dispatch"]:view_dispatch,
   ["page_raw_callback_add"]:page_raw_callback_add,
   ["page_raw_callback_remove"]:page_raw_callback_remove,
   ["page_proxy_install"]:page_proxy_install,

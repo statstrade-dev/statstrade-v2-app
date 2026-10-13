@@ -1,6 +1,6 @@
-import React from 'react'
-
 import * as T from 'tamagui'
+
+import React from 'react'
 
 import * as ui_section from '@statstrade/component/ui-section.jsx'
 
@@ -98,4 +98,4 @@ export function Test_sectionContent(){
     </T.YStack>);
 }
 
-export default Metadata;
+export default Metadata

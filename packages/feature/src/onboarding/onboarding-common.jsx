@@ -8,16 +8,16 @@ import * as hook_form from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
 import * as group_user from '@statstrade/group/common-user-action.jsx'
 
+import * as client_auth from '@statstrade/edge/remote/util-supabase.jsx'
+
 import * as group_org from '@statstrade/group/manage-organisation-action.jsx'
 
 import * as ui from '@statstrade/component/ui-common.jsx'
 
-import * as api_sb from '@statstrade/edge/remote/api-general.jsx'
-
-// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingContext [26] 
+// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingContext [25] 
 export var IndexOnboardingContext = React.createContext();
 
-// statstrade-web.feature.onboarding.onboarding-common/indexOnboardingStages [29] 
+// statstrade-web.feature.onboarding.onboarding-common/indexOnboardingStages [28] 
 export var indexOnboardingStages = {
   "creator":[
     {
@@ -65,7 +65,83 @@ export var indexOnboardingStages = {
   ]
 };
 
-// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingHeader [57] 
+// statstrade-web.feature.onboarding.onboarding-common/syncOnboardingSessionUser [56] 
+export function syncOnboardingSessionUser(session,setUser){
+  let user = session ? session["user"] : null;
+  if(user){
+    setUser(user);
+  }
+  return user;
+}
+
+// statstrade-web.feature.onboarding.onboarding-common/syncOnboardingIdentity [64] 
+export function syncOnboardingIdentity(profileRows,organisations,preferred_organisation_id,controls){
+  let profile = Array.isArray(profileRows) ? profileRows[0] : profileRows;
+  if(profile && !controls.userType && profile.type){
+    controls.setUserType(profile.type);
+  }
+  if(!controls.existingOrg && Array.isArray(organisations) && (organisations["length"] > 0)){
+    let preferred = organisations.find(function (organisation){
+      return organisation.id == preferred_organisation_id;
+    });
+    let selected = preferred || organisations[0];
+    controls.setExistingOrg(selected);
+    controls.setExistingOrgId(selected.id);
+  }
+  return profile;
+}
+
+// statstrade-web.feature.onboarding.onboarding-common/mergeOnboardingContexts [84] 
+export function mergeOnboardingContexts(controls,invitationsForm,userContext,organisationContext){
+  let userApi = userContext.api;
+  let organisationApi = organisationContext.api;
+  let queries = Object.assign({},userApi.queries,organisationApi.queries);
+  let mutations = Object.assign({},userApi.mutations,organisationApi.mutations);
+  let forms = Object.assign({},userContext.forms,organisationContext.forms,{
+    "invitations":invitationsForm,
+    "set_profile":userContext.forms.user_profile,
+    "organisation_create":organisationContext.forms.organisation_create,
+    "organisation_update":organisationContext.forms.organisation_update
+  });
+  return {
+    "controls":controls,
+    "user":controls.user,
+    "api":{
+        "client":userApi.client,
+        "queries":queries,
+        "mutations":mutations
+      },
+    "forms":forms
+  };
+}
+
+// statstrade-web.feature.onboarding.onboarding-common/sendOnboardingInvitations [109] 
+export async function sendOnboardingInvitations(mutation,organisation_id,emails){
+  if(!organisation_id){
+    throw new Error("Organisation is required to send invitations");
+  }
+  let outcomes = await Promise.all((emails || []).map(async function (email){
+    try{
+      let result = await mutation.mutateAsync({"organisation_id":organisation_id,"email":email});
+      return {"email":email,"error":result && result.error};
+    }
+    catch(e){
+      return {"email":email,"error":e};
+    }
+  }));
+  let successful = outcomes.filter(function (outcome){
+    return !outcome.error;
+  });
+  let failed = outcomes.filter(function (outcome){
+    return outcome.error;
+  });
+  let sent = successful.map(function (outcome){
+    return outcome.email;
+  });
+  return {"sent":sent,"failed":failed};
+}
+
+// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingHeader [142] 
 export function IndexOnboardingHeader(){
   let ctx = React.useContext(IndexOnboardingContext);
   let controls = ctx.controls;
@@ -83,7 +159,7 @@ export function IndexOnboardingHeader(){
     </T.YStack>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-common/useIndexOnboardingContext [91] 
+// statstrade-web.feature.onboarding.onboarding-common/useIndexOnboardingContext [176] 
 export function useIndexOnboardingContext(){
   let controls = hook_form.useControls([
     ["step",1],
@@ -92,6 +168,7 @@ export function useIndexOnboardingContext(){
     "userType",
     "user",
     ["existingOrg",null],
+    ["existingOrgId",null],
     ["sessionId",null],
     ["invitees",[]],
     ["profileImage",null],
@@ -100,53 +177,45 @@ export function useIndexOnboardingContext(){
     ["interestTags",new Set()],
     ["billingPlan","professional"]
   ]);
-  React.useEffect(function (){
-    let fetchUser = async function fetch_user(){
-      try{
-        let session = await api_sb.get_session();
-        let data = session.data;
-        let error = session.error;
-        if(data && data.session){
-          controls.setUser(data.session.user);
-        }
-        else{
-          console.warn("No session found in onboarding");
-        }
-      }
-      catch(e){
-        console.error("Error fetching session",e);
-      }
-    };
-    fetchUser();
-  },[]);
+  let [session] = client_auth.useListenSession();
   React.useEffect(function (){
     let params = new URLSearchParams(window.location.search);
     let stepParam = params.get("step");
     let sessionParam = params.get("session_id");
+    let organisationParam = params.get("org_id");
     if(stepParam){
       controls.setStep(parseInt(stepParam));
     }
     if(sessionParam){
       controls.setSessionId(sessionParam);
     }
+    if(organisationParam){
+      controls.setExistingOrgId(organisationParam);
+    }
   },[]);
   let userCtx = group_user.useUserActionContext();
   let orgCtx = group_org.useManageOrganisationContext({"userId":kd.get_in(controls.user,["id"])});
-  let tokenCtx = group_org.useManageOrganisationTokenContext({});
   let invitationsForm = hook_form.useFormState({
     "defaultValues":{"email":""},
     "schema":hook_form.Z.object({"email":hook_form.Z.string().email()})
   });
-  let context = hook_form.mergeContexts({
-    "controls":controls,
-    "forms":{
-        "invitations":invitationsForm,
-        "set_profile":userCtx.forms.user_profile,
-        "organisation_create":orgCtx.forms.organisation_create,
-        "organisation_update":orgCtx.forms.organisation_update,
-        "token_creation":tokenCtx.forms.organisation_token_create
-      },
-    "user":controls.user
-  },userCtx,orgCtx,tokenCtx);
+  let context = mergeOnboardingContexts(controls,invitationsForm,userCtx,orgCtx);
+  React.useEffect(function (){
+    syncOnboardingSessionUser(session,controls.setUser);
+    if(session){
+      userCtx.api.queries.user_get_profile.refetch();
+    }
+  },[session]);
+  React.useEffect(function (){
+    syncOnboardingIdentity(
+      userCtx.api.queries.user_get_profile.output,
+      userCtx.api.queries.user_list_member_organisations.output,
+      controls.existingOrgId,
+      controls
+    );
+  },[
+    userCtx.api.queries.user_get_profile.data,
+    userCtx.api.queries.user_list_member_organisations.data
+  ]);
   return context;
 }

@@ -1,65 +1,70 @@
 'use client'
 
-import * as T from 'tamagui'
-
 import React from 'react'
 
-import * as substrate from '@statstrade/web-superadmin/lib/substrate-bare.jsx'
+import * as T from 'tamagui'
 
-import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
+import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
 
-import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
+import * as global_table from '@statstrade/web-superadmin/a03/s03/global-table.jsx'
+
+import * as substrate from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
 
 import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
-// statstrade-superadmin.pages.demos.show-ping/PING-PAGE [20] 
-var PING_PAGE = {
-  "group_id":"demos/show-ping",
-  "models":{
-    "ping":{
-      "rpc":"ping",
-      "model":{"pipeline":{},"options":{},"defaults":{"args":[],"output":{}}}
-    }
-  }
+// statstrade-superadmin.pages.demos.show-ping/PING-RPC-SPEC [23] 
+var PING_RPC_SPEC = {
+  "id":"ping",
+  "schema":"stats_rpc",
+  "input":[],
+  "return":"text",
+  "flags":{}
 };
 
-// statstrade-superadmin.pages.demos.show-ping/usePingProps [30] 
-function usePingProps(page){
-  let output = ext_page.listenPageModel(page,"ping","output",{});
+// statstrade-superadmin.pages.demos.show-ping/usePingProps [25] 
+function usePingProps(context){
+  let node = context["node"];
+  let primary_id = context["primary-id"] || "db/primary";
+  let opts = context["opts"] || {};
   let [busy,setBusy] = React.useState(false);
   let [error,setError] = React.useState(null);
-  let actions = {
-    "ping":async function (){
-        if(!busy){
-          setBusy(true);
-          setError(null);
-          try{
-            await ext_page.callPageModel(page,"ping",[],true,{});
-          }
-          catch(e){
-            setError("The ping failed. Please try again.");
-          }
-          finally{
-            setBusy(false);
-          }
-        }
+  let [output,setOutput] = React.useState(null);
+  let ping = async function (){
+    if(!busy){
+      setBusy(true);
+      setError(null);
+      try{
+        setOutput(
+          await global_table.rpcCall(node,primary_id,PING_RPC_SPEC,[],opts)
+        );
       }
+      catch(e){
+        setError("The ping failed. Please try again.");
+      }
+      finally{
+        setBusy(false);
+      }
+    }
   };
   let views = {
-    "output_text":((typeof output) == "string") ? output : "ready",
+    "output-text":((typeof output) == "string") ? output : "ready",
     "output":output,
     "busy":busy,
     "error":error
   };
-  return {actions,views};
+  return {"actions":{"ping":ping},"views":views};
 }
 
-// statstrade-superadmin.pages.demos.show-ping/PingApp [59] 
-function PingApp({page}){
-  let props = usePingProps(page);
-  let {actions,views} = props;
-  let {ping} = actions;
-  let {busy,error,output,output_text} = views;
+// statstrade-superadmin.pages.demos.show-ping/PingApp [55] 
+function PingApp({context}){
+  let props = usePingProps(context);
+  let actions = props["actions"];
+  let views = props["views"];
+  let ping = actions["ping"];
+  let output_text = views["output-text"];
+  let output = views["output"];
+  let busy = views["busy"];
+  let error = views["error"];
   return (
     <T.YStack
       gap="$4"
@@ -97,60 +102,45 @@ function PingApp({page}){
 }
 
 // statstrade-superadmin.pages.demos.show-ping/PingContent [106] 
-function PingContent(){
+function PingContent({actor_id}){
   let state = substrate.useSubstrateContext();
   let resource = state["resource"];
-  let page_state = ext_page.usePage(resource,"db/primary","room/superadmin",PING_PAGE,{});
-  let page = page_state["page"];
-  let page_error = page_state["error"];
+  let runtime_context = {
+    "node":resource["client"],
+    "primary-id":resource["config"]["primary"]["id"] || ("db/primary/" + (actor_id || "GUEST")),
+    "space-id":substrate.pageSpaceId(resource["scope-id"],"demo/ping"),
+    "opts":{}
+  };
   return (
-    <layout_base.LayoutBase showDevtool={true}>
-      <T.YStack
-        minHeight="100vh"
-        width="100%"
-        padding="$5"
-        alignItems="center"
-        justifyContent="center"
-        backgroundColor="$background">
-        <T.YStack width="100%" maxWidth={560} gap="$5">
-          <T.XStack alignItems="center" gap="$2">
-            <logo.LogoStatstrade size={28}/>
-            <T.Text fontSize="$3" fontWeight="700" color="$color12">STATSTRADE</T.Text>
-          </T.XStack>
-          <T.YStack gap="$2">
-            <T.H2 color="$color12">Connection check</T.H2>
-            <T.Text color="$color10" fontSize="$4">Send a ping to check the service connection.</T.Text>
-          </T.YStack>
-          {page ? (
-            <PingApp page={page}/>) : (
-            <T.YStack
-              gap="$3"
-              padding="$5"
-              borderWidth={1}
-              borderColor="$color4"
-              borderRadius="$4"
-              backgroundColor="$background"
-              accessibilityLiveRegion="polite">
-              {page_error ? (
-                <T.YStack gap="$2">
-                  <T.Text fontWeight="600" color="$red10" accessibilityRole="alert">Unable to connect</T.Text>
-                  <T.Text color="$color10">Refresh the page to try again.</T.Text>
-                </T.YStack>) : (
-                <T.XStack gap="$3" alignItems="center">
-                  <T.Spinner size="small" color="$color10"/>
-                  <T.Text color="$color10">Connecting to the page...</T.Text>
-                </T.XStack>)}
-            </T.YStack>)}
+    <T.YStack
+      minHeight="100vh"
+      width="100%"
+      padding="$5"
+      alignItems="center"
+      justifyContent="center"
+      backgroundColor="$background">
+      <T.YStack width="100%" maxWidth={560} gap="$5">
+        <T.XStack alignItems="center" gap="$2">
+          <logo.LogoStatstrade size={28}/>
+          <T.Text fontSize="$3" fontWeight="700" color="$color12">STATSTRADE</T.Text>
+        </T.XStack>
+        <T.YStack gap="$2">
+          <T.H2 color="$color12">Connection check</T.H2>
+          <T.Text color="$color10" fontSize="$4">Send a ping to check the service connection.</T.Text>
         </T.YStack>
+        <PingApp context={runtime_context}/>
       </T.YStack>
-    </layout_base.LayoutBase>);
+    </T.YStack>);
 }
 
-// statstrade-superadmin.pages.demos.show-ping/Page [167] 
+// statstrade-superadmin.pages.demos.show-ping/Page [142] 
 function Page(){
-  // 7a3e3915-1429-4fb1-aaf9-624c07231a0c
+  let [session] = sb.useListenSession();
+  let current_session = session || {};
+  let user = current_session["user"] || {};
+  let actor_id = user["id"];
   return (
-    <substrate.SubstrateProvider options={{"client_id":"statstrade-superadmin-demo-ping"}}><PingContent/></substrate.SubstrateProvider>);
+    <PingContent actor-id={actor_id}/>);
 }
 
 export default Page

@@ -1,6 +1,6 @@
 // StatsTrade site SharedWorker; site maps are loaded through kernel-init.
-import sqlite3InitModule from './sqlite-wasm/index.mjs'
 import * as Postgres from 'data:text/javascript,export default {Client: function() {}}'
+import sqlite3InitModule from './sqlite-wasm/index.mjs'
 
 function xt_lang_common_data$$is_emptyp(res){
   if(null == res){
@@ -980,6 +980,10 @@ function xt_event_base_model$$pipeline_run_remote(context,save_output,async_fn,h
   return xt_event_base_model$$pipeline_run_force(context,save_output,async_fn,hook_fn,complete_fn,"remote");
 }
 
+function xt_lang_common_string$$replace(s,tok,replacement){
+  return s.replace(new RegExp(tok,"g"),replacement);
+}
+
 function xt_lang_common_string$$to_uppercase(s){
   return s.toUpperCase();
 }
@@ -1099,6 +1103,17 @@ function xt_substrate_base_frame$$frame(kind,id,space,meta,extra){
     "space":space || "__NODE__",
     "meta":meta || {}
   },extra || {});
+}
+
+function xt_substrate_base_frame$$request_frame(space,action,args,meta){
+  meta = (meta || {});
+  return xt_substrate_base_frame$$frame(
+    "request",
+    meta["id"] || xt_substrate_base_frame$$rand_id("req-",6),
+    space,
+    meta,
+    {"action":action,"args":args || []}
+  );
 }
 
 function xt_substrate_base_frame$$response_frame(reply_to,space,status,data,error,meta){
@@ -1812,6 +1827,19 @@ function xt_substrate_base_request$$ensure_promise(value){
   }
 }
 
+function xt_substrate_base_request$$add_pending(node,request,resolve,reject,meta){
+  let {pending} = node;
+  let {id} = request;
+  let entry = {
+    "resolve":resolve,
+    "reject":reject,
+    "request":request,
+    "meta":meta || {}
+  };
+  pending[id] = entry;
+  return entry;
+}
+
 function xt_substrate_base_request$$remove_pending(node,request_id){
   let {pending} = node;
   let entry = pending[request_id];
@@ -1929,6 +1957,21 @@ function xt_substrate_base_util$$transport_send(node,transport_id,frame){
     throw "transport missing send_fn - " + transport_id;
   }
   return xt_substrate_base_request$$ensure_promise(send_fn(frame));
+}
+
+function xt_substrate_base_util$$transport_request_target(node,meta){
+  if(meta["local"]){
+    return null;
+  }
+  let target = meta["transport_id"];
+  if(null != target){
+    return target;
+  }
+  let transports = xt_substrate_base_util$$transport_list(node);
+  if(0 == transports.length){
+    return null;
+  }
+  return transports[0];
 }
 
 function xt_substrate_base_util$$stream_route_loop(node,ids,frame,exclude_id,index){
@@ -2067,6 +2110,10 @@ function xt_substrate_base_util$$register_handler(node,action,handler,meta){
   return entry;
 }
 
+function xt_substrate_base_util$$get_handler(node,action){
+  return (node["handlers"])[action];
+}
+
 function xt_substrate_base_util$$list_handlers(node){
   return xt_lang_common_data$$arr_sort(Object.keys(node["handlers"]),function (x){
     return x;
@@ -2087,6 +2134,32 @@ function xt_substrate_base_util$$list_triggers(node){
   },function (x,y){
     return 0 > x.localeCompare(y);
   });
+}
+
+function xt_substrate_base_util$$request(node,space,action,args,meta){
+  meta = (meta || {});
+  let request_frame = xt_substrate_base_frame$$request_frame(space,action,args,meta);
+  let target = xt_substrate_base_util$$transport_request_target(node,meta);
+  if(null == target){
+    return xt_substrate_base_request$$invoke_handler(node,request_frame);
+  }
+  else{
+    return new Promise(function (resolve,reject){
+      (function (resolve,reject){
+        xt_substrate_base_request$$add_pending(node,request_frame,resolve,reject,{"transport_id":target});
+        try{
+          return xt_substrate_base_util$$transport_send(node,target,request_frame).catch(function (err){
+            xt_substrate_base_request$$remove_pending(node,request_frame["id"]);
+            return reject(err);
+          });
+        }
+        catch(err){
+          xt_substrate_base_request$$remove_pending(node,request_frame["id"]);
+          return reject(err);
+        }
+      })(resolve,reject);
+    });
+  }
 }
 
 function xt_substrate_base_util$$publish(node,space,signal,data,meta){
@@ -2577,12 +2650,28 @@ function xt_substrate$$transport_get(node,transport_id){
   return xt_substrate_base_util$$transport_get(node,transport_id);
 }
 
+function xt_substrate$$transport_list(node){
+  return xt_substrate_base_util$$transport_list(node);
+}
+
+function xt_substrate$$publish(node,space,signal,data,meta){
+  return xt_substrate_base_util$$publish(node,space,signal,data,meta);
+}
+
 function xt_substrate$$register_trigger(node,signal,trigger_fn,meta){
   return xt_substrate_base_util$$register_trigger(node,signal,trigger_fn,meta);
 }
 
+function xt_substrate$$get_handler(node,action){
+  return xt_substrate_base_util$$get_handler(node,action);
+}
+
 function xt_substrate$$register_handler(node,action,handler,meta){
   return xt_substrate_base_util$$register_handler(node,action,handler,meta);
+}
+
+function xt_substrate$$request(node,space,action,args,meta){
+  return xt_substrate_base_util$$request(node,space,action,args,meta);
 }
 
 function xt_substrate$$route_stream(node,stream,exclude_id){
@@ -3079,6 +3168,26 @@ function xt_net_addon_supabase$$cmd_rpc_call(rpc_name,data,opts){
 function xt_net_addon_supabase$$cmd_query_table(table_name,query,opts){
   let path = "/rest/v1/" + table_name + "?" + query;
   return Object.assign({"path":path,"method":"GET"},opts);
+}
+
+function xt_net_addon_supabase$$cmd_storage_upload(bucket,object_path,data,opts){
+  let segments = object_path.split("/");
+  let encoded_parts = [];
+  for(let segment of segments){
+    encoded_parts.push(encodeURIComponent(segment));
+  };
+  let content_type = opts["content-type"] || opts["contentType"];
+  let headers = Object.assign({},opts["headers"]);
+  headers["x-upsert"] = String(true == opts["upsert"]);
+  if(content_type){
+    headers["Content-Type"] = content_type;
+  }
+  return Object.assign(opts,{
+    "path":"/storage/v1/object/" + encodeURIComponent(bucket) + "/" + encoded_parts.join("/"),
+    "method":"POST",
+    "body":data,
+    "headers":headers
+  });
 }
 
 function xt_net_addon_supabase$$cmd_health(opts){
@@ -7116,6 +7225,15 @@ function xt_db_system_impl_supabase_realtime$$add_realtime_callback(impl,conn_id
   return handler;
 }
 
+function xt_db_system_impl_supabase_realtime$$remove_realtime_callback(impl,conn_id,callback_id){
+  let client = xt_db_system_impl_supabase_realtime$$get_realtime(impl,conn_id);
+  if(null != client){
+    let callbacks = xt_lang_common_data$$get_in(client,["state","callbacks"]);
+    delete(callbacks[callback_id]);
+  }
+  return true;
+}
+
 function xt_db_system_impl_supabase_realtime$$create_sync_callback(impl){
   return function (event){
     let caching_fn = xt_lang_common_data$$get_in(impl,["metadata","caching_fn"]) || xt_lang_common_data$$get_in(impl,["state","caching_fn"]);
@@ -7393,7 +7511,7 @@ function xt_db_system_impl_supabase$$cmd_rpc_call_async(impl,rpc_spec,args,opts)
     headers["Accept-Profile"] = schema;
   }
   return xt_net_addon_supabase$$cmd_rpc_call(
-    rpc_spec["id"],
+    xt_lang_common_string$$replace(rpc_spec["id"],"-","_"),
     body,
     Object.assign(Object.assign({},opts),{"headers":headers})
   );
@@ -7459,6 +7577,43 @@ function xt_db_system_main$$create_impl_init(impl){
       return impl;
     });
   }
+}
+
+function xt_db_node_proxy_util$$get_default_transport(node){
+  return xt_lang_common_data$$get_in(node,["state","adaptor_proxy","default_transport_id"]);
+}
+
+function xt_db_node_proxy_util$$get_transport_id(node,opts){
+  return xt_lang_common_data$$get_in(opts,["transport_id"]) || xt_db_node_proxy_util$$get_default_transport(node) || (xt_substrate$$transport_list(node))[0];
+}
+
+function xt_db_node_proxy_util$$request_meta(node,request){
+  let transport_id = xt_db_node_proxy_util$$get_transport_id(node,request);
+  return {"transport_id":transport_id};
+}
+
+function xt_db_node_proxy_util$$request_client(node,action,args,opts){
+  let local_meta = {};
+  local_meta["local"] = true;
+  return xt_substrate$$get_handler(node,action) ? xt_substrate$$request(node,null,action,args,local_meta) : xt_substrate$$request(
+    node,
+    null,
+    action,
+    args,
+    xt_db_node_proxy_util$$request_meta(node,opts)
+  );
+}
+
+function xt_db_node_client_supabase$$user_get(node,service_id,opts){
+  return xt_db_node_proxy_util$$request_client(node,"@xt.supabase/user-get",[service_id,opts || {}],opts);
+}
+
+function xt_db_node_client_base$$subscribe_db(node,primary_id,conn_id,topics,opts){
+  return xt_db_node_proxy_util$$request_client(node,"@xt.db/subscribe-db",[primary_id,conn_id,topics],opts);
+}
+
+function xt_db_node_client_base$$unsubscribe_db(node,primary_id,conn_id,topics,opts){
+  return xt_db_node_proxy_util$$request_client(node,"@xt.db/unsubscribe-db",[primary_id,conn_id,topics],opts);
 }
 
 function xt_db_node_kernel_supabase$$supabase_rpc_error_detail(body){
@@ -7604,6 +7759,19 @@ function xt_db_node_kernel_supabase$$supabase_query_table_handler(space,args,req
     node,
     service_id,
     xt_net_addon_supabase$$cmd_query_table(table_name,query,opts)
+  );
+}
+
+function xt_db_node_kernel_supabase$$supabase_storage_upload_handler(space,args,request,node){
+  let service_id = args[0];
+  let bucket = args[1];
+  let object_path = args[2];
+  let data = args[3];
+  let opts = args[4] || {};
+  return xt_db_node_kernel_supabase$$supabase_request(
+    node,
+    service_id,
+    xt_net_addon_supabase$$cmd_storage_upload(bucket,object_path,data,opts)
   );
 }
 
@@ -7861,6 +8029,12 @@ function xt_db_node_kernel_supabase$$init_handlers(node){
     node,
     "@xt.supabase/query-table",
     xt_db_node_kernel_supabase$$supabase_query_table_handler,
+    null
+  );
+  xt_substrate$$register_handler(
+    node,
+    "@xt.supabase/storage-upload",
+    xt_db_node_kernel_supabase$$supabase_storage_upload_handler,
     null
   );
   xt_substrate$$register_handler(
@@ -8578,5 +8752,152 @@ function xt_db_node_runtime$$sharedworker_init_kernel(node,transport_id,worker_i
   });
 }
 
-let node = xt_substrate$$node_create({"id":xt_db_node_runtime$$DEFAULT_WORKER});
-xt_db_node_runtime$$sharedworker_init_kernel(node);
+let node = xt_substrate$$node_create({"id":"statstrade-web-shared-worker"});
+xt_substrate$$register_handler(node,"@statstrade-web/auth/session-set",async function (_space,args,_request,node){
+  let session = args[0];
+  let event_type = args[1] || "SESSION_CHANGED";
+  let impl = xt_substrate$$get_service(node,"db/primary");
+  if(!impl){
+    throw new Error("Supabase worker service is not initialized.");
+  }
+  xt_db_system_impl_supabase_session$$auto_refresh_stop(impl);
+  xt_db_system_impl_supabase_session$$set_session(impl,session);
+  if(session){
+    xt_db_system_impl_supabase_session$$auto_refresh_start(impl);
+    if(!session["user"]){
+      let user_response = await xt_db_node_client_supabase$$user_get(node,"db/primary",{});
+      session["user"] = user_response["user"];
+      xt_db_system_impl_supabase_session$$set_session(impl,session);
+    }
+  }
+  await xt_substrate$$publish(
+    node,
+    "statstrade-web-auth",
+    "session.changed",
+    {"type":event_type,"session":session},
+    {}
+  );
+  return session;
+},null);
+xt_substrate$$register_handler(node,"@statstrade-web/auth/graphql",async function (_space,args,_request,node){
+  let query = args[0];
+  let variables = args[1] || {};
+  let impl = xt_substrate$$get_service(node,"db/primary");
+  if(!impl){
+    throw new Error("Supabase worker service is not initialized.");
+  }
+  let defaults = impl["client"]["defaults"];
+  let session = xt_db_system_impl_supabase_session$$get_session(impl);
+  let secured = defaults["secured"];
+  let host = defaults["host"];
+  let port = defaults["port"];
+  let basepath = defaults["basepath"] || "";
+  let scheme = secured ? "https://" : "http://";
+  let url = scheme + host + ":" + port + basepath + "/graphql/v1";
+  let token = session["access_token"] || defaults["token"] || defaults["apikey"];
+  let response = await fetch(url,{
+    "method":"POST",
+    "headers":{
+        "apikey":defaults["apikey"],
+        "Authorization":"Bearer " + token,
+        "Content-Type":"application/json"
+      },
+    "body":JSON.stringify({"query":query,"variables":variables})
+  });
+  let body = await response.json();
+  if(!response["ok"]){
+    return {"data":null,"error":body};
+  }
+  return body;
+},null);
+xt_substrate$$register_handler(node,"@xt.db/realtime/subscribe",function (_space,args,_request,node){
+  let primary_id = args[0];
+  let space_id = args[1];
+  let subscriber_id = args[2];
+  let topic = args[3];
+  let signal = args[4];
+  let service_id = "xt/db/realtime/" + primary_id + "/" + subscriber_id;
+  let entry = xt_substrate$$get_service(node,service_id);
+  if(entry){
+    return entry["promise"];
+  }
+  let primary = xt_substrate$$get_service(node,primary_id);
+  if(!primary){
+    return {
+      "status":"error",
+      "message":"Realtime database service is not initialized."
+    };
+  }
+  let connection_id = service_id + "/subscription";
+  let callback_id = service_id + "/notify";
+  xt_db_system_impl_supabase_realtime$$add_realtime_callback(primary,connection_id,callback_id,function (event){
+    if((topic == event["topic"]) && ((null != event["db/sync"]) || (null != event["db/remove"]))){
+      xt_substrate$$publish(node,space_id,signal,{},{});
+    }
+  });
+  let init = xt_db_node_client_base$$subscribe_db(node,primary_id,connection_id,[topic],{}).then(function (results){
+    if(true == results[0]){
+      return {"status":"live"};
+    }
+    else{
+      xt_db_system_impl_supabase_realtime$$remove_realtime_callback(primary,connection_id,callback_id);
+      xt_substrate$$remove_service(node,service_id);
+      return {
+        "status":"error",
+        "message":"Supabase Realtime could not subscribe."
+      };
+    }
+  }).catch(function (error){
+    xt_db_system_impl_supabase_realtime$$remove_realtime_callback(primary,connection_id,callback_id);
+    xt_substrate$$remove_service(node,service_id);
+    return {
+      "status":"error",
+      "message":error["message"] || "Supabase Realtime could not subscribe."
+    };
+  });
+  xt_substrate$$set_service(node,service_id,{
+    "promise":init,
+    "primary":primary,
+    "connection-id":connection_id,
+    "callback-id":callback_id,
+    "topic":topic
+  });
+  return init;
+},null);
+xt_substrate$$register_handler(node,"@xt.db/realtime/unsubscribe",function (_space,args,_request,node){
+  let primary_id = args[0];
+  let subscriber_id = args[1];
+  let service_id = "xt/db/realtime/" + primary_id + "/" + subscriber_id;
+  let entry = xt_substrate$$get_service(node,service_id);
+  if(!entry){
+    return true;
+  }
+  let primary = entry["primary"];
+  let connection_id = entry["connection-id"];
+  let callback_id = entry["callback-id"];
+  let topic = entry["topic"];
+  let stopping = entry["unsubscribe"];
+  if(stopping){
+    return stopping;
+  }
+  if(primary){
+    xt_db_system_impl_supabase_realtime$$remove_realtime_callback(primary,connection_id,callback_id);
+  }
+  let stop = entry["promise"].then(function (result){
+    if("live" == result["status"]){
+      return xt_db_node_client_base$$unsubscribe_db(node,primary_id,connection_id,[topic],{});
+    }
+    else{
+      return true;
+    }
+  }).then(function (_){
+    xt_substrate$$remove_service(node,service_id);
+    return true;
+  }).catch(function (_){
+    xt_substrate$$remove_service(node,service_id);
+    return true;
+  });
+  entry["unsubscribe"] = stop;
+  return stop;
+},null);
+xt_db_node_runtime$$sharedworker_init_kernel(node,null,"statstrade-web");

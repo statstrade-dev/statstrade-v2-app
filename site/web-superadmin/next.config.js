@@ -12,11 +12,11 @@ const disableExtraction =
 
 const plugins = [
   withTamagui({
-    config: '../../packages/config/src/tamagui.config.ts',
+    config: join(__dirname, '../../packages/config/src/tamagui.config.ts'),
     components: ['tamagui'],
     appDir: true,
     importsWhitelist: ['constants.js', 'colors.js'],
-    outputCSS: process.env.NODE_ENV === 'production' ? './public/tamagui.css' : null,
+    outputCSS: process.env.NODE_ENV === 'production' ? join(__dirname, 'public/tamagui.css') : null,
     logTimings: true,
     disableExtraction,
     shouldExtract: (path) => {
@@ -42,6 +42,8 @@ const configureWebpack = (config) => {
   const optionalBackend = join(__dirname, 'src/browser-optional-backend.js')
   config.resolve.alias['@xtalk/net/net/conn-sqlite.js'] = optionalBackend
   config.resolve.alias['@xtalk/net/net/conn-postgres.js'] = optionalBackend
+  config.resolve.alias['@statstrade/edge/lib/js/net/conn-sqlite.js'] = optionalBackend
+  config.resolve.alias['@statstrade/edge/lib/js/net/conn-postgres.js'] = optionalBackend
   config.module.rules.push({
     test: /\.js$/,
     include: /node_modules\/@react-native\/assets-registry/,

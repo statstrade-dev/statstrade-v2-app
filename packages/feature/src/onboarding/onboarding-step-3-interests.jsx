@@ -14,11 +14,22 @@ import * as ui_section from '@statstrade/component/ui-section.jsx'
 
 import * as ui from '@statstrade/component/ui-common.jsx'
 
-// statstrade-web.feature.onboarding.onboarding-step-3-interests/OnboardingStep3InterestsScreen [22] 
+// statstrade-web.feature.onboarding.onboarding-step-3-interests/saveOnboardingInterests [22] 
+export async function saveOnboardingInterests(mutation,tags,set_step){
+  let result = await mutation.mutateAsync({"detail":{"interests":Array.from(tags)}});
+  if(result.error){
+    throw result.error;
+  }
+  set_step(4);
+  return result;
+}
+
+// statstrade-web.feature.onboarding.onboarding-step-3-interests/OnboardingStep3InterestsScreen [32] 
 export function OnboardingStep3InterestsScreen(){
   let context = React.useContext(common.IndexOnboardingContext);
   let {api,controls,user} = context;
   let [isLoading,setIsLoading] = React.useState(false);
+  let [saveError,setSaveError] = React.useState(null);
   React.useEffect(function (){
     let existingInterests = kd.get_in(user,["user_metadata","detail","interests"]);
     if(existingInterests && kl.is_arrayp(existingInterests)){
@@ -37,12 +48,21 @@ export function OnboardingStep3InterestsScreen(){
   };
   let handleContinue = async function (){
     setIsLoading(true);
+    setSaveError(null);
     try{
-      await api.mutations.user_set_public.mutateAsync({"detail":{"interests":Array.from(controls.interestTags)}});
-      controls.setStep(4);
+      await saveOnboardingInterests(
+        api.mutations.user_set_public,
+        controls.interestTags,
+        controls.setStep
+      );
     }
     catch(e){
       console.error("Failed to save interests",e);
+      setSaveError(
+        e.message || "Failed to save your interests. Please try again."
+      );
+    }
+    finally{
       setIsLoading(false);
     }
   };
@@ -52,6 +72,8 @@ export function OnboardingStep3InterestsScreen(){
         title="Your Interests"
         paragraph="Pick some categories that you are interested in"/>
       <T.YStack marginTop="$8" gap="$6">
+        {saveError ? (
+          <T.Paragraph color="$red10" textAlign="center">{saveError}</T.Paragraph>) : null}
         <T.View
           display="grid"
           gridTemplateColumns="1fr 1fr"

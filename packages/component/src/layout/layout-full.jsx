@@ -20,12 +20,23 @@ import * as layout_manage from '@statstrade/component/layout/layout-manage.jsx'
 
 import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
-// statsui.basic.layout.layout-full/check-expired [28] 
+// statsui.basic.layout.layout-full/authEntryMode [28] 
+export function authEntryMode(session,loaded){
+  if(!loaded){
+    return "loading";
+  }
+  if(session && session["user"] && session["user"]["id"]){
+    return "authenticated";
+  }
+  return "guest";
+}
+
+// statsui.basic.layout.layout-full/check-expired [37] 
 export function check_expired(account){
   return ((null == account[["expires_at"]]) ? 0 : account[["expires_at"]]) > (Date.now() / 1000);
 }
 
-// statsui.basic.layout.layout-full/LayoutFullSplash [36] 
+// statsui.basic.layout.layout-full/LayoutFullSplash [45] 
 export function LayoutFullSplash(){
   return (
     <T.YStack
@@ -40,18 +51,19 @@ export function LayoutFullSplash(){
     </T.YStack>);
 }
 
-// statsui.basic.layout.layout-full/LayoutFullContext [53] 
+// statsui.basic.layout.layout-full/LayoutFullContext [62] 
 export var LayoutFullContext = React.createContext(null);
 
-// statsui.basic.layout.layout-full/LayoutFull [55] 
+// statsui.basic.layout.layout-full/LayoutFull [64] 
 export function LayoutFull({screens,children}){
   let api = rq.useApi(action_user.userApi);
-  let [session] = sb.useListenSession();
-  let hasAuth = kd.not_emptyp(session);
+  let [session,_setSession,session_loaded] = sb.useListenSession();
+  let authMode = authEntryMode(session,session_loaded);
+  let hasAuth = authMode == "authenticated";
   let currentUser = api.queries.get_user.output;
   let userProfile = api.queries.user_get_profile.output;
   let isOnboarded = kd.get_in(userProfile,["is_onboarded"]);
-  let isBusy = (hasAuth && (api.queries.get_user.isPending || api.queries.user_get_profile.isPending));
+  let isBusy = (authMode == "loading") || (hasAuth && (api.queries.get_user.isPending || api.queries.user_get_profile.isPending));
   let {Landing,Onboarding,Manage,Splash = LayoutFullSplash} = screens || {};
   React.useEffect(function (){
     if(hasAuth){
