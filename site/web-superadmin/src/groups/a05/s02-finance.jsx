@@ -1,0 +1,111 @@
+import * as common from '@statstrade/web-superadmin/lib/substrate-model-common.jsx'
+
+// statstrade-superadmin.groups.a05.s02-finance/Group [29] 
+export var Group = {
+  "area":"superadmin",
+  "label":"Finance & settlement",
+  "key":"finance",
+  "id":"superadmin/finance",
+  "href":"/superadmin/finance",
+  "gaps":[],
+  "commands":{
+    "finance_settlements":["process","succeed","fail","cancel"],
+    "finance_exceptions":["acknowledge","resolve","ignore"]
+  },
+  "number":"A05.S02",
+  "source":"visual-language",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s02-finance",
+  "models":{
+    "settlements":{
+      "model":{
+        "options":{"refresh":{"FinanceSettlement":true}},
+        "defaults":{"output":[],"args":[{"return_args":[],"select_args":[]}]}
+      },
+      "dataview":{
+        "select_entry":{
+          "input":[],
+          "view":{"table":"FinanceSettlement","type":"select","query":{}}
+        },
+        "select_args":[],
+        "table":"FinanceSettlement",
+        "return_entry":{
+          "input":[{"symbol":"i_id","type":"uuid"}],
+          "view":{
+            "table":"FinanceSettlement",
+            "type":"return",
+            "query":[
+              "id",
+              "status",
+              "currency",
+              "gross_amount",
+              "fee_amount",
+              "processed_at"
+            ],
+            "identity":["id"]
+          }
+        },
+        "return_args":[]
+      },
+      "select":{},
+      "kind":"dataview",
+      "fields":[
+        "id",
+        "status",
+        "currency",
+        "gross_amount",
+        "fee_amount",
+        "processed_at"
+      ]
+    },
+    "exceptions":{
+      "model":{
+        "options":{"refresh":{"FinanceException":true}},
+        "defaults":{"output":[],"args":[{"return_args":[],"select_args":[]}]}
+      },
+      "dataview":{
+        "select_entry":{
+          "input":[],
+          "view":{"table":"FinanceException","type":"select","query":{}}
+        },
+        "select_args":[],
+        "table":"FinanceException",
+        "return_entry":{
+          "input":[{"symbol":"i_id","type":"uuid"}],
+          "view":{
+            "table":"FinanceException",
+            "type":"return",
+            "query":["id","title","exception_type","status","amount","currency"],
+            "identity":["id"]
+          }
+        },
+        "return_args":[]
+      },
+      "select":{},
+      "kind":"dataview",
+      "fields":["id","title","exception_type","status","amount","currency"]
+    }
+  },
+  "actions":{
+    "command":{
+      "rpc":{
+        "id":"super-operations-command",
+        "schema":"stats_rpc",
+        "input":[
+          {"name":"actor_id","symbol":"actor_id","type":"uuid"},
+          {"name":"resource","symbol":"resource","type":"citext"},
+          {"name":"target_id","symbol":"target_id","type":"uuid"},
+          {"name":"action","symbol":"action","type":"citext"},
+          {"name":"payload","symbol":"payload","type":"jsonb"}
+        ],
+        "return":"jsonb",
+        "flags":{}
+      }
+    }
+  }
+};
+
+// statstrade-superadmin.groups.a05.s02-finance/createPageSpec [31] 
+export function createPageSpec(bindings){
+  return common.createPageSpec(Group,bindings);
+}

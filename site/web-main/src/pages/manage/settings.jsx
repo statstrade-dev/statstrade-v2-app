@@ -1,11 +1,25 @@
-import * as layout_manage from '@statstrade/component/layout/layout-manage.jsx'
+import dynamic from 'next/dynamic'
 
-import * as screen from '@statstrade/feature/manage/settings.jsx'
+// statstrade-web.page.manage.settings/Workspace [5] 
+export var Workspace = dynamic(function (){
+  return import("@statstrade/feature/manage/page-workspace.jsx").then(function (module){
+    return module.ManagementPage;
+  });
+},{
+  "ssr":false,
+  "loading":function (){
+    return (
+      <p role="status">Loading page…</p>);
+  }
+});
 
-// statstrade-web.page.manage.settings/Page [14] 
-export function Page(props){
+// statstrade-web.page.manage.settings/Page [9] 
+export function Page(){
   return (
-    <layout_manage.LayoutManage userType="manager"><screen.SettingsScreen/></layout_manage.LayoutManage>);
+    <Workspace pageKey="settings"/>);
 }
+
+// statstrade-web.page.manage.settings/page-model-key [10] 
+Page["pageModelKey"] = "/manage/settings";
 
 export default Page

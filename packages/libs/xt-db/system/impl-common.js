@@ -133,6 +133,16 @@ function process_remove_event(impl,data){
   return method_fn(impl,data);
 }
 
+var ISourceInit = proto.create_protocol_fn(
+  "xt.db.system.impl_common/ISourceInit",
+  {"init_db":{"name":"init_db","arglist":["impl"]}}
+);
+
+function init_db(impl){
+  let method_fn = proto.protocol_method(impl,"xt.db.system.impl_common/ISourceInit","init_db");
+  return method_fn(impl);
+}
+
 var ISourceLifecycle = proto.create_protocol_fn(
   "xt.db.system.impl_common/ISourceLifecycle",
   {"stop_db":{"name":"stop_db","arglist":["impl"]}}
@@ -249,6 +259,8 @@ module.exports = {
   ["record_delete"]:record_delete,
   ["process_add_event"]:process_add_event,
   ["process_remove_event"]:process_remove_event,
+  ["ISourceInit"]:ISourceInit,
+  ["init_db"]:init_db,
   ["ISourceLifecycle"]:ISourceLifecycle,
   ["stop_db"]:stop_db,
   ["add_db_listener_default"]:add_db_listener_default,

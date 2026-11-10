@@ -1,0 +1,109 @@
+import * as common from '@statstrade/web-superadmin/lib/substrate-model-common.jsx'
+
+// statstrade-superadmin.groups.a06.s01-access/Group [29] 
+export var Group = {
+  "area":"superadmin",
+  "label":"Access control",
+  "key":"access",
+  "id":"superadmin/access",
+  "href":"/superadmin/access",
+  "gaps":[],
+  "commands":{},
+  "number":"A06.S01",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s01-access",
+  "models":{
+    "users":{
+      "model":{
+        "options":{"refresh":{"User":true}},
+        "defaults":{"output":[],"args":[{"return_args":[],"select_args":[]}]}
+      },
+      "dataview":{
+        "select_entry":{
+          "input":[],
+          "view":{"table":"User","type":"select","query":{}}
+        },
+        "select_args":[],
+        "table":"User",
+        "return_entry":{
+          "input":[{"symbol":"i_id","type":"uuid"}],
+          "view":{
+            "table":"User",
+            "type":"return",
+            "query":["id","handle","first_name","last_name","type","is_active"],
+            "identity":["id"]
+          }
+        },
+        "return_args":[]
+      },
+      "select":{},
+      "kind":"dataview",
+      "fields":["id","handle","first_name","last_name","type","is_active"]
+    },
+    "grants":{
+      "model":{
+        "options":{"refresh":{"PlatformGrant":true}},
+        "defaults":{"output":[],"args":[{"return_args":[],"select_args":[]}]}
+      },
+      "dataview":{
+        "select_entry":{
+          "input":[],
+          "view":{"table":"PlatformGrant","type":"select","query":{}}
+        },
+        "select_args":[],
+        "table":"PlatformGrant",
+        "return_entry":{
+          "input":[{"symbol":"i_id","type":"uuid"}],
+          "view":{
+            "table":"PlatformGrant",
+            "type":"return",
+            "query":["id","level","status","scopes","expires_at","reason"],
+            "identity":["id"]
+          }
+        },
+        "return_args":[]
+      },
+      "select":{},
+      "kind":"dataview",
+      "fields":["id","level","status","scopes","expires_at","reason"]
+    }
+  },
+  "actions":{
+    "set-grant":{
+      "rpc":{
+        "id":"super-set-platform-grant",
+        "schema":"stats_rpc",
+        "input":[
+          {"name":"actor_id","symbol":"actor_id","type":"uuid"},
+          {"name":"user_id","symbol":"user_id","type":"uuid"},
+          {"name":"level","symbol":"level","type":"citext"},
+          {"name":"scopes","symbol":"scopes","type":"jsonb"},
+          {"name":"expires_at","symbol":"expires_at","type":"bigint"},
+          {"name":"reason","symbol":"reason","type":"text"},
+          {"name":"metadata","symbol":"metadata","type":"jsonb"}
+        ],
+        "return":"jsonb",
+        "flags":{}
+      }
+    },
+    "revoke-grant":{
+      "rpc":{
+        "id":"super-revoke-platform-grant",
+        "schema":"stats_rpc",
+        "input":[
+          {"name":"actor_id","symbol":"actor_id","type":"uuid"},
+          {"name":"user_id","symbol":"user_id","type":"uuid"},
+          {"name":"reason","symbol":"reason","type":"text"}
+        ],
+        "return":"jsonb",
+        "flags":{}
+      }
+    }
+  }
+};
+
+// statstrade-superadmin.groups.a06.s01-access/createPageSpec [31] 
+export function createPageSpec(bindings){
+  return common.createPageSpec(Group,bindings);
+}

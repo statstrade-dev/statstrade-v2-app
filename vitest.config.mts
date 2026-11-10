@@ -1,13 +1,21 @@
 import { defineConfig } from 'vitest/config'
+import { transformWithEsbuild } from 'vite'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
+  plugins: [{
+    name: 'generated-jsx-in-js',
+    async transform(code, id) {
+      if (id.endsWith('.js') && !id.includes('/node_modules/')) {
+        return transformWithEsbuild(code, id, { loader: 'jsx', jsx: 'automatic' })
+      }
+    },
+  }],
   esbuild: {
     jsx: 'automatic',
-    loader: 'jsx',
   },
   ssr: {
     noExternal: ['@sqlite.org/sqlite-wasm', 'react-native-web'],
@@ -16,6 +24,8 @@ export default defineConfig({
     alias: {
       '@statstrade/edge': path.resolve(__dirname, './packages/edge/src'),
       '@statstrade/group': path.resolve(__dirname, './packages/group/src'),
+      '@statstrade/component/layout/layout-base.jsx': path.resolve(__dirname, './test/vitest-stubs/layout-base-vitest-stub.jsx'),
+      '@statstrade/component/layout/common/frame-devtool.jsx': path.resolve(__dirname, './test/vitest-stubs/frame-devtool-vitest-stub.js'),
       '@statstrade/component': path.resolve(__dirname, './packages/component/src'),
       '@statstrade/feature': path.resolve(__dirname, './packages/feature/src'),
       '@statstrade/web-main': path.resolve(__dirname, './site/web-main/src'),

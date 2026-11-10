@@ -1,16 +1,12 @@
-import * as layout_full from '@statstrade/component/layout/layout-full.jsx'
+import * as civic from '@statstrade/feature/civic/pages.jsx'
 
-import * as index_landing from '@statstrade/feature/landing/index-landing.jsx'
-
-import * as index_onboarding from '@statstrade/feature/onboarding/index-onboarding.jsx'
-
-// statstrade-web.page.index/Page [17] 
+// statstrade-web.page.index/Page [5] 
 export function Page(){
   return (
-    <layout_full.LayoutFull
-      landing={index_landing.IndexLandingScreen}
-      onboarding={index_onboarding.IndexOnboardingScreen}><index_landing.IndexLandingScreen/>
-    </layout_full.LayoutFull>);
+    <civic.Browse mode="today"/>);
 }
+
+// statstrade-web.page.index/page-model-key [6] 
+Page["pageModelKey"] = "/";
 
 export default Page

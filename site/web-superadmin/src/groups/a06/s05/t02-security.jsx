@@ -1,0 +1,96 @@
+import * as common from '@statstrade/web-superadmin/lib/substrate-model-common.jsx'
+
+// statstrade-superadmin.groups.a06.s05.t02-security/Group [31] 
+export var Group = {
+  "area":"superadmin",
+  "label":"Security policy",
+  "key":"settings/security",
+  "parent":"superadmin/settings",
+  "id":"superadmin/settings/security",
+  "href":"/superadmin/settings/security",
+  "gaps":[
+    "Uses the registered identity section; reference security controls need explicit backend mappings."
+  ],
+  "commands":{},
+  "number":"A06.S05.T02",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s05.t02-security",
+  "models":{
+    "policy":{
+      "model":{
+        "options":{"refresh":{"Global":true}},
+        "defaults":{"output":[],"args":[{"return_args":[],"select_args":[]}]}
+      },
+      "dataview":{
+        "select_entry":{
+          "input":[],
+          "view":{
+            "table":"Global",
+            "type":"select",
+            "query":{"is_registered":true,"key":"identity"}
+          }
+        },
+        "select_args":[],
+        "table":"Global",
+        "return_entry":{
+          "input":[{"symbol":"i_id","type":"uuid"}],
+          "view":{
+            "table":"Global",
+            "type":"return",
+            "query":["id","is_registered","key","value_json","revision"],
+            "identity":["id"]
+          }
+        },
+        "return_args":[]
+      },
+      "select":{"is_registered":true,"key":"identity"},
+      "kind":"dataview",
+      "fields":["id","is_registered","key","value_json","revision"]
+    }
+  },
+  "actions":{
+    "update-global":{
+      "rpc":{
+        "id":"super-global-section-update",
+        "schema":"stats_rpc",
+        "input":[
+          {"name":"actor_id","symbol":"actor_id","type":"uuid"},
+          {"name":"key","symbol":"key","type":"citext"},
+          {
+          "name":"expected_revision",
+          "symbol":"expected_revision",
+          "type":"integer"
+        },
+          {"name":"value","symbol":"value","type":"jsonb"},
+          {"name":"reason","symbol":"reason","type":"text"}
+        ],
+        "return":"jsonb",
+        "flags":{}
+      }
+    },
+    "reset-global":{
+      "rpc":{
+        "id":"super-global-section-reset",
+        "schema":"stats_rpc",
+        "input":[
+          {"name":"actor_id","symbol":"actor_id","type":"uuid"},
+          {"name":"key","symbol":"key","type":"citext"},
+          {
+          "name":"expected_revision",
+          "symbol":"expected_revision",
+          "type":"integer"
+        },
+          {"name":"reason","symbol":"reason","type":"text"}
+        ],
+        "return":"jsonb",
+        "flags":{}
+      }
+    }
+  }
+};
+
+// statstrade-superadmin.groups.a06.s05.t02-security/createPageSpec [33] 
+export function createPageSpec(bindings){
+  return common.createPageSpec(Group,bindings);
+}

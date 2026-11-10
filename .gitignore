@@ -13,6 +13,7 @@ dist
 
 # next.js
 **/.next/*
+**/.next-*/
 /out/
 /projects/web/out
 

@@ -6,6 +6,8 @@ import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
 import * as hook_form from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
+import * as ui_controls from '@statstrade/edge/ui-controls.jsx'
+
 import * as group_user from '@statstrade/group/common-user-action.jsx'
 
 import * as client_auth from '@statstrade/edge/remote/util-supabase.jsx'
@@ -14,10 +16,10 @@ import * as group_org from '@statstrade/group/manage-organisation-action.jsx'
 
 import * as ui from '@statstrade/component/ui-common.jsx'
 
-// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingContext [25] 
+// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingContext [26] 
 export var IndexOnboardingContext = React.createContext();
 
-// statstrade-web.feature.onboarding.onboarding-common/indexOnboardingStages [28] 
+// statstrade-web.feature.onboarding.onboarding-common/indexOnboardingStages [29] 
 export var indexOnboardingStages = {
   "creator":[
     {
@@ -65,7 +67,7 @@ export var indexOnboardingStages = {
   ]
 };
 
-// statstrade-web.feature.onboarding.onboarding-common/syncOnboardingSessionUser [56] 
+// statstrade-web.feature.onboarding.onboarding-common/syncOnboardingSessionUser [57] 
 export function syncOnboardingSessionUser(session,setUser){
   let user = session ? session["user"] : null;
   if(user){
@@ -74,7 +76,7 @@ export function syncOnboardingSessionUser(session,setUser){
   return user;
 }
 
-// statstrade-web.feature.onboarding.onboarding-common/syncOnboardingIdentity [64] 
+// statstrade-web.feature.onboarding.onboarding-common/syncOnboardingIdentity [65] 
 export function syncOnboardingIdentity(profileRows,organisations,preferred_organisation_id,controls){
   let profile = Array.isArray(profileRows) ? profileRows[0] : profileRows;
   if(profile && !controls.userType && profile.type){
@@ -91,7 +93,7 @@ export function syncOnboardingIdentity(profileRows,organisations,preferred_organ
   return profile;
 }
 
-// statstrade-web.feature.onboarding.onboarding-common/mergeOnboardingContexts [84] 
+// statstrade-web.feature.onboarding.onboarding-common/mergeOnboardingContexts [85] 
 export function mergeOnboardingContexts(controls,invitationsForm,userContext,organisationContext){
   let userApi = userContext.api;
   let organisationApi = organisationContext.api;
@@ -115,7 +117,7 @@ export function mergeOnboardingContexts(controls,invitationsForm,userContext,org
   };
 }
 
-// statstrade-web.feature.onboarding.onboarding-common/sendOnboardingInvitations [109] 
+// statstrade-web.feature.onboarding.onboarding-common/sendOnboardingInvitations [110] 
 export async function sendOnboardingInvitations(mutation,organisation_id,emails){
   if(!organisation_id){
     throw new Error("Organisation is required to send invitations");
@@ -141,7 +143,7 @@ export async function sendOnboardingInvitations(mutation,organisation_id,emails)
   return {"sent":sent,"failed":failed};
 }
 
-// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingHeader [142] 
+// statstrade-web.feature.onboarding.onboarding-common/IndexOnboardingHeader [143] 
 export function IndexOnboardingHeader(){
   let ctx = React.useContext(IndexOnboardingContext);
   let controls = ctx.controls;
@@ -159,9 +161,9 @@ export function IndexOnboardingHeader(){
     </T.YStack>);
 }
 
-// statstrade-web.feature.onboarding.onboarding-common/useIndexOnboardingContext [176] 
+// statstrade-web.feature.onboarding.onboarding-common/useIndexOnboardingContext [177] 
 export function useIndexOnboardingContext(){
-  let controls = hook_form.useControls([
+  let controls = ui_controls.useControls([
     ["step",1],
     ["currentStage",0],
     "currentError",

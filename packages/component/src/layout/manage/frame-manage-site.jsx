@@ -1,5 +1,5 @@
 import 
-  {BarChart,Coins,CreditCard,House,Mail,Megaphone,Settings,Store}
+  {Award,BarChart,Coins,CreditCard,House,Mail,Megaphone,Settings,Store}
  from '@tamagui/lucide-icons'
 
 // statsui.basic.layout.manage.frame-manage-site/navGroups [10] 
@@ -30,6 +30,12 @@ export var navGroups = [
     "label":"Tokens",
     "icon":Coins,
     "path":"/manage/tokens"
+  },
+    {
+    "id":"reputation",
+    "label":"Reputation & rewards",
+    "icon":Award,
+    "path":"/manage/reputation"
   },
     {
     "id":"analytics",

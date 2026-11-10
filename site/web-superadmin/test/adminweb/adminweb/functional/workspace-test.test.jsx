@@ -10,9 +10,13 @@ import * as T from 'tamagui'
 
 import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
 
+import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
+
+import * as user_group from '@statstrade/web-superadmin/groups/a02/s01-user-operations.jsx'
+
 import * as sut from '@statstrade/web-superadmin/adminweb/workspace.jsx'
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-page-number-output [20] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-page-number-output [21] 
 vitest.it("returns the route code for roots and nested pages",function (){
   vitest.expect(sut.getPageNumber("organisation",null)).toBe("A02.S02");
   vitest.expect(sut.getPageNumber("billing",null)).toBe("A02.S03");
@@ -21,7 +25,7 @@ vitest.it("returns the route code for roots and nested pages",function (){
   vitest.expect(sut.getPageNumber("user","personal")).toBe("A02.S04");
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-tab-number-output [36] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-tab-number-output [37] 
 vitest.it("numbers root, nested, and double digit tabs",function (){
   vitest.expect(sut.getTabNumber("global",null,3)).toBe("A03.S03.T03");
   vitest.expect(sut.getTabNumber("billing",null,2)).toBe("A02.S03.T02");
@@ -29,7 +33,7 @@ vitest.it("numbers root, nested, and double digit tabs",function (){
   vitest.expect(sut.getTabNumber("billing",null,10)).toBe("A02.S03.T10");
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-table-rows [50] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-table-rows [51] 
 vitest.describe("workspace table row projection",function (){
   let React = r["default"];
   vitest.afterEach(function (){
@@ -49,7 +53,7 @@ vitest.describe("workspace table row projection",function (){
   });
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-content [80] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-content [81] 
 vitest.describe("workspace content",function (){
   let React = r["default"];
   vitest.afterEach(function (){
@@ -89,6 +93,7 @@ vitest.describe("workspace content",function (){
       "time_updated"
     ],{
       "node":node,
+      "group":user_group.Group,
       "primary-id":"db/primary/test",
       "space-id":"statstrade-superadmin/tab-one/workspace/user/account",
       "runtime":{
@@ -148,7 +153,7 @@ vitest.describe("workspace content",function (){
   });
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-billing-tabs [163] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-workspace-billing-tabs [165] 
 vitest.afterEach(function (){
   vitest.vi.restoreAllMocks();
 });
@@ -194,7 +199,7 @@ vitest.it("numbers invoice and payment and selects the payment view",function ()
   vitest.expect(rows_hook["mock"]["calls"][0][2]["space-id"]).toBe("statstrade-superadmin/tab-one/workspace/billing/root");
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-adminweb-shell-numbered-navigation [214] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-adminweb-shell-numbered-navigation [216] 
 vitest.afterEach(function (){
   vitest.vi.restoreAllMocks();
 });
@@ -210,6 +215,7 @@ vitest.it("shows the Accounts code and existing Billing destination",function ()
     null;
   });
   vitest.vi.spyOn(ext_page,"listenModelOutput").mockReturnValue({"current":null});
+  let listenModelOutput = ext_page.listenModelOutput;
   let child = React.createElement("span",{},"Billing content");
   let view = sut.AdminwebShell({"section":"billing","children":child});
   let columns = view["props"]["children"];
@@ -223,12 +229,12 @@ vitest.it("shows the Accounts code and existing Billing destination",function ()
   let account_entries = accounts_children[1];
   let billing_row = account_entries[2];
   let billing_link = billing_row["props"]["children"][0];
-  vitest.expect(billing_link["props"]["href"]).toBe("/adminweb/billing");
+  vitest.expect(billing_link["props"]["href"]).toBe("/a02/s03-billing");
   let link_children = billing_link["props"]["children"]["props"]["children"];
   vitest.expect(link_children[1]["props"]["children"]).toBe("A02.S03");
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-campaign-impersonation-handoff [260] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-campaign-impersonation-handoff [263] 
 vitest.describe("campaign account impersonation",function (){
   let React = r["default"];
   vitest.afterEach(function (){
@@ -327,7 +333,7 @@ vitest.describe("campaign account impersonation",function (){
   });
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-superadmin-gate [338] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-superadmin-gate [341] 
 vitest.describe("superadmin access check",function (){
   let React = r["default"];
   vitest.afterEach(function (){
@@ -392,7 +398,7 @@ vitest.describe("superadmin access check",function (){
   });
 });
 
-// statstrade-superadmin.adminweb.functional.workspace-test/test-admin-workspace-session [403] 
+// statstrade-superadmin.adminweb.functional.workspace-test/test-admin-workspace-session [406] 
 vitest.describe("workspace session boundary",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -411,6 +417,6 @@ vitest.describe("workspace session boundary",function (){
     session_hook.mockReturnValueOnce([{"access_token":"session-token","user":{"id":"actor-33"}}]);
     let page = sut.AdminWorkspace({"section":"chain","area":"tokens"});
     vitest.expect(page["type"]).toBe(sut["AdminWorkspaceGuard"]);
-    vitest.expect(page["props"]).toEqual({"section":"chain","area":"tokens","actorId":"actor-33"});
+    vitest.expect(page["props"]).toEqual({"section":"chain","area":"tokens","actor_id":"actor-33"});
   });
 });

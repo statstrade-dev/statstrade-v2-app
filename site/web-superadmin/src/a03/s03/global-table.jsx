@@ -4,11 +4,11 @@ import * as ReactNative from 'react-native'
 
 import * as client_base from '@xtalk/db/node/client-base.js'
 
+import * as group_tables from '@statstrade/web-superadmin/groups/a00/s02-tables.jsx'
+
 import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
 
-import * as page_core from '@xtalk/substrate/page-core.js'
-
-import * as substrate from '@xtalk/substrate/substrate.js'
+import * as group_common from '@statstrade/web-superadmin/lib/substrate-model-common.jsx'
 
 // statstrade-superadmin.a03.s03.global-table/tableImpl [13] 
 export function tableImpl(table,fields){
@@ -22,45 +22,108 @@ export function tableImpl(table,fields){
 
 // statstrade-superadmin.a03.s03.global-table/tablePageModel [22] 
 export function tablePageModel(primary_id,spec,opts){
+  let options = {};
+  let table_name = spec[0];
+  if(table_name && !(false == (opts || {})["realtime-enabled"])){
+    let refresh = {};
+    refresh[table_name] = true;
+    options["refresh"] = refresh;
+  }
   return {
-    "handler":function (context){
-        return client_base.pull_call(context["node"],primary_id,spec,opts);
-      },
+    "attach-type":"pull",
     "defaults":{"args":[],"output":[]},
-    "options":{}
+    "options":options
   };
 }
 
-// statstrade-superadmin.a03.s03.global-table/dataviewPageModel [35] 
+// statstrade-superadmin.a03.s03.global-table/dataviewPageModel [36] 
 export function dataviewPageModel(primary_id,dataview,opts){
+  let options = {};
+  let table_name = dataview["table"];
+  if(table_name && !(false == (opts || {})["realtime-enabled"])){
+    let refresh = {};
+    refresh[table_name] = true;
+    options["refresh"] = refresh;
+  }
   return {
-    "handler":function (context){
-        return client_base.dataview_call(context["node"],primary_id,dataview,opts);
-      },
-    "defaults":{"args":[],"output":[]},
-    "options":{}
+    "attach-type":"dataview",
+    "defaults":{"args":[{"select_args":[],"return_args":[]}],"output":[]},
+    "options":options
   };
 }
 
-// statstrade-superadmin.a03.s03.global-table/tableRealtimeEnabled [48] 
+// statstrade-superadmin.a03.s03.global-table/tableRealtimeEnabled [51] 
 export function tableRealtimeEnabled(opts){
   return !(false == (opts || {})["realtime-enabled"]);
 }
 
-// statstrade-superadmin.a03.s03.global-table/useRows [53] 
+// statstrade-superadmin.a03.s03.global-table/useGlobalRealtime [56] 
+export function useGlobalRealtime(handle){
+  let context = handle["context"];
+  let node = context["node"];
+  let primary_id = context["primary-id"];
+  let space_id = context["space-id"];
+  let group_id = handle["spec"]["group_id"];
+  let opts = context["opts"] || {};
+  let [realtimeStatus,set_realtimeStatus] = React.useState(tableRealtimeEnabled(opts) ? "CONNECTING" : "DISABLED");
+  let [realtimeError,set_realtimeError] = React.useState(null);
+  React.useEffect(function (){
+    if(!tableRealtimeEnabled(opts)){
+      return null;
+    }
+    let active = true;
+    let topic = "realtime:Superadmin:Global";
+    let subscriber_id = group_id + "-realtime-" + Math.random().toString(36).substr(2,8);
+    let connection_id = "page-realtime/" + primary_id + "/" + space_id + "/" + subscriber_id;
+    let subscription = client_base.subscribe_db(node,primary_id,connection_id,[topic],{}).then(function (results){
+      if(active){
+        if(true == results[0]){
+          set_realtimeStatus("LIVE");
+          set_realtimeError(null);
+        }
+        else{
+          set_realtimeStatus("OFFLINE");
+          set_realtimeError("Unable to subscribe to Global updates.");
+        }
+      }
+      return results;
+    }).catch(function (subscribe_error){
+      if(active){
+        set_realtimeStatus("OFFLINE");
+        set_realtimeError(
+          subscribe_error["message"] || "Unable to subscribe to Global updates."
+        );
+      }
+      return null;
+    });
+    return function (){
+      active = false;
+      subscription.then(function (_){
+        return client_base.unsubscribe_db(node,primary_id,connection_id,[topic],{});
+      }).catch(function (_){
+        return null;
+      });
+    };
+  },[node,primary_id,space_id,group_id]);
+  return {
+    "realtimeStatus":realtimeStatus,
+    "realtimeError":realtimeError
+  };
+}
+
+// statstrade-superadmin.a03.s03.global-table/useRows [126] 
 export function useRows(spec,context,model_builder){
   let node = context["node"];
   let primary_id = context["primary-id"] || "db/primary/GUEST";
   let space_id = context["space-id"] || "app/GUEST";
   let opts = context["opts"] || {};
   let hook_id = React.useRef(Math.random().toString(36).substr(2,8)).current;
-  let group_id = "a03-s03-global-table-" + hook_id;
+  let group = context["group"] || group_tables.Group;
+  let group_id = group_common.instanceGroupId(group,hook_id);
+  let page_args = {"space_id":space_id,"group_id":group_id,"model_id":"rows"};
   let model_spec = React.useMemo(function (){
     return model_builder(primary_id,spec,opts);
   },[primary_id,spec,JSON.stringify(opts),model_builder]);
-  let attached = React.useMemo(function (){
-    return page_core.group_add_attach(node,space_id,group_id,{"rows":model_spec});
-  },[node,space_id,group_id,model_spec]);
   let output = ext_page.listenModelOutput(node,space_id,[group_id,"rows"],["output"],null);
   let rows = output["current"] || [];
   let [error,set_error] = React.useState(null);
@@ -83,92 +146,50 @@ export function useRows(spec,context,model_builder){
     };
   },[node,space_id,group_id,model_spec]);
   React.useEffect(function (){
-    page_core.group_add_attach(node,space_id,group_id,{"rows":model_spec});
-    mounted["current"] = true;
-    let load = async function (){
-      await refresh();
-    };
-    load();
-    return function (){
-      mounted["current"] = false;
-      page_core.group_remove(node,space_id,group_id);
-    };
-  },[node,space_id,group_id,model_spec,refresh]);
-  let [realtimeStatus,set_realtimeStatus] = React.useState(tableRealtimeEnabled(opts) ? "CONNECTING" : "DISABLED");
-  let [realtimeError,set_realtimeError] = React.useState(null);
-  React.useEffect(function (){
-    if(!tableRealtimeEnabled(opts)){
-      return null;
-    }
     let active = true;
-    let refresh_timeout = null;
-    let subscription_id = group_id + "-realtime-" + Math.random().toString(36).substr(2,8);
-    let signal = "realtime.changed/" + subscription_id;
-    let schedule_refresh = function (){
-      if(null == refresh_timeout){
-        refresh_timeout = setTimeout(function (){
-          refresh_timeout = null;
+    mounted["current"] = true;
+    let setup = async function (){
+      try{
+        await ("dataview" == model_spec["attach-type"]) ? client_base.dataview_attach_model(node,primary_id,page_args,spec,model_spec,{}) : client_base.pull_attach_model(node,primary_id,page_args,spec,model_spec,{});
+        if(active){
+          await ("dataview" == model_spec["attach-type"]) ? client_base.dataview_call(node,primary_id,spec,opts) : client_base.pull_call(node,primary_id,spec,opts);
           if(active){
-            refresh();
+            set_error(null);
+            await refresh();
           }
-        },100);
+        }
+      }
+      catch(e){
+        if(active){
+          set_error("Unable to load records.");
+        }
       }
     };
-    substrate.register_trigger(node,signal,function (_space,_stream,_trigger_node){
-      if(active){
-        schedule_refresh();
-      }
-    },null);
-    substrate.subscribe(node,space_id,signal,subscription_id,{}).then(function (_){
-      return substrate.request(node,null,"@xt.db/realtime/subscribe",[
-        primary_id,
-        space_id,
-        subscription_id,
-        "realtime:Superadmin:Global",
-        signal
-      ],{});
-    }).then(function (result){
-      if("live" == result["status"]){
-        set_realtimeStatus("LIVE");
-        set_realtimeError(null);
-      }
-      else{
-        set_realtimeStatus("OFFLINE");
-        set_realtimeError(
-          result["message"] || "Unable to subscribe to Global updates."
-        );
-      }
-    }).catch(function (subscribe_error){
-      if(active){
-        set_realtimeStatus("OFFLINE");
-        set_realtimeError(
-          subscribe_error["message"] || "Unable to subscribe to Global updates."
-        );
-      }
-      return null;
-    });
+    setup();
     return function (){
       active = false;
-      if(!(null == refresh_timeout)){
-        clearTimeout(refresh_timeout);
-        refresh_timeout = null;
-      }
-      substrate.unregister_trigger(node,signal);
-      substrate.unsubscribe(node,space_id,signal,subscription_id,{}).then(function (_){
-        return substrate.request(
-          node,
-          null,
-          "@xt.db/realtime/unsubscribe",
-          [primary_id,subscription_id],
-          {}
-        );
+      mounted["current"] = false;
+      setup.then(function (_){
+        return client_base.detach_model(node,primary_id,page_args,{});
       }).catch(function (_){
         return null;
       });
     };
-  },[node,primary_id,space_id,group_id,refresh]);
+  },[node,primary_id,space_id,group_id,spec,model_spec,refresh]);
+  let realtime = useGlobalRealtime({
+    "context":{
+        "node":node,
+        "primary-id":primary_id,
+        "space-id":space_id,
+        "opts":opts
+      },
+    "spec":{"group_id":group_id}
+  });
+  let {realtimeError,realtimeStatus} = realtime;
   return {
     "view":refresh,
+    "group":group,
+    "group-id":group_id,
     "rows":rows,
     "error":error,
     "realtimeStatus":realtimeStatus,
@@ -176,7 +197,7 @@ export function useRows(spec,context,model_builder){
   };
 }
 
-// statstrade-superadmin.a03.s03.global-table/useTableRows [207] 
+// statstrade-superadmin.a03.s03.global-table/useTableRows [217] 
 export function useTableRows(table,fields,context){
   let spec = React.useMemo(function (){
     return [table,{"data":fields}];
@@ -184,17 +205,17 @@ export function useTableRows(table,fields,context){
   return useRows(spec,context,tablePageModel);
 }
 
-// statstrade-superadmin.a03.s03.global-table/useDataviewRows [216] 
+// statstrade-superadmin.a03.s03.global-table/useDataviewRows [226] 
 export function useDataviewRows(dataview,context){
   return useRows(dataview,context,dataviewPageModel);
 }
 
-// statstrade-superadmin.a03.s03.global-table/rpcCall [221] 
+// statstrade-superadmin.a03.s03.global-table/rpcCall [231] 
 export function rpcCall(node,primary_id,rpc_spec,args,opts){
   return client_base.rpc_call(node,primary_id,rpc_spec,args,opts);
 }
 
-// statstrade-superadmin.a03.s03.global-table/TableList [226] 
+// statstrade-superadmin.a03.s03.global-table/TableList [236] 
 export function TableList({title,subtitle,rows,realtimeStatus,realtimeError}){
   let records = rows || [];
   let cards = records.map(function (row){

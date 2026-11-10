@@ -74,6 +74,9 @@ export function initModelBase(node,space_id,path,{getResult,meta,pred,resultRef,
   let key = model_key(space_id,path);
   let {resultFn,resultPrint} = meta || {};
   let listener_id = r.id();
+  let cleanup = function (){
+    return event_common.remove_keyed_listener(node,key,listener_id);
+  };
   React.useEffect(function (){
     event_common.add_keyed_listener(node,key,listener_id,"page",function (_id,data,_t,_meta){
       let event = xtd.obj_clone(data);
@@ -88,13 +91,12 @@ export function initModelBase(node,space_id,path,{getResult,meta,pred,resultRef,
         resultPrint({event,nresult,resultTag});
       }
     },meta,pred);
-    return function (){
-      return event_common.remove_keyed_listener(node,key,listener_id);
-    };
+    return cleanup;
   },[]);
+  return cleanup;
 }
 
-// js.react.ext-page/listenModel [104] 
+// js.react.ext-page/listenModel [106] 
 export function listenModel(node,space_id,path,type,meta){
   let [tfn,tkey,tevent] = TYPES[type];
   tevent = (tevent || type);
@@ -111,7 +113,7 @@ export function listenModel(node,space_id,path,type,meta){
   return result;
 }
 
-// js.react.ext-page/listenModelOutput [127] 
+// js.react.ext-page/listenModelOutput [129] 
 export function listenModelOutput(node,space_id,path,types,meta){
   let getOutput = function (){
     return xtd.obj_clone(event_model.get_output(get_model(node,space_id,path),null));
@@ -133,15 +135,15 @@ export function listenModelOutput(node,space_id,path,types,meta){
   return output;
 }
 
-// js.react.ext-page/listenModelThrottled [150] 
+// js.react.ext-page/listenModelThrottled [152] 
 export function listenModelThrottled(node,space_id,path,delay,meta){
   let getResult = function (){
     return xtd.clone_shallow(event_model.get_success(get_model(node,space_id,path),null));
   };
   let [result,setResult] = React.useState(getResult);
   let resultRef = r.useFollowRef(result);
+  let listener_id = r.id();
   React.useEffect(function (){
-    let listener_id = r.id();
     let [setThrottled,throttle] = throttled_setter(setResult,delay);
     let key = model_key(space_id,path);
     event_common.add_keyed_listener(node,key,listener_id,"page",function (_id,data,_t,_meta){
@@ -160,7 +162,7 @@ export function listenModelThrottled(node,space_id,path,delay,meta){
   return result;
 }
 
-// js.react.ext-page/refreshArgsFn [182] 
+// js.react.ext-page/refreshArgsFn [184] 
 export function refreshArgsFn(node,space_id,path,args,opts){
   let group_id = path[0];
   let model_id = path[1];
@@ -172,25 +174,25 @@ export function refreshArgsFn(node,space_id,path,args,opts){
   }
 }
 
-// js.react.ext-page/useRefreshArgs [204] 
+// js.react.ext-page/useRefreshArgs [206] 
 export function useRefreshArgs(node,space_id,path,args,opts){
   opts = (opts || {});
   React.useEffect(function (){
-    return refreshArgsFn(node,space_id,path,args,opts);
+    refreshArgsFn(node,space_id,path,args,opts);
   },[JSON.stringify(args)]);
 }
 
-// js.react.ext-page/refreshModel [213] 
+// js.react.ext-page/refreshModel [214] 
 export function refreshModel(node,space_id,path,event){
   return page_core.model_refresh(node,space_id,path[0],path[1],event || {},null);
 }
 
-// js.react.ext-page/remoteCall [224] 
+// js.react.ext-page/remoteCall [225] 
 export function remoteCall(node,space_id,path,args,save_output){
   return page_core.model_remote_call(node,space_id,path[0],path[1],args,save_output);
 }
 
-// js.react.ext-page/listenSuccess [235] 
+// js.react.ext-page/listenSuccess [236] 
 export function listenSuccess(node,space_id,path,args,opts,meta){
   opts = (opts || {});
   let output = r.useStablized(

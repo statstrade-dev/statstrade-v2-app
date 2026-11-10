@@ -45,8 +45,19 @@ function kernel_check_exists(node,config){
   return (null != substrate.get_service(node,xtd.get_in(config,["common","id"]))) && (null != substrate.get_service(node,xtd.get_in(config,["primary","id"]))) && (null != substrate.get_service(node,xtd.get_in(config,["caching","id"])));
 }
 
+function set_backends(node,backends){
+  xtd.set_in(node,["state","db_backends"],backends || {});
+  return node;
+}
+
 function kernel_setup_single(node,service_id,type,defaults,schema,lookup){
-  return impl_main.create_impl_init(impl_main.create_impl(type,defaults,schema,lookup)).then(function (impl){
+  return impl_main.create_impl_init(impl_main.create_impl(
+    type,
+    defaults,
+    schema,
+    lookup,
+    xtd.get_in(node,["state","db_backends"])
+  )).then(function (impl){
     substrate.set_service(node,service_id,impl);
     return node;
   });
@@ -54,7 +65,7 @@ function kernel_setup_single(node,service_id,type,defaults,schema,lookup){
 
 function kernel_teardown_single(node,service_id){
   let impl = substrate.get_service(node,service_id);
-  if(protocol.protocol_implements(impl,"xt.db.system.impl_common/ISourceLifecycle")){
+  if(protocol.protocol_implements(impl,impl_common.ISourceLifecycle["on"])){
     impl_common.stop_db(impl);
   }
   substrate.remove_service(node,service_id);
@@ -497,6 +508,7 @@ module.exports = {
   ["get_caching_impl"]:get_caching_impl,
   ["kernel_create_config"]:kernel_create_config,
   ["kernel_check_exists"]:kernel_check_exists,
+  ["set_backends"]:set_backends,
   ["kernel_setup_single"]:kernel_setup_single,
   ["kernel_teardown_single"]:kernel_teardown_single,
   ["kernel_setup_main"]:kernel_setup_main,

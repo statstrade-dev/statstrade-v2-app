@@ -4,7 +4,7 @@ import * as T from 'tamagui'
 
 import React from 'react'
 
-import * as kd from '@xtalk/lang/common-data.jsx'
+import * as kd from '@xtalk/lang/common-data.js'
 
 import * as ui_image from '@statstrade/component/ui-image.jsx'
 

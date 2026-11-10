@@ -90,7 +90,90 @@ vitest.describe("workerConfig",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-connect-proxy-node [138] 
+// statsui.edge.remote.util-supabase-test/test-actor-worker-isolation [122] 
+vitest.it("keeps worker identity stable on refresh and distinct between accounts",function (){
+  let a = sut.workerConfig({
+    "url":"https://db.example",
+    "key":"public",
+    "token":"first",
+    "actor_id":"account-a"
+  });
+  let refreshed = sut.workerConfig({
+    "url":"https://db.example",
+    "key":"public",
+    "token":"refreshed",
+    "actor_id":"account-a"
+  });
+  let b = sut.workerConfig({
+    "url":"https://db.example",
+    "key":"public",
+    "token":"other",
+    "actor_id":"account-b"
+  });
+  vitest.expect(a.worker_name).toBe(refreshed.worker_name);
+  vitest.expect(a.worker_name == b.worker_name).toBe(false);
+});
+
+// statsui.edge.remote.util-supabase-test/test-verified-callback-session [138] 
+vitest.describe("verified callback session",function (){
+  vitest.afterEach(function (){
+    vitest.vi.unstubAllGlobals();
+    vitest.vi.unstubAllEnvs();
+    vitest.vi.restoreAllMocks();
+  });
+  vitest.it("verifies identity before publishing and preserves Next router state",async function (){
+    vitest.vi.stubEnv("NEXT_PUBLIC_IMPERSONATION_ENABLED","false");
+    vitest.vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL","https://auth.example");
+    let state = {"__N":true};
+    let replace = vitest.vi.fn();
+    vitest.vi.stubGlobal("window",{
+      "location":{
+            "hash":"#access_token=access&refresh_token=refresh&expires_in=600",
+            "pathname":"/newsroom/imports",
+            "search":""
+          },
+      "history":{"state":state,"replaceState":replace}
+    });
+    let store = vitest.vi.fn();
+    vitest.vi.stubGlobal("localStorage",{"setItem":store});
+    vitest.vi.stubGlobal("fetch",vitest.vi.fn().mockResolvedValue({
+      "ok":true,
+      "json":async function (){
+            return {"id":"real-user"};
+          }
+    }));
+    let publish = vitest.vi.spyOn(substrate,"request");
+    publish.mockResolvedValue(true);
+    let result = await sut.loadInitialSession({});
+    vitest.expect(result["user"]["id"]).toBe("real-user");
+    vitest.expect(publish).toHaveBeenCalledTimes(1);
+    vitest.expect(store).toHaveBeenCalledWith(sut.REFRESH_TOKEN_KEY,"refresh");
+    vitest.expect(replace).toHaveBeenCalledWith(state,"","/newsroom/imports");
+  });
+  vitest.it("does not publish an unverified callback",async function (){
+    vitest.vi.stubEnv("NEXT_PUBLIC_IMPERSONATION_ENABLED","false");
+    vitest.vi.stubGlobal("window",{
+      "location":{"hash":"#access_token=invalid&refresh_token=refresh"}
+    });
+    vitest.vi.stubGlobal("fetch",vitest.vi.fn().mockResolvedValue({"ok":false}));
+    let publish = vitest.vi.spyOn(substrate,"request");
+    await vitest.expect(sut.loadInitialSession({})).rejects.toThrow("Unable to verify your sign-in");
+    vitest.expect(publish).not.toHaveBeenCalled();
+  });
+});
+
+// statsui.edge.remote.util-supabase-test/test-retain-authenticated-client [169] 
+vitest.it("does not replace a token-scoped client during a parameterless lookup",function (){
+  let node = sut.getClient("authenticated-lookup",{
+    "url":"https://db.example",
+    "key":"public",
+    "token":"account-token"
+  });
+  vitest.expect(sut.getClient("authenticated-lookup")).toBe(node);
+  vitest.expect(sut.getEntry("authenticated-lookup")["params"]["token"]).toBe("account-token");
+});
+
+// statsui.edge.remote.util-supabase-test/test-util-connect-proxy-node [187] 
 vitest.afterEach(function (){
   vitest.vi.restoreAllMocks();
 });
@@ -116,7 +199,7 @@ vitest.it("connects all proxy layers before kernel initialization",async functio
   vitest.expect(result["connection"]).toBe(connection);
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-reset-clients [168] 
+// statsui.edge.remote.util-supabase-test/test-util-reset-clients [217] 
 vitest.describe("resetClients",function (){
   vitest.afterEach(async function (){
     await sut.resetClients();
@@ -137,7 +220,7 @@ vitest.describe("resetClients",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-client-readiness [200] 
+// statsui.edge.remote.util-supabase-test/test-util-client-readiness [249] 
 vitest.describe("client readiness",function (){
   vitest.afterEach(async function (){
     sut.markClientFailed(new Error("ready test cleanup"),"ready-client");
@@ -154,7 +237,7 @@ vitest.describe("client readiness",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-client-failure [225] 
+// statsui.edge.remote.util-supabase-test/test-util-client-failure [274] 
 vitest.describe("client failure",function (){
   vitest.afterEach(async function (){
     await sut.resetClients();
@@ -174,7 +257,7 @@ vitest.describe("client failure",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-await-client [249] 
+// statsui.edge.remote.util-supabase-test/test-util-await-client [298] 
 vitest.describe("awaitClient",function (){
   vitest.afterEach(async function (){
     sut.markClientFailed(new Error("await test cleanup"),"already-ready");
@@ -187,7 +270,7 @@ vitest.describe("awaitClient",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-web-client-selection [269] 
+// statsui.edge.remote.util-supabase-test/test-util-web-client-selection [318] 
 vitest.afterEach(function (){
   sut.resetWebRuntime();
 });
@@ -202,7 +285,7 @@ vitest.it("selects the data node for shared calls and the auth node for auth cal
   vitest.expect(await sut.awaitClient()).toBe(auth_node);
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-set-web-auth-runtime [288] 
+// statsui.edge.remote.util-supabase-test/test-util-set-web-auth-runtime [337] 
 vitest.afterEach(function (){
   sut.resetWebRuntime();
 });
@@ -212,7 +295,7 @@ vitest.it("makes the provided node available to auth operations",async function 
   vitest.expect(await sut.awaitAuthClient()).toBe(auth_node);
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-set-web-data-client [302] 
+// statsui.edge.remote.util-supabase-test/test-util-set-web-data-client [351] 
 vitest.afterEach(function (){
   sut.resetWebRuntime();
 });
@@ -222,7 +305,7 @@ vitest.it("returns the selected node and supports clearing it",function (){
   vitest.expect(sut.setWebDataClient(null)).toBeNull();
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-reset-web-runtime [315] 
+// statsui.edge.remote.util-supabase-test/test-util-reset-web-runtime [364] 
 vitest.afterEach(async function (){
   sut.resetWebRuntime();
   await sut.resetClients();
@@ -246,7 +329,7 @@ vitest.it("makes client waits pending again after it clears Web state",async fun
   vitest.expect(await pending).toBe("cleanup");
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-notify-web-auth-changed [342] 
+// statsui.edge.remote.util-supabase-test/test-util-notify-web-auth-changed [391] 
 vitest.afterEach(function (){
   sut.resetWebRuntime();
 });
@@ -265,7 +348,7 @@ vitest.it("invalidates exactly the auth entry and succeeds after teardown",async
   vitest.expect(await sut.notifyWebAuthChanged()).toBe(true);
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-publish-or-store-session [365] 
+// statsui.edge.remote.util-supabase-test/test-util-publish-or-store-session [414] 
 vitest.afterEach(function (){
   sut.resetWebRuntime();
   vitest.vi.restoreAllMocks();
@@ -316,7 +399,7 @@ vitest.it("persists local refresh tokens, invalidates query state, and publishes
   );
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-postgrest-value [476] 
+// statsui.edge.remote.util-supabase-test/test-util-postgrest-value [525] 
 vitest.describe("postgrestValue",function (){
   vitest.it("quotes in-list strings and represents null exactly",function (){
     vitest.expect(sut.postgrestValue(null)).toBe("null");
@@ -324,7 +407,7 @@ vitest.describe("postgrestValue",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-query-and-selection-contracts [489] 
+// statsui.edge.remote.util-supabase-test/test-util-query-and-selection-contracts [538] 
 vitest.describe("Supabase query helpers",function (){
   vitest.it("encodes filters, selection and route helpers exactly",function (){
     let params = new URLSearchParams(sut.buildQuery({
@@ -356,7 +439,7 @@ vitest.describe("Supabase query helpers",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-auth-href [526] 
+// statsui.edge.remote.util-supabase-test/test-util-auth-href [575] 
 vitest.describe("authHref",function (){
   vitest.it("joins routes with and without a configured prefix",function (){
     vitest.expect(sut.authHref("/auth","sign-in")).toBe("/auth/sign-in");
@@ -364,7 +447,7 @@ vitest.describe("authHref",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-auth-redirect [539] 
+// statsui.edge.remote.util-supabase-test/test-util-auth-redirect [588] 
 vitest.describe("authRedirectTo",function (){
   vitest.it("prefers site configuration and falls back to origin",function (){
     vitest.expect(
@@ -374,7 +457,7 @@ vitest.describe("authRedirectTo",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-local-store [572] 
+// statsui.edge.remote.util-supabase-test/test-util-local-store [621] 
 vitest.describe("getLocalStore",function (){
   vitest.afterEach(function (){
     vitest.vi.unstubAllGlobals();
@@ -390,7 +473,7 @@ vitest.describe("getLocalStore",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-subscribe-worker-auth-events [601] 
+// statsui.edge.remote.util-supabase-test/test-util-subscribe-worker-auth-events [650] 
 let subscribe_test_client = null;
 vitest.afterEach(async function (){
   if(subscribe_test_client){
@@ -418,7 +501,7 @@ vitest.it("subscribes once under the Web auth event topic",async function (){
   );
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-unsubscribe-worker-auth-events [631] 
+// statsui.edge.remote.util-supabase-test/test-util-unsubscribe-worker-auth-events [680] 
 let unsubscribe_test_client = null;
 vitest.afterEach(async function (){
   if(unsubscribe_test_client){
@@ -452,7 +535,7 @@ vitest.it("unsubscribes the stored room and makes teardown repeatable",async fun
   ).toBe(false);
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-public-url [711] 
+// statsui.edge.remote.util-supabase-test/test-util-public-url [760] 
 vitest.describe("getPublicUrl",function (){
   vitest.beforeEach(function (){
     vitest.vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL","https://db.example");
@@ -467,7 +550,7 @@ vitest.describe("getPublicUrl",function (){
   });
 });
 
-// statsui.edge.remote.util-supabase-test/test-util-update-user [738] 
+// statsui.edge.remote.util-supabase-test/test-util-update-user [787] 
 vitest.afterEach(async function (){
   sut.markClientFailed(null,"default");
   await sut.resetClients();

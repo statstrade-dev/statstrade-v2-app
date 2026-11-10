@@ -1,0 +1,82 @@
+{
+  "Campaign" : {
+    "position" : 13,
+    "schema" : "stats_type"
+  },
+  "Social" : {
+    "position" : 9,
+    "schema" : "stats_type"
+  },
+  "Asset" : {
+    "position" : 5,
+    "schema" : "stats_type"
+  },
+  "Rev" : {
+    "position" : 8,
+    "schema" : "stats_type"
+  },
+  "ProspectStake" : {
+    "position" : 18,
+    "schema" : "stats_type"
+  },
+  "User" : {
+    "position" : 19,
+    "schema" : "stats_type"
+  },
+  "Topic" : {
+    "position" : 14,
+    "schema" : "stats_type"
+  },
+  "Org" : {
+    "position" : 12,
+    "schema" : "stats_type"
+  },
+  "Access" : {
+    "position" : 0,
+    "schema" : "stats_type"
+  },
+  "Playable" : {
+    "position" : 2,
+    "schema" : "stats_type"
+  },
+  "TaskProvider" : {
+    "position" : 11,
+    "schema" : "stats_type"
+  },
+  "ApikeyProvider" : {
+    "position" : 1,
+    "schema" : "stats_type"
+  },
+  "FeedProvider" : {
+    "position" : 6,
+    "schema" : "stats_type"
+  },
+  "Prospect" : {
+    "position" : 15,
+    "schema" : "stats_type"
+  },
+  "Wallet" : {
+    "position" : 3,
+    "schema" : "stats_type"
+  },
+  "Lock" : {
+    "position" : 7,
+    "schema" : "stats_type"
+  },
+  "ProspectOrder" : {
+    "position" : 16,
+    "schema" : "stats_type"
+  },
+  "Token" : {
+    "position" : 4,
+    "schema" : "stats_type"
+  },
+  "Starred" : {
+    "position" : 10,
+    "schema" : "stats_type"
+  },
+  "ProspectOrderStrike" : {
+    "position" : 17,
+    "schema" : "stats_type"
+  }
+}

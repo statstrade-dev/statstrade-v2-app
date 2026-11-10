@@ -13,12 +13,17 @@ vitest.afterEach(function (){
   vitest.vi.restoreAllMocks();
 });
 vitest.it("returns user, session, and profile query results",async function (){
-  let userSpy = vitest.vi.spyOn(action.userApi.queries.get_user,"fn");
-  let sessionSpy = vitest.vi.spyOn(action.userApi.queries.get_session,"fn");
-  let profileSpy = vitest.vi.spyOn(action.userApi.queries.user_get_profile,"fn");
+  let userSpy = vitest.vi.spyOn(action.userApi["queries"]["get_user"],"fn");
+  let sessionSpy = vitest.vi.spyOn(action.userApi["queries"]["get_session"],"fn");
+  let profileSpy = vitest.vi.spyOn(action.userApi["queries"]["user_get_profile"],"fn");
   userSpy.mockResolvedValue({"data":{"user":{"id":"user-7"}},"error":null});
   sessionSpy.mockResolvedValue({"data":{"session":{"user":{"id":"user-7"}}},"error":null});
   profileSpy.mockResolvedValue({"is_onboarded":true});
+  let mutationSpy = vitest.vi.spyOn(action.userApi["mutations"]["user_set_public"],"fn");
+  mutationSpy.mockResolvedValue({"ok":true});
+  let client = new ReactQuery.QueryClient();
+  let invalidateSpy = vitest.vi.spyOn(client,"invalidateQueries");
+  invalidateSpy.mockResolvedValue(null);
   let captured = null;
   let Probe = function (){
     captured = action.useUserActionContext();
@@ -26,15 +31,15 @@ vitest.it("returns user, session, and profile query results",async function (){
   };
   renderToStaticMarkup(React.createElement(
     ReactQuery.QueryClientProvider,
-    {"client":new ReactQuery.QueryClient()},
+    {"client":client},
     React.createElement(Probe,{})
   ));
   let user = await captured.api.queries.get_user.queryRaw(null);
   let session = await captured.api.queries.get_session.queryRaw(null);
   let profile = await captured.api.queries.user_get_profile.queryRaw(null);
-  let profileValues = captured.forms.user_profile.getValues();
-  vitest.expect(user).toEqual({"user":{"id":"user-7"}});
-  vitest.expect(session).toEqual({"session":{"user":{"id":"user-7"}}});
+  let profileValues = captured.forms.user_profile.defaultValues;
+  vitest.expect(user).toEqual({"data":{"user":{"id":"user-7"}},"error":null});
+  vitest.expect(session).toEqual({"data":{"session":{"user":{"id":"user-7"}}},"error":null});
   vitest.expect(profile).toEqual({"is_onboarded":true});
   vitest.expect(profileValues).toEqual({
     "handle":"",
@@ -44,7 +49,10 @@ vitest.it("returns user, session, and profile query results",async function (){
     "country_code":"",
     "location":{"city":""}
   });
-  vitest.expect(captured.api.mutations.user_set_public.refresh).toEqual(["get_user","user_get_profile"]);
+  let updated = await captured.api.mutations.user_set_public.mutateAsync({});
+  vitest.expect(updated).toEqual({"ok":true});
+  vitest.expect(invalidateSpy).toHaveBeenCalledWith({"queryKey":["get_user"]});
+  vitest.expect(invalidateSpy).toHaveBeenCalledWith({"queryKey":["user_get_profile"]});
   vitest.expect(userSpy).toHaveBeenCalled();
   vitest.expect(sessionSpy).toHaveBeenCalled();
   vitest.expect(profileSpy).toHaveBeenCalled();

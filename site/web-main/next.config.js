@@ -29,13 +29,19 @@ const plugins = [
   }),
 ]
 
-const configureWebpack = (config) => {
+const configureWebpack = (config, options) => {
   config.resolve.alias = { ...(config.resolve.alias || {}) }
   config.resolve.fallback = {
     ...(config.resolve.fallback || {}),
     worker_threads: false,
   }
   delete config.resolve.alias['@xtalk/db/net']
+  // Edge ESM and shared CJS modules must share one protocol registry. Loading
+  // both copies resets global registrations and breaks account initialisation.
+  config.plugins.push(new options.webpack.NormalModuleReplacementPlugin(
+    /(?:@statstrade\/edge\/lib\/xt\/lang|packages\/edge\/src\/lib\/xt\/lang)\/common-protocol\.jsx$/,
+    join(__dirname, '../../packages/libs/xt-lang/common-protocol.js')
+  ))
   const xtNet = join(__dirname, '../../packages/libs/xt-net')
   config.resolve.alias['@xtalk/net/net/http-fetch.js'] = join(xtNet, 'net/http-fetch.js')
   config.resolve.alias['@xtalk/net/net/ws-native.js'] = join(xtNet, 'net/ws-native.js')
@@ -60,6 +66,7 @@ const configureWebpack = (config) => {
 module.exports = () => {
   /** @type {import('next').NextConfig} */
   let config = {
+    distDir: process.env.STATSTRADE_NEXT_DIST_DIR || '.next',
     devIndicators: {
       position: 'bottom-right',
     },
@@ -133,7 +140,7 @@ module.exports = () => {
     const nextConfig = pluginWebpack
       ? pluginWebpack(webpackConfig, options)
       : webpackConfig
-    return configureWebpack(nextConfig)
+    return configureWebpack(nextConfig, options)
   }
 
   return config

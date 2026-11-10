@@ -145,5 +145,345 @@
       "sb/grant" : "auth",
       "table" : "statsdb.common.type-system-base/Global"
     }
+  },
+  "super-newsroom-import" : {
+    "id" : "super-newsroom-import",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor_id",
+      "symbol" : "actor_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "organization_id",
+      "symbol" : "organization_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "desk_id",
+      "symbol" : "desk_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "edition_id",
+      "symbol" : "edition_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "bundle",
+      "symbol" : "bundle",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "super-newsroom-review" : {
+    "id" : "super-newsroom-review",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor_id",
+      "symbol" : "actor_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "submission_id",
+      "symbol" : "submission_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "action",
+      "symbol" : "action",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "reason",
+      "symbol" : "reason",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "super-newsroom-submissions" : {
+    "id" : "super-newsroom-submissions",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor_id",
+      "symbol" : "actor_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "query",
+      "symbol" : "query",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "super-operations-command" : {
+    "id" : "super-operations-command",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor_id",
+      "symbol" : "actor_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "resource",
+      "symbol" : "resource",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "target_id",
+      "symbol" : "target_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "action",
+      "symbol" : "action",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "payload",
+      "symbol" : "payload",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.super.super-operations-command",
+      "sb/grant" : "auth"
+    }
+  },
+  "super-operations-snapshot" : {
+    "id" : "super-operations-snapshot",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor_id",
+      "symbol" : "actor_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.super.super-operations-snapshot",
+      "sb/grant" : "auth"
+    }
+  },
+  "super-org-update" : {
+    "id" : "super-org-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "user_id",
+      "symbol" : "user_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "name", "title", "description", "color", "icon", "picture", "background", "detail", "tags", "is-academic", "is-nonprofit", "is-archived" ],
+      "db/module" : "statsdb.fn.super.super-manage-org",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-base/Org"
+    }
+  },
+  "super-revoke-platform-grant" : {
+    "id" : "super-revoke-platform-grant",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor_id",
+      "symbol" : "actor_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "user_id",
+      "symbol" : "user_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "reason",
+      "symbol" : "reason",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "status", "reason" ],
+      "db/module" : "statsdb.fn.super.super-manage-platform",
+      "notify" : {
+        "aggregate" : "User",
+        "event" : "db/sync",
+        "private" : true,
+        "rows" : [ [ "User", [ ], "one" ], [ "PlatformGrant", [ ], "one" ] ],
+        "topic-id" : {
+          "kind" : "arg",
+          "name" : "i-user-id"
+        }
+      },
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-system-platform/PlatformGrant"
+    }
+  },
+  "super-set-platform-grant" : {
+    "id" : "super-set-platform-grant",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "actor_id",
+      "symbol" : "actor_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "user_id",
+      "symbol" : "user_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "level",
+      "symbol" : "level",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "scopes",
+      "symbol" : "scopes",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    }, {
+      "name" : "expires_at",
+      "symbol" : "expires_at",
+      "type" : "bigint",
+      "modifiers" : [ "bigint" ],
+      "role" : "payload"
+    }, {
+      "name" : "reason",
+      "symbol" : "reason",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "metadata",
+      "symbol" : "metadata",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "level", "status", "scopes", "expires-at", "granted-by", "reason" ],
+      "db/module" : "statsdb.fn.super.super-manage-platform",
+      "notify" : {
+        "aggregate" : "User",
+        "event" : "db/sync",
+        "private" : true,
+        "rows" : [ [ "User", [ ], "one" ], [ "PlatformGrant", [ ], "one" ] ],
+        "topic-id" : {
+          "kind" : "arg",
+          "name" : "i-user-id"
+        }
+      },
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-system-platform/PlatformGrant"
+    }
+  },
+  "super-user-update" : {
+    "id" : "super-user-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "user_id",
+      "symbol" : "user_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "target_id",
+      "symbol" : "target_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "type", "handle", "color", "is-active", "is-official", "is-onboarded", "is-super", "first-name", "last-name", "country-code", "location", "bio", "picture", "detail" ],
+      "db/module" : "statsdb.fn.super.super-manage-user",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-user/User"
+    }
   }
 }

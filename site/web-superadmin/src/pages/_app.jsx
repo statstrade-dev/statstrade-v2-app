@@ -8,12 +8,13 @@ import * as substrate from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
 
 import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
 
-// statstrade-superadmin.pages._app/AppLayout [15] 
+// statstrade-superadmin.pages._app/AppLayout [34] 
 function AppLayout({Component,pageProps}){
   let [session] = sb.useListenSession();
-  let user = session["user"] || {};
+  let current_session = session || {};
+  let user = current_session["user"] || {};
   let actor_id = user["id"];
-  let token = session["access_token"];
+  let token = current_session["access_token"];
   let tab_scope_ref = React.useRef(null);
   if(!tab_scope_ref["current"]){
     tab_scope_ref["current"] = ("tab-" + Math.random().toString(36).substr(2,14));

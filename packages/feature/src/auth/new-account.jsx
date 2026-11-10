@@ -6,7 +6,7 @@ import {Github} from '@tamagui/lucide-icons'
 
 import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
-import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
+import * as ui_controls from '@statstrade/edge/ui-controls.jsx'
 
 import * as ui_router from '@statstrade/component/ui-router.jsx'
 
@@ -28,10 +28,10 @@ import * as gu from '@statstrade/edge/global-ui.jsx'
 
 import * as logo_google from '@statstrade/component/logo/logo-google.jsx'
 
-// statstrade-web.feature.auth.new-account/NewAccountContext [28] 
+// statstrade-web.feature.auth.new-account/NewAccountContext [29] 
 export var NewAccountContext = React.createContext({});
 
-// statstrade-web.feature.auth.new-account/NewAccountForm [32] 
+// statstrade-web.feature.auth.new-account/NewAccountForm [33] 
 export function NewAccountForm(){
   let context = React.useContext(NewAccountContext);
   let {api,controls,forms} = context;
@@ -79,22 +79,25 @@ export function NewAccountForm(){
           disabled={isBusy}/>
         <T.XStack flexDirection="row-reverse" gap="$4">
           <T.FormTrigger asChild={true} borderWidth={0}>
-            <ui.ButtonInverse
-              flex={4}
-              size="$5"
-              icon={isBusy ? (function (){
-                  return (
-                    <T.Spinner/>);
-                }) : null}
-              disabled={isBusy || !forms.sign_up.formState.isValid}>{isBusy ? "" : ui.t("Sign Up")}
-            </ui.ButtonInverse>
+            <span className="st-auth-primary" style={{"display":"contents"}}>
+              <ui.ButtonInverse
+                className="st-primary-button"
+                flex={4}
+                size="$5"
+                icon={isBusy ? (function (){
+                    return (
+                      <T.Spinner/>);
+                  }) : null}
+                disabled={isBusy || !forms.sign_up.formState.isValid}>{isBusy ? "" : ui.t("Sign Up")}
+              </ui.ButtonInverse>
+            </span>
           </T.FormTrigger>
         </T.XStack>
       </T.YStack>
     </T.Form>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreenRegister [98] 
+// statstrade-web.feature.auth.new-account/NewAccountScreenRegister [101] 
 export function NewAccountScreenRegister(){
   let context = React.useContext(NewAccountContext);
   let {api,controls,pathPrefix} = context;
@@ -102,35 +105,40 @@ export function NewAccountScreenRegister(){
   return (
     <React.Fragment>
       <ui_section.MinHeader
+        paragraphProps={{"className":"st-auth-caption"}}
         title={ui.t("Create your Statstrade Account")}
         paragraph={ui.t("Start building in minutes")}/>
       <T.XStack gap="$4" flexWrap="wrap">
-        <ui.ButtonInverse
-          flex={1}
-          tooltip="Continue with Google"
-          icon={logo_google.LogoGoogle}
-          disabled={isBusy}
-          onPress={function (){
-              api.mutations.sign_in_oauth.mutateAsync({
-                "provider":"google",
-                "options":{
-                      "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
-                    }
-              });
-            }}/>
-        <ui.ButtonInverse
-          flex={1}
-          tooltip="Continue with Github"
-          icon={Github}
-          disabled={isBusy}
-          onPress={function (){
-              api.mutations.sign_in_oauth.mutateAsync({
-                "provider":"github",
-                "options":{
-                      "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
-                    }
-              });
-            }}/>
+        <span className="st-auth-primary" style={{"display":"contents"}}>
+          <ui.ButtonInverse
+            flex={1}
+            tooltip="Continue with Google"
+            icon={logo_google.LogoGoogle}
+            disabled={isBusy}
+            onPress={function (){
+                api.mutations.sign_in_oauth.mutateAsync({
+                  "provider":"google",
+                  "options":{
+                        "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
+                      }
+                });
+              }}/>
+        </span>
+        <span className="st-auth-primary" style={{"display":"contents"}}>
+          <ui.ButtonInverse
+            flex={1}
+            tooltip="Continue with Github"
+            icon={Github}
+            disabled={isBusy}
+            onPress={function (){
+                api.mutations.sign_in_oauth.mutateAsync({
+                  "provider":"github",
+                  "options":{
+                        "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
+                      }
+                });
+              }}/>
+        </span>
       </T.XStack>
       <ui.HorizontalText
         text={ui.t("OR")}
@@ -143,12 +151,14 @@ export function NewAccountScreenRegister(){
       </T.YStack>
       <ui.Horizontal marginVertical="$2" borderColor="$color1"/>
       <T.YStack alignItems="center">
-        <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Already have an account?")}</ui.ButtonLink>
+        <span className="st-auth-link" style={{"display":"contents"}}>
+          <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Already have an account?")}</ui.ButtonLink>
+        </span>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.new-account/markAccountVerifiedFromSession [158] 
+// statstrade-web.feature.auth.new-account/markAccountVerifiedFromSession [165] 
 export function markAccountVerifiedFromSession(session,current,setVerified){
   if(session && session["user"] && session["user"]["id"] && !current){
     setVerified(true);
@@ -157,7 +167,7 @@ export function markAccountVerifiedFromSession(session,current,setVerified){
   return false;
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreenVerify [167] 
+// statstrade-web.feature.auth.new-account/NewAccountScreenVerify [174] 
 export function NewAccountScreenVerify(){
   let router = ui_router.useRouter();
   let [current,setCurrent,{startCountdown,stopCountdown}] = r.useCountdown(30,null,{"interval":1000});
@@ -186,6 +196,7 @@ export function NewAccountScreenVerify(){
   return (
     <React.Fragment>
       <ui_section.MinHeader
+        paragraphProps={{"className":"st-auth-caption"}}
         title={ui.t("Verify Email")}
         paragraph={ui.t(
             "Check your inbox for instructions to activate your account."
@@ -193,47 +204,51 @@ export function NewAccountScreenVerify(){
       <ui_section.SectionMinInfo
         logo={(current > 0) ? (
             <T.H1>{current + ""}</T.H1>) : (
-            <ui.ButtonInverse
-              width={200}
-              size="$6"
-              disabled={(current != 0) || isBusy}
-              icon={isBusy ? (function (){
-                  return (
-                    <T.Spinner/>);
-                }) : null}
-              onPress={forms.sign_up.handleSubmit(function (){
-                  api.mutations.sign_up.mutateAsync(forms.sign_up.getValues()).then(function ({data,error}){
-                    if(data){
-                      toast.show(ui.t("Verify Account"),{
-                        "duration":2000,
-                        "message":ui.t("Check your email at ") + forms.sign_up.getValues("email")
-                      });
-                      gs.setStore(["flags","new-account"],true);
-                      setCurrent(30);
-                      startCountdown();
-                    }
-                  });
-                })}>Resend
-            </ui.ButtonInverse>)}/>
+            <span className="st-auth-primary" style={{"display":"contents"}}>
+              <ui.ButtonInverse
+                width={200}
+                size="$6"
+                disabled={(current != 0) || isBusy}
+                icon={isBusy ? (function (){
+                    return (
+                      <T.Spinner/>);
+                  }) : null}
+                onPress={forms.sign_up.handleSubmit(function (){
+                    api.mutations.sign_up.mutateAsync(forms.sign_up.getValues()).then(function ({data,error}){
+                      if(data){
+                        toast.show(ui.t("Verify Account"),{
+                          "duration":2000,
+                          "message":ui.t("Check your email at ") + forms.sign_up.getValues("email")
+                        });
+                        gs.setStore(["flags","new-account"],true);
+                        setCurrent(30);
+                        startCountdown();
+                      }
+                    });
+                  })}>Resend
+              </ui.ButtonInverse>
+            </span>)}/>
       <T.YStack alignItems="center">
-        <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Sign In")}</ui.ButtonLink>
+        <span className="st-auth-link" style={{"display":"contents"}}>
+          <ui.ButtonLink href={client_auth.authHref(pathPrefix,"sign-in")}>{ui.t("Sign In")}</ui.ButtonLink>
+        </span>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreenMain [238] 
+// statstrade-web.feature.auth.new-account/NewAccountScreenMain [248] 
 export function NewAccountScreenMain(){
   let context = React.useContext(NewAccountContext);
   let {controls} = context;
   let Component = (null == ({"verify":NewAccountScreenVerify})[[controls.currentStage]]) ? NewAccountScreenRegister : ({"verify":NewAccountScreenVerify})[[controls.currentStage]];
   return (
-    <ui_section.MinFrameCenter><Component/></ui_section.MinFrameCenter>);
+    <section className="st-auth-panel"><Component/></section>);
 }
 
-// statstrade-web.feature.auth.new-account/NewAccountScreen [252] 
+// statstrade-web.feature.auth.new-account/NewAccountScreen [262] 
 export function NewAccountScreen(props){
   let ctx = common_auth.useSignUpContext(props);
-  let controls = hf.useControls([
+  let controls = ui_controls.useControls([
     ["currentStage","initial"],
     "currentError",
     [

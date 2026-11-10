@@ -1,11 +1,25 @@
-import * as screen from '@statstrade/feature/manage/tokens.jsx'
+import dynamic from 'next/dynamic'
 
-import * as layout_manage from '@statstrade/component/layout/layout-manage.jsx'
+// statstrade-web.page.manage.tokens/Workspace [5] 
+export var Workspace = dynamic(function (){
+  return import("@statstrade/feature/manage/page-workspace.jsx").then(function (module){
+    return module.ManagementPage;
+  });
+},{
+  "ssr":false,
+  "loading":function (){
+    return (
+      <p role="status">Loading page…</p>);
+  }
+});
 
-// statstrade-web.page.manage.tokens/Page [14] 
-export function Page(props){
+// statstrade-web.page.manage.tokens/Page [9] 
+export function Page(){
   return (
-    <layout_manage.LayoutManage userType="manager"><screen.TokensScreen/></layout_manage.LayoutManage>);
+    <Workspace pageKey="tokens"/>);
 }
+
+// statstrade-web.page.manage.tokens/page-model-key [10] 
+Page["pageModelKey"] = "/manage/tokens";
 
 export default Page

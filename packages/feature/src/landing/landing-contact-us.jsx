@@ -6,6 +6,8 @@ import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
 import * as rq from '@statstrade/edge/lib/js/lib/react-query.jsx'
 
+import * as ui_controls from '@statstrade/edge/ui-controls.jsx'
+
 import * as ui_router from '@statstrade/component/ui-router.jsx'
 
 import * as ui_section from '@statstrade/component/ui-section.jsx'
@@ -16,7 +18,7 @@ import * as ui_form from '@statstrade/component/ui-form.jsx'
 
 import * as gu from '@statstrade/edge/global-ui.jsx'
 
-// statstrade-web.feature.landing.landing-contact-us/submitContactUs [19] 
+// statstrade-web.feature.landing.landing-contact-us/submitContactUs [20] 
 export function submitContactUs(data){
   return fetch(
     process.env.NEXT_PUBLIC_CONTACT_US_URL,
@@ -24,13 +26,13 @@ export function submitContactUs(data){
   );
 }
 
-// statstrade-web.feature.landing.landing-contact-us/contactUsDefaults [28] 
+// statstrade-web.feature.landing.landing-contact-us/contactUsDefaults [29] 
 export var contactUsDefaults = {
   "defaultValues":{"name":"","email":"","message":""},
   "onSubmit":submitContactUs
 };
 
-// statstrade-web.feature.landing.landing-contact-us/schemaContactUs [35] 
+// statstrade-web.feature.landing.landing-contact-us/schemaContactUs [36] 
 export var schemaContactUs = hf.Z.object({
   "name":hf.Z.string().min(1,"Name is required.").min(2,"Name at least 2 characters."),
   "email":hf.Z.string().min(1,"Email is required.").email("Email should be valid."),
@@ -41,10 +43,10 @@ export var schemaContactUs = hf.Z.object({
   })
 });
 
-// statstrade-web.feature.landing.landing-contact-us/ContactUsContext [58] 
+// statstrade-web.feature.landing.landing-contact-us/ContactUsContext [59] 
 export var ContactUsContext = React.createContext({});
 
-// statstrade-web.feature.landing.landing-contact-us/ContactUsForm [61] 
+// statstrade-web.feature.landing.landing-contact-us/ContactUsForm [62] 
 export function ContactUsForm(props){
   let context = props.context || React.useContext(ContactUsContext);
   let {api,controls,forms} = context;
@@ -93,7 +95,7 @@ export function ContactUsForm(props){
     </T.Form>);
 }
 
-// statstrade-web.feature.landing.landing-contact-us/ContactUsStatus [111] 
+// statstrade-web.feature.landing.landing-contact-us/ContactUsStatus [112] 
 export function ContactUsStatus(){
   let router = ui_router.useRouter();
   let context = React.useContext(ContactUsContext);
@@ -129,21 +131,21 @@ export function ContactUsStatus(){
     </T.YStack>);
 }
 
-// statstrade-web.feature.landing.landing-contact-us/useContactUsContext [146] 
+// statstrade-web.feature.landing.landing-contact-us/useContactUsContext [147] 
 export function useContactUsContext({
   schema = schemaContactUs,
   defaultValues = contactUsDefaults.defaultValues,
   onSubmit = contactUsDefaults.onSubmit
 }){
   let api = rq.useApi({"mutations":{"contact_us":{"fn":onSubmit}}});
-  let controls = hf.useControls(["submitted","success","error","busy"]);
+  let controls = ui_controls.useControls(["submitted","success","error","busy"]);
   let forms = {
     "contact_us":hf.useFormState({"schema":schema,"defaultValues":defaultValues})
   };
   return {"controls":controls,"forms":forms,"api":api};
 }
 
-// statstrade-web.feature.landing.landing-contact-us/ContactUsScreen [163] 
+// statstrade-web.feature.landing.landing-contact-us/ContactUsScreen [164] 
 export function ContactUsScreen(props){
   let context = useContactUsContext(props);
   gu.usePathContext(["contact_us"],context);

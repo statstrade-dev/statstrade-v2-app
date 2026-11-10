@@ -36,7 +36,9 @@ import * as homePage from '@statstrade/web-superadmin/pages/index.jsx'
 
 import * as indexPage from '@statstrade/web-superadmin/pages/adminweb/index.jsx'
 
-import {expect,it,toBeUndefined} from 'vitest'
+import * as worker from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
+
+import {expect,it,toBeUndefined,vi} from 'vitest'
 
 import * as chainPage from '@statstrade/web-superadmin/pages/adminweb/chain.jsx'
 
@@ -54,26 +56,35 @@ import * as superSystemTemplatePage from '@statstrade/web-superadmin/pages/admin
 
 import * as layout_base from '@statstrade/component/layout/layout-base.jsx'
 
-// statstrade-superadmin.adminweb.functional.page-routes-test/test-superadmin-index-page-shell [38] 
-it("places the worker component beneath LayoutBase",function (){
+// statstrade-superadmin.adminweb.functional.page-routes-test/test-superadmin-index-page-shell [39] 
+it("returns the worker status component",function (){
   let page = homePage["default"]();
-  let worker_child = page["props"]["children"];
-  expect(page["type"]).toBe(layout_base.LayoutBase);
-  expect(page["props"]["showDevWebsocket"]).toBe(true);
-  expect(page["props"]["showDevtool"]).toBe(true);
-  expect(typeof worker_child["type"]).toBe("function");
-  expect(worker_child["props"]["children"]).toBeUndefined();
+  expect(typeof page["type"]).toBe("function");
+  expect(page["type"]["name"]).toBe("PageContent");
+  expect(page["props"]["children"]).toBeUndefined();
 });
 
-// statstrade-superadmin.adminweb.functional.page-routes-test/test-superadmin-index-page-content [51] 
-it("preserves a renderable worker status child",function (){
-  let page = homePage["default"]();
-  let content = page["props"]["children"];
-  expect(typeof content["type"]).toBe("function");
-  expect(content["props"]["children"]).toBeUndefined();
+// statstrade-superadmin.adminweb.functional.page-routes-test/test-superadmin-index-page-content [49] 
+it("renders worker state from the application context",function (){
+  let hook = vi.spyOn(worker,"useSubstrateContext");
+  hook.mockReturnValue({"readyState":"ready"});
+  try{
+    let page = homePage["default"]();
+    let Consumer = page["type"];
+    let content = Consumer();
+    let children = content["props"]["children"];
+    expect(children[0]["props"]["children"]).toBe("ready");
+    expect(children[1]["props"]["href"]).toBe("/adminweb");
+  }
+  catch(error){
+    throw error;
+  }
+  finally{
+    hook.mockRestore();
+  }
 });
 
-// statstrade-superadmin.adminweb.functional.page-routes-test/test-adminweb-page-routes [61] 
+// statstrade-superadmin.adminweb.functional.page-routes-test/test-adminweb-page-routes [66] 
 it("mounts the overview inside the numbered shell",function (){
   let page = indexPage["default"]();
   expect(page["type"]).toBe(layout_base.LayoutBase);

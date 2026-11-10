@@ -1,13 +1,21 @@
 import { defineConfig } from 'vitest/config'
+import { transformWithEsbuild } from 'vite'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
+  plugins: [{
+    name: 'generated-jsx-in-js',
+    async transform(code, id) {
+      if (id.endsWith('.js') && !id.includes('/node_modules/')) {
+        return transformWithEsbuild(code, id, { loader: 'jsx', jsx: 'automatic' })
+      }
+    },
+  }],
   esbuild: {
     jsx: 'automatic',
-    loader: 'jsx',
   },
   ssr: {
     noExternal: ['@sqlite.org/sqlite-wasm'],

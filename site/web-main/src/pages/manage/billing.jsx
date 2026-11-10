@@ -1,11 +1,25 @@
-import * as layout_manage from '@statstrade/component/layout/layout-manage.jsx'
+import dynamic from 'next/dynamic'
 
-import * as screen from '@statstrade/feature/manage/billing.jsx'
+// statstrade-web.page.manage.billing/Workspace [5] 
+export var Workspace = dynamic(function (){
+  return import("@statstrade/feature/manage/page-workspace.jsx").then(function (module){
+    return module.ManagementPage;
+  });
+},{
+  "ssr":false,
+  "loading":function (){
+    return (
+      <p role="status">Loading page…</p>);
+  }
+});
 
-// statstrade-web.page.manage.billing/Page [14] 
-export function Page(props){
+// statstrade-web.page.manage.billing/Page [9] 
+export function Page(){
   return (
-    <layout_manage.LayoutManage userType="manager"><screen.BillingScreen/></layout_manage.LayoutManage>);
+    <Workspace pageKey="billing"/>);
 }
+
+// statstrade-web.page.manage.billing/page-model-key [10] 
+Page["pageModelKey"] = "/manage/billing";
 
 export default Page

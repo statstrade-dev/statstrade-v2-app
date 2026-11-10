@@ -8,6 +8,12 @@
     ],
     "baseUrl": ".",
     "paths": {
+      "@statstrade/edge/lib/js/net/conn-postgres.js": [
+        "./src/browser-optional-backend.js"
+      ],
+      "@statstrade/edge/lib/js/net/conn-sqlite.js": [
+        "./src/browser-optional-backend.js"
+      ],
       "react-native": [
         "react-native-web"
       ],
@@ -52,12 +58,14 @@
     ]
   },
   "include": [
-    "next-env.d.ts",
+    ".next-model-test/types/**/*.ts",
+    ".next-real-data/types/**/*.ts",
     ".next/types/**/*.ts",
-    "src/**/*.ts",
-    "src/**/*.tsx",
+    "next-env.d.ts",
     "src/**/*.js",
-    "src/**/*.jsx"
+    "src/**/*.jsx",
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

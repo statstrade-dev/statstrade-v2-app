@@ -104,35 +104,39 @@ export async function unsyncEntry(entry){
 
 // statsui.edge.remote.util-supabase/createParams [65] 
 export function createParams(input = {}){
-  return {
+  let params = {
     "url":input["url"] || process.env.NEXT_PUBLIC_SUPABASE_URL,
     "key":input["key"] || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     "token":input["token"]
   };
+  if(input.actor_id){
+    params.actor_id = input.actor_id;
+  }
+  return params;
 }
 
-// statsui.edge.remote.util-supabase/getEntry [72] 
+// statsui.edge.remote.util-supabase/getEntry [74] 
 export function getEntry(client_id = "default"){
   return globalThis["statsui_edge_remote_util_supabase$$CLIENTS"][client_id];
 }
 
-// statsui.edge.remote.util-supabase/createClient [77] 
+// statsui.edge.remote.util-supabase/createClient [79] 
 export function createClient(params){
   let config = params || {};
   return substrate.node_create({"id":config["client_id"] || "statstrade-shared-client"});
 }
 
-// statsui.edge.remote.util-supabase/getDefaultClient [84] 
+// statsui.edge.remote.util-supabase/getDefaultClient [86] 
 export function getDefaultClient(client_id = "default"){
   return getEntry(client_id);
 }
 
-// statsui.edge.remote.util-supabase/getClient [89] 
+// statsui.edge.remote.util-supabase/getClient [91] 
 export function getClient(client_id = "default",params){
   let entry = getEntry(client_id);
   let config = Object.assign({},params || {},{"client_id":client_id});
-  let next_params = createParams(params || {});
-  if(entry && ((entry["params"]["url"] != next_params["url"]) || (entry["params"]["key"] != next_params["key"]) || (entry["params"]["token"] != next_params["token"]))){
+  let next_params = (entry && (null == params)) ? entry["params"] : createParams(params || {});
+  if(entry && ((entry["params"]["url"] != next_params["url"]) || (entry["params"]["key"] != next_params["key"]) || (entry["params"]["token"] != next_params["token"]) || (entry["params"]["actor_id"] != next_params["actor_id"]))){
     unsyncEntry(entry);
     delete globalThis["statsui_edge_remote_util_supabase$$CLIENTS"][client_id];
     entry = null;
@@ -145,12 +149,13 @@ export function getClient(client_id = "default",params){
   return entry["instance"];
 }
 
-// statsui.edge.remote.util-supabase/workerConfig [109] 
+// statsui.edge.remote.util-supabase/workerConfig [112] 
 export function workerConfig(input = {}){
   let params = createParams(input);
   let url = new URL(params["url"]);
   let secured = url["protocol"] == "https:";
   return {
+    "worker_name":(process.env.NEXT_PUBLIC_SHAREDWORKER_NAME || "statstrade-shared-worker") + (params.actor_id ? ("/" + params.actor_id) : ""),
     "site_map_url":"/worker/site-map/manifest.json",
     "primary":{
         "type":"supabase",
@@ -167,24 +172,24 @@ export function workerConfig(input = {}){
   };
 }
 
-// statsui.edge.remote.util-supabase/connectProxyNode [130] 
+// statsui.edge.remote.util-supabase/connectProxyNode [134] 
 export async function connectProxyNode(client,config){
   page_proxy.install(client);
   proxy_base.init_proxy_handlers(client);
   proxy_supabase.init_proxy_handlers(client);
   let connection = await browser_transport.connect_sharedworker(client,{
     "transport_id":"worker",
-    "source":browser_transport.sharedworker_url_source(
-        "/workers/web.sharedworker.js",
-        {"type":"module","name":"statstrade-shared-worker"}
-      )
+    "source":browser_transport.sharedworker_url_source("/workers/web.sharedworker.js",{
+        "type":"module",
+        "name":config.worker_name || process.env.NEXT_PUBLIC_SHAREDWORKER_NAME || "statstrade-shared-worker"
+      })
   });
   proxy_util.set_default_transport(client,connection["transport_id"]);
   let init_result = await client_base.kernel_init(client,config,{},{},{});
   return {"connection":connection,"init":init_result};
 }
 
-// statsui.edge.remote.util-supabase/markClientReady [149] 
+// statsui.edge.remote.util-supabase/markClientReady [153] 
 export function markClientReady(client_id = "default",connection = null){
   let entry = getEntry(client_id);
   if(!entry){
@@ -201,7 +206,7 @@ export function markClientReady(client_id = "default",connection = null){
   return entry["instance"];
 }
 
-// statsui.edge.remote.util-supabase/markClientFailed [167] 
+// statsui.edge.remote.util-supabase/markClientFailed [171] 
 export function markClientFailed(error,client_id = "default"){
   let entry = getEntry(client_id);
   if(!entry){
@@ -217,7 +222,7 @@ export function markClientFailed(error,client_id = "default"){
   return true;
 }
 
-// statsui.edge.remote.util-supabase/publishSession [183] 
+// statsui.edge.remote.util-supabase/publishSession [187] 
 export async function publishSession(client,session,type){
   let result = await substrate.request(
     client,
@@ -235,17 +240,19 @@ export async function publishSession(client,session,type){
   return result;
 }
 
-// statsui.edge.remote.util-supabase/loadInitialSession [199] 
+// statsui.edge.remote.util-supabase/loadInitialSession [203] 
 export async function loadInitialSession(client){
   let impersonation_response = null;
-  try{
-    impersonation_response = await fetch(
-      "/api/impersonation/token",
-      {"credentials":"same-origin","cache":"no-store"}
-    );
-  }
-  catch(_){
-    null;
+  if(!(process.env.NEXT_PUBLIC_IMPERSONATION_ENABLED == "false")){
+    try{
+      impersonation_response = await fetch(
+        "/api/impersonation/token",
+        {"credentials":"same-origin","cache":"no-store"}
+      );
+    }
+    catch(_){
+      null;
+    }
   }
   if(impersonation_response && impersonation_response["ok"]){
     let body = await impersonation_response.json();
@@ -272,16 +279,31 @@ export async function loadInitialSession(client){
       "expires_in":expires_in,
       "expires_at":(Date.now() / 1000) + expires_in
     };
+    let user_response = await fetch(process.env.NEXT_PUBLIC_SUPABASE_URL + "/auth/v1/user",{
+      "headers":{
+            "apikey":process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+            "Authorization":"Bearer " + callback_access_token
+          },
+      "signal":AbortSignal.timeout(20000)
+    });
+    if(!user_response.ok){
+      throw new Error("Unable to verify your sign-in. Please sign in again.");
+    }
+    callback_session["user"] = await user_response.json();
+    if(!callback_session["user"]["id"]){
+      throw new Error("The sign-in response did not include a user.");
+    }
     await publishSession(client,callback_session,"SIGNED_IN");
+    localStorage.setItem(REFRESH_TOKEN_KEY,callback_refresh_token);
     window.history.replaceState(
-      null,
+      window.history.state,
       "",
       window.location["pathname"] + window.location["search"]
     );
     return callback_session;
   }
   let session = await client_supabase.current_session(client,SERVICE_ID,{});
-  let refresh_token = session["refresh_token"] || localStorage.getItem(REFRESH_TOKEN_KEY);
+  let refresh_token = (session && session["refresh_token"]) || localStorage.getItem(REFRESH_TOKEN_KEY);
   let refresh_at = (Date.now() / 1000) + 180;
   if(refresh_token && ((null == session) || (null == session["expires_at"]) || (session["expires_at"] <= refresh_at))){
     try{
@@ -296,7 +318,7 @@ export async function loadInitialSession(client){
   return session;
 }
 
-// statsui.edge.remote.util-supabase/connectClient [255] 
+// statsui.edge.remote.util-supabase/connectClient [271] 
 export async function connectClient(client_id = "default",params){
   let client = getClient(client_id,params);
   let entry = getEntry(client_id);
@@ -331,7 +353,7 @@ export async function connectClient(client_id = "default",params){
   }
 }
 
-// statsui.edge.remote.util-supabase/unsubscribeWorkerAuthEvents [289] 
+// statsui.edge.remote.util-supabase/unsubscribeWorkerAuthEvents [305] 
 export async function unsubscribeWorkerAuthEvents(client){
   if(null == globalThis["statsui_edge_remote_util_supabase$$AUTH_SUBSCRIPTION"]){
     return false;
@@ -356,7 +378,7 @@ export async function unsubscribeWorkerAuthEvents(client){
   }
 }
 
-// statsui.edge.remote.util-supabase/resetClients [310] 
+// statsui.edge.remote.util-supabase/resetClients [326] 
 export async function resetClients(){
   let client_ids = Object.keys(globalThis["statsui_edge_remote_util_supabase$$CLIENTS"]);
   if(globalThis["statsui_edge_remote_util_supabase$$AUTH_SUBSCRIPTION"] && globalThis["statsui_edge_remote_util_supabase$$CLIENTS"]["default"] && globalThis["statsui_edge_remote_util_supabase$$CLIENTS"]["default"]["ready"]){
@@ -392,11 +414,11 @@ export async function resetClients(){
   return true;
 }
 
-// statsui.edge.remote.util-supabase/SharedWorkerRuntime [346] 
+// statsui.edge.remote.util-supabase/SharedWorkerRuntime [362] 
 export function SharedWorkerRuntime({children,enabled}){
   React.useEffect(function (){
     if(enabled == false){
-      return null;
+      return undefined;
     }
     globalThis["statsui_edge_remote_util_supabase$$RUNTIME_GENERATION"] = (globalThis["statsui_edge_remote_util_supabase$$RUNTIME_GENERATION"] + 1);
     let generation = globalThis["statsui_edge_remote_util_supabase$$RUNTIME_GENERATION"];
@@ -420,12 +442,11 @@ export function SharedWorkerRuntime({children,enabled}){
         }
       },0);
     };
-    [enabled];
-  });
+  },[enabled]);
   return children;
 }
 
-// statsui.edge.remote.util-supabase/awaitClient [376] 
+// statsui.edge.remote.util-supabase/awaitClient [392] 
 export async function awaitClient(client_id = "default"){
   if(globalThis["statsui_edge_remote_util_supabase$$WEB_DATA_CLIENT"]){
     return globalThis["statsui_edge_remote_util_supabase$$WEB_DATA_CLIENT"];
@@ -446,7 +467,7 @@ export async function awaitClient(client_id = "default"){
   });
 }
 
-// statsui.edge.remote.util-supabase/awaitAuthClient [397] 
+// statsui.edge.remote.util-supabase/awaitAuthClient [413] 
 export async function awaitAuthClient(client_id = "default"){
   if(globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_CLIENT"]){
     return globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_CLIENT"];
@@ -454,7 +475,7 @@ export async function awaitAuthClient(client_id = "default"){
   return await awaitClient(client_id);
 }
 
-// statsui.edge.remote.util-supabase/setWebAuthRuntime [404] 
+// statsui.edge.remote.util-supabase/setWebAuthRuntime [420] 
 export function setWebAuthRuntime(client,query_client,clear_session){
   globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_CLIENT"] = client;
   globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_QUERY_CLIENT"] = query_client;
@@ -462,13 +483,13 @@ export function setWebAuthRuntime(client,query_client,clear_session){
   return client;
 }
 
-// statsui.edge.remote.util-supabase/setWebDataClient [412] 
+// statsui.edge.remote.util-supabase/setWebDataClient [428] 
 export function setWebDataClient(client){
   globalThis["statsui_edge_remote_util_supabase$$WEB_DATA_CLIENT"] = client;
   return client;
 }
 
-// statsui.edge.remote.util-supabase/resetWebRuntime [418] 
+// statsui.edge.remote.util-supabase/resetWebRuntime [434] 
 export function resetWebRuntime(){
   globalThis["statsui_edge_remote_util_supabase$$WEB_DATA_CLIENT"] = null;
   globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_CLIENT"] = null;
@@ -477,7 +498,7 @@ export function resetWebRuntime(){
   return true;
 }
 
-// statsui.edge.remote.util-supabase/notifyWebAuthChanged [427] 
+// statsui.edge.remote.util-supabase/notifyWebAuthChanged [443] 
 export async function notifyWebAuthChanged(){
   if(globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_QUERY_CLIENT"]){
     await globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_QUERY_CLIENT"].invalidateQueries({"queryKey":["web-auth-entry"]});
@@ -485,7 +506,7 @@ export async function notifyWebAuthChanged(){
   return true;
 }
 
-// statsui.edge.remote.util-supabase/publishOrStoreSession [435] 
+// statsui.edge.remote.util-supabase/publishOrStoreSession [451] 
 export async function publishOrStoreSession(client,session,type){
   if(client == globalThis["statsui_edge_remote_util_supabase$$WEB_AUTH_CLIENT"]){
     if(session && session["refresh_token"]){
@@ -502,7 +523,7 @@ export async function publishOrStoreSession(client,session,type){
   }
 }
 
-// statsui.edge.remote.util-supabase/setSession [449] 
+// statsui.edge.remote.util-supabase/setSession [465] 
 export async function setSession(session,options = {}){
   let client = await awaitClient();
   let result = await substrate.request(
@@ -521,7 +542,7 @@ export async function setSession(session,options = {}){
   return result;
 }
 
-// statsui.edge.remote.util-supabase/signInWithPassword [467] 
+// statsui.edge.remote.util-supabase/signInWithPassword [483] 
 export async function signInWithPassword(client,credentials,options = {}){
   try{
     let active_client = await awaitAuthClient();
@@ -537,7 +558,7 @@ export async function signInWithPassword(client,credentials,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/signUp [481] 
+// statsui.edge.remote.util-supabase/signUp [497] 
 export async function signUp(client,credentials,options = {}){
   try{
     let active_client = await awaitAuthClient();
@@ -553,7 +574,7 @@ export async function signUp(client,credentials,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/signOut [495] 
+// statsui.edge.remote.util-supabase/signOut [511] 
 export async function signOut(client,options = {}){
   try{
     let active_client = await awaitAuthClient();
@@ -585,7 +606,7 @@ export async function signOut(client,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/signInWithOAuth [520] 
+// statsui.edge.remote.util-supabase/signInWithOAuth [536] 
 export async function signInWithOAuth(client,options){
   try{
     let active_client = await awaitAuthClient();
@@ -609,7 +630,7 @@ export async function signInWithOAuth(client,options){
   }
 }
 
-// statsui.edge.remote.util-supabase/resetPasswordForEmail [539] 
+// statsui.edge.remote.util-supabase/resetPasswordForEmail [555] 
 export async function resetPasswordForEmail(client,email,options = {}){
   try{
     let active_client = await awaitAuthClient();
@@ -624,7 +645,7 @@ export async function resetPasswordForEmail(client,email,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/updateUser [554] 
+// statsui.edge.remote.util-supabase/updateUser [570] 
 export async function updateUser(client,attributes,options = {}){
   try{
     let active_client = await awaitAuthClient();
@@ -642,7 +663,7 @@ export async function updateUser(client,attributes,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/callRemote [571] 
+// statsui.edge.remote.util-supabase/callRemote [587] 
 export async function callRemote(fstr,margs,options = {}){
   let client = await awaitClient();
   let headers = Object.assign({},options["headers"] || {});
@@ -657,7 +678,7 @@ export async function callRemote(fstr,margs,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/callRemoteDebug [585] 
+// statsui.edge.remote.util-supabase/callRemoteDebug [601] 
 export async function callRemoteDebug(fstr,margs,options = {}){
   let client = await awaitClient();
   let headers = Object.assign({},options["headers"] || {});
@@ -672,7 +693,7 @@ export async function callRemoteDebug(fstr,margs,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/callGraphql [599] 
+// statsui.edge.remote.util-supabase/callGraphql [615] 
 export async function callGraphql(query,variables = {}){
   let client = await awaitClient();
   try{
@@ -687,7 +708,7 @@ export async function callGraphql(query,variables = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/postgrestValue [618] 
+// statsui.edge.remote.util-supabase/postgrestValue [634] 
 export function postgrestValue(value,quote_string = false){
   if(null == value){
     return "null";
@@ -701,7 +722,7 @@ export function postgrestValue(value,quote_string = false){
   return JSON.stringify(value);
 }
 
-// statsui.edge.remote.util-supabase/buildQuery [629] 
+// statsui.edge.remote.util-supabase/buildQuery [645] 
 export function buildQuery(spec){
   let params = new URLSearchParams();
   if(spec["select"]){
@@ -731,7 +752,7 @@ export function buildQuery(spec){
   return params.toString();
 }
 
-// statsui.edge.remote.util-supabase/queryTable [661] 
+// statsui.edge.remote.util-supabase/queryTable [677] 
 export async function queryTable(table,spec,options = {}){
   let client = await awaitClient();
   let headers = Object.assign({},options["headers"] || {});
@@ -768,17 +789,17 @@ export async function queryTable(table,spec,options = {}){
   }
 }
 
-// statsui.edge.remote.util-supabase/authHref [688] 
+// statsui.edge.remote.util-supabase/authHref [704] 
 export function authHref(prefix,route){
   return (prefix ? (prefix + "/") : "/") + route;
 }
 
-// statsui.edge.remote.util-supabase/authRedirectTo [693] 
+// statsui.edge.remote.util-supabase/authRedirectTo [709] 
 export function authRedirectTo(configured,origin){
   return configured || origin;
 }
 
-// statsui.edge.remote.util-supabase/getSession [698] 
+// statsui.edge.remote.util-supabase/getSession [714] 
 export async function getSession(){
   try{
     let client = await awaitAuthClient();
@@ -790,7 +811,7 @@ export async function getSession(){
   }
 }
 
-// statsui.edge.remote.util-supabase/getUser [708] 
+// statsui.edge.remote.util-supabase/getUser [724] 
 export async function getUser(){
   try{
     let client = await awaitAuthClient();
@@ -802,7 +823,7 @@ export async function getUser(){
   }
 }
 
-// statsui.edge.remote.util-supabase/initLocal [718] 
+// statsui.edge.remote.util-supabase/initLocal [734] 
 export async function initLocal(){
   let result = await getSession();
   if(null == result["error"]){
@@ -811,7 +832,7 @@ export async function initLocal(){
   return gs.getStore(["account"]);
 }
 
-// statsui.edge.remote.util-supabase/getLocalStore [726] 
+// statsui.edge.remote.util-supabase/getLocalStore [742] 
 export function getLocalStore(storage_key){
   let stored = null;
   try{
@@ -831,13 +852,13 @@ export function getLocalStore(storage_key){
   return stored;
 }
 
-// statsui.edge.remote.util-supabase/getCurrentUserId [739] 
+// statsui.edge.remote.util-supabase/getCurrentUserId [755] 
 export async function getCurrentUserId(){
   let result = await getUser();
   return kd.get_in(result,["data","user","id"]);
 }
 
-// statsui.edge.remote.util-supabase/notifyAuthListeners [745] 
+// statsui.edge.remote.util-supabase/notifyAuthListeners [761] 
 export function notifyAuthListeners(event){
   let event_type = event["type"] || "SESSION_CHANGED";
   let session = event["session"];
@@ -873,7 +894,7 @@ export function notifyAuthListeners(event){
   return true;
 }
 
-// statsui.edge.remote.util-supabase/subscribeWorkerAuthEvents [772] 
+// statsui.edge.remote.util-supabase/subscribeWorkerAuthEvents [788] 
 export async function subscribeWorkerAuthEvents(client){
   if(null == globalThis["statsui_edge_remote_util_supabase$$AUTH_SUBSCRIPTION"]){
     let setup = async function (){
@@ -895,7 +916,7 @@ export async function subscribeWorkerAuthEvents(client){
   return await globalThis["statsui_edge_remote_util_supabase$$AUTH_SUBSCRIPTION"];
 }
 
-// statsui.edge.remote.util-supabase/addListeners [796] 
+// statsui.edge.remote.util-supabase/addListeners [812] 
 export function addListeners(listeners,client = getClient()){
   let listener_id = "auth-listener-" + Date.now() + "-" + Math.random();
   globalThis["statsui_edge_remote_util_supabase$$AUTH_LISTENERS"][listener_id] = listeners;
@@ -916,7 +937,7 @@ export function addListeners(listeners,client = getClient()){
   return listener_id;
 }
 
-// statsui.edge.remote.util-supabase/removeSubscription [813] 
+// statsui.edge.remote.util-supabase/removeSubscription [829] 
 export async function removeSubscription(client,subscription){
   if(null == subscription){
     return false;
@@ -930,7 +951,7 @@ export async function removeSubscription(client,subscription){
   return true;
 }
 
-// statsui.edge.remote.util-supabase/useListeners [823] 
+// statsui.edge.remote.util-supabase/useListeners [839] 
 export function useListeners(listeners,client = getClient(),enabled = true){
   React.useEffect(function (){
     if(enabled){
@@ -939,11 +960,11 @@ export function useListeners(listeners,client = getClient(),enabled = true){
         removeSubscription(client,subscription);
       };
     }
-    return null;
-  },[]);
+    return undefined;
+  },[client,enabled]);
 }
 
-// statsui.edge.remote.util-supabase/useStoreSync [836] 
+// statsui.edge.remote.util-supabase/useStoreSync [852] 
 export function useStoreSync(client = getClient()){
   let [session,setSession] = React.useState(null);
   useListeners({
@@ -955,7 +976,7 @@ export function useStoreSync(client = getClient()){
   return [session,setSession];
 }
 
-// statsui.edge.remote.util-supabase/useListenSession [847] 
+// statsui.edge.remote.util-supabase/useListenSession [863] 
 export function useListenSession(client = getClient()){
   let auth_entry = React.useContext(AuthEntryContext);
   let use_worker = null == auth_entry;
@@ -978,12 +999,12 @@ export function useListenSession(client = getClient()){
   return [session,setSession,loaded];
 }
 
-// statsui.edge.remote.util-supabase/useListenPrint [868] 
+// statsui.edge.remote.util-supabase/useListenPrint [884] 
 export function useListenPrint(client = getClient()){
   useListeners({"onAll":console.log},client);
 }
 
-// statsui.edge.remote.util-supabase/wrapProcess [873] 
+// statsui.edge.remote.util-supabase/wrapProcess [889] 
 export async function wrapProcess(f){
   let client = await awaitClient();
   let result = await f(client);
@@ -993,7 +1014,7 @@ export async function wrapProcess(f){
   return result;
 }
 
-// statsui.edge.remote.util-supabase/fileUpload [882] 
+// statsui.edge.remote.util-supabase/fileUpload [898] 
 export async function fileUpload({file_raw,file_path,bucket,options = {}}){
   try{
     let client = await awaitClient();
@@ -1005,7 +1026,7 @@ export async function fileUpload({file_raw,file_path,bucket,options = {}}){
   }
 }
 
-// statsui.edge.remote.util-supabase/getPublicUrl [893] 
+// statsui.edge.remote.util-supabase/getPublicUrl [909] 
 export function getPublicUrl(bucket,object_path){
   let parts = object_path.split("/");
   let encoded = parts.map(function (part){
@@ -1014,7 +1035,7 @@ export function getPublicUrl(bucket,object_path){
   return process.env.NEXT_PUBLIC_SUPABASE_URL.replace(new RegExp("/$"),"") + "/storage/v1/object/public/" + encodeURIComponent(bucket) + "/" + encoded.join("/");
 }
 
-// statsui.edge.remote.util-supabase/toSelect [904] 
+// statsui.edge.remote.util-supabase/toSelect [920] 
 export function toSelect(spec){
   if(kl.is_arrayp(spec)){
     return ks.join(",",spec);

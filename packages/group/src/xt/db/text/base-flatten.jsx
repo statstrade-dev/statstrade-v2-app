@@ -22,9 +22,9 @@ export function flatten_get_links(obj){
   });
 }
 
-// xt.db.text.base-flatten/flatten-merge [29] 
-export function flatten_merge(table_map,data_obj,ref_links,rev_links){
-  let {id} = data_obj;
+// xt.db.text.base-flatten/flatten-merge-key [29] 
+export function flatten_merge_key(table_map,data_obj,ref_links,rev_links,record_id){
+  let id = (null == record_id) ? data_obj["id"] : record_id;
   let rec = table_map[id];
   if(!((null != rec) && ("object" == (typeof rec)) && !Array.isArray(rec))){
     rec = {"id":id,"data":{},"ref_links":{},"rev_links":{}};
@@ -46,7 +46,12 @@ export function flatten_merge(table_map,data_obj,ref_links,rev_links){
   return table_map;
 }
 
-// xt.db.text.base-flatten/flatten-node [46] 
+// xt.db.text.base-flatten/flatten-merge [46] 
+export function flatten_merge(table_map,data_obj,ref_links,rev_links){
+  return flatten_merge_key(table_map,data_obj,ref_links,rev_links,data_obj["id"]);
+}
+
+// xt.db.text.base-flatten/flatten-node [51] 
 export function flatten_node(schema,table_name,data,parent,acc){
   data = Object.assign(data,xtd.clone_nested(parent));
   let table_map = acc[table_name];
@@ -69,9 +74,9 @@ export function flatten_node(schema,table_name,data,parent,acc){
       ref_id_links[k] = {[data[id_k]]:true};
     }
   };
-  flatten_merge(table_map,data_obj,xtd.obj_assign_with(ref_links,ref_id_links,function (obj,other){
+  flatten_merge_key(table_map,data_obj,xtd.obj_assign_with(ref_links,ref_id_links,function (obj,other){
     return Object.assign(obj,other);
-  }),rev_links);
+  }),rev_links,sch.record_key(schema,table_name,data));
   return {
     "table_map":table_map,
     "data_obj":data_obj,
@@ -80,7 +85,7 @@ export function flatten_node(schema,table_name,data,parent,acc){
   };
 }
 
-// xt.db.text.base-flatten/flatten-linked [77] 
+// xt.db.text.base-flatten/flatten-linked [83] 
 export function flatten_linked(schema,table_name,link_obj,link_id,acc,flatten_fn){
   let link_fn = function (e){
     let ref = xtd.get_in(schema,[table_name,e,"ref"]);
@@ -100,7 +105,7 @@ export function flatten_linked(schema,table_name,link_obj,link_id,acc,flatten_fn
   return acc;
 }
 
-// xt.db.text.base-flatten/flatten-obj [97] 
+// xt.db.text.base-flatten/flatten-obj [103] 
 export function flatten_obj(schema,table_name,obj,parent,acc){
   let flattened = flatten_node(schema,table_name,obj,parent,acc);
   let {data_obj,ref_obj,rev_obj,table_map} = flattened;
@@ -110,7 +115,7 @@ export function flatten_obj(schema,table_name,obj,parent,acc){
   return acc;
 }
 
-// xt.db.text.base-flatten/flatten [111] 
+// xt.db.text.base-flatten/flatten [117] 
 export function flatten(schema,table_name,data,parent){
   let input = Array.isArray(data) ? data : (((null != data) && ("object" == (typeof data)) && !Array.isArray(data)) ? data : []);
   let parent_obj = ((null != parent) && ("object" == (typeof parent)) && !Array.isArray(parent)) ? parent : {};
@@ -128,7 +133,7 @@ export function flatten(schema,table_name,data,parent){
   return acc;
 }
 
-// xt.db.text.base-flatten/flatten-bulk [131] 
+// xt.db.text.base-flatten/flatten-bulk [137] 
 export function flatten_bulk(schema,m){
   let acc = {};
   if(Array.isArray(m)){
@@ -155,7 +160,7 @@ export function flatten_bulk(schema,m){
   return acc;
 }
 
-// xt.db.text.base-flatten/flatten-bulk-ids [150] 
+// xt.db.text.base-flatten/flatten-bulk-ids [156] 
 export function flatten_bulk_ids(schema,lookup,m){
   let flat = flatten_bulk(schema,m);
   return xtd.arr_keep(sch.table_order(lookup),function (table_name){

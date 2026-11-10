@@ -12,7 +12,6 @@
     "playable" : {
       "type" : "ref",
       "cardinality" : "one",
-      "primary" : "default",
       "ref" : {
         "ns" : "Playable",
         "link" : {
@@ -35,7 +34,6 @@
     "token" : {
       "ident" : "token",
       "profiles" : { },
-      "primary" : "default",
       "scope" : "id",
       "order" : 1,
       "required" : true,
@@ -60,11 +58,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "time_updated" : {
       "type" : "time",
@@ -186,11 +184,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "idempotency_key" : {
       "type" : "citext",
@@ -721,11 +719,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_table" : {
       "ignore" : true,
@@ -1061,191 +1059,6 @@
       }
     }
   },
-  "OrgSettings" : {
-    "org" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "Org",
-        "link" : {
-          "section" : "code",
-          "lang" : "postgres",
-          "module" : "statsdb.common.type-org-base",
-          "id" : "Org"
-        },
-        "rval" : "org_settings",
-        "type" : "forward",
-        "key" : "org",
-        "val" : "org",
-        "rkey" : "_org",
-        "rident" : "org_settings"
-      },
-      "scope" : "ref",
-      "order" : 1,
-      "ident" : "org"
-    },
-    "allow_followers" : {
-      "type" : "boolean",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "allow_followers",
-      "sql" : {
-        "default" : true
-      }
-    },
-    "is_discoverable" : {
-      "type" : "boolean",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 3,
-      "ident" : "is_discoverable",
-      "sql" : {
-        "default" : true
-      }
-    },
-    "security" : {
-      "ident" : "security",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 10,
-      "required" : true,
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "notifications" : {
-      "ident" : "notifications",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 9,
-      "required" : true,
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "timezone" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 2,
-      "ident" : "timezone",
-      "sql" : {
-        "default" : "Australia/Melbourne"
-      }
-    },
-    "time_updated" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 3,
-      "scope" : "data",
-      "order" : 15,
-      "ident" : "time_updated"
-    },
-    "id" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "primary" : "default",
-      "priority" : 0,
-      "scope" : "id",
-      "order" : 0,
-      "ident" : "id"
-    },
-    "call_to_action" : {
-      "ident" : "call_to_action",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 7,
-      "required" : true,
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "allow_sharing" : {
-      "type" : "boolean",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 6,
-      "ident" : "allow_sharing",
-      "sql" : {
-        "default" : true
-      }
-    },
-    "show_activity" : {
-      "type" : "boolean",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 5,
-      "ident" : "show_activity",
-      "sql" : {
-        "default" : true
-      }
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 12,
-      "ident" : "op_created"
-    },
-    "op_updated" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
-      "scope" : "data",
-      "order" : 13,
-      "ident" : "op_updated"
-    },
-    "time_created" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 2,
-      "scope" : "data",
-      "order" : 14,
-      "ident" : "time_created"
-    },
-    "data" : {
-      "ident" : "data",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 11,
-      "required" : true,
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "governance" : {
-      "ident" : "governance",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 8,
-      "required" : true,
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "sql" : {
-        "default" : "{}"
-      }
-    }
-  },
   "ComplianceRecord" : {
     "released_at" : {
       "type" : "bigint",
@@ -1257,7 +1070,6 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 2,
       "type" : "enum",
@@ -1317,11 +1129,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -1335,7 +1147,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -1492,11 +1303,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "name" : {
       "type" : "citext",
@@ -1608,409 +1419,6 @@
       }
     }
   },
-  "OrgRewardLedger" : {
-    "org" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "Org",
-        "link" : {
-          "id" : "Org",
-          "module" : "statsdb.common.type-org-base",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "org_reward_ledgers",
-        "type" : "forward",
-        "key" : "org",
-        "val" : "org",
-        "rkey" : "_org",
-        "rident" : "org_reward_ledgers"
-      },
-      "scope" : "ref",
-      "order" : 1,
-      "ident" : "org"
-    },
-    "contest_award" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "ref" : {
-        "ns" : "ContestAward",
-        "link" : {
-          "id" : "ContestAward",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "org_reward_ledgers",
-        "type" : "forward",
-        "key" : "contest_award",
-        "val" : "contest_award",
-        "rkey" : "_contest_award",
-        "rident" : "org_reward_ledgers"
-      },
-      "scope" : "ref",
-      "order" : 6,
-      "ident" : "contest_award"
-    },
-    "task_class" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "enum" : {
-        "ns" : "statsdb.common.type-system-seed/EnumClassType"
-      },
-      "foreign" : {
-        "task" : {
-          "ns" : "Task",
-          "column" : "class_table",
-          "link" : {
-            "id" : "Task",
-            "module" : "statsdb.common.type-addon-task",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        }
-      },
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "task_class"
-    },
-    "balance" : {
-      "type" : "numeric",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 10,
-      "ident" : "balance"
-    },
-    "source_type" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 12,
-      "ident" : "source_type"
-    },
-    "user" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "User",
-        "link" : {
-          "id" : "User",
-          "module" : "statsdb.common.type-user",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "org_reward_ledgers",
-        "type" : "forward",
-        "key" : "user",
-        "val" : "user",
-        "rkey" : "_user",
-        "rident" : "org_reward_ledgers"
-      },
-      "scope" : "ref",
-      "order" : 3,
-      "ident" : "user"
-    },
-    "detail" : {
-      "ident" : "detail",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 15,
-      "required" : true,
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "id" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "primary" : "default",
-      "priority" : 0,
-      "scope" : "id",
-      "order" : 0,
-      "ident" : "id"
-    },
-    "idempotency_key" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 11,
-      "ident" : "idempotency_key"
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 16,
-      "ident" : "op_created"
-    },
-    "source_ref" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 13,
-      "ident" : "source_ref"
-    },
-    "task" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "ref" : {
-        "group" : "task",
-        "key" : "task",
-        "rkey" : "_task",
-        "link" : {
-          "id" : "Task",
-          "module" : "statsdb.common.type-addon-task",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "type" : "forward",
-        "rident" : "org_reward_ledgers",
-        "rval" : "org_reward_ledgers",
-        "ns" : "Task",
-        "val" : "task"
-      },
-      "scope" : "ref",
-      "order" : 5,
-      "ident" : "task"
-    },
-    "asset_tx" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "AssetTx",
-        "link" : {
-          "id" : "AssetTx",
-          "module" : "statsdb.common.type-system-asset",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "org_reward_ledgers",
-        "type" : "forward",
-        "key" : "asset_tx",
-        "val" : "asset_tx",
-        "rkey" : "_asset_tx",
-        "rident" : "org_reward_ledgers"
-      },
-      "scope" : "ref",
-      "order" : 7,
-      "ident" : "asset_tx"
-    },
-    "type" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-org-rewards/EnumOrgRewardLedgerType"
-      },
-      "scope" : "data",
-      "order" : 8,
-      "ident" : "type"
-    },
-    "amount" : {
-      "type" : "numeric",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 9,
-      "ident" : "amount"
-    },
-    "budget" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "OrgRewardBudget",
-        "link" : {
-          "section" : "code",
-          "lang" : "postgres",
-          "module" : "statsdb.common.type-org-rewards",
-          "id" : "OrgRewardBudget"
-        },
-        "rval" : "org_reward_ledgers",
-        "type" : "forward",
-        "key" : "budget",
-        "val" : "budget",
-        "rkey" : "_budget",
-        "rident" : "org_reward_ledgers"
-      },
-      "scope" : "ref",
-      "order" : 2,
-      "ident" : "budget"
-    },
-    "time_created" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
-      "scope" : "data",
-      "order" : 17,
-      "ident" : "time_created"
-    },
-    "occurred_at" : {
-      "type" : "bigint",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 14,
-      "ident" : "occurred_at"
-    }
-  },
-  "ContestEntry" : {
-    "eligibility" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 5,
-      "ident" : "eligibility",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "time_updated" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 3,
-      "scope" : "data",
-      "order" : 9,
-      "ident" : "time_updated"
-    },
-    "user" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "User",
-        "link" : {
-          "id" : "User",
-          "module" : "statsdb.common.type-user",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "contest_entries",
-        "type" : "forward",
-        "key" : "user",
-        "val" : "user",
-        "rkey" : "_user",
-        "rident" : "contest_entries"
-      },
-      "scope" : "ref",
-      "order" : 2,
-      "ident" : "user"
-    },
-    "id" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "primary" : "default",
-      "priority" : 0,
-      "scope" : "id",
-      "order" : 0,
-      "ident" : "id"
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 6,
-      "ident" : "op_created"
-    },
-    "status" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-campaign-contest/EnumContestEntryStatus"
-      },
-      "scope" : "data",
-      "order" : 3,
-      "ident" : "status",
-      "sql" : {
-        "default" : "pending"
-      }
-    },
-    "op_updated" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
-      "scope" : "data",
-      "order" : 7,
-      "ident" : "op_updated"
-    },
-    "entered_at" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "entered_at"
-    },
-    "time_created" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 2,
-      "scope" : "data",
-      "order" : 8,
-      "ident" : "time_created"
-    },
-    "contest" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "CampaignContest",
-        "link" : {
-          "section" : "code",
-          "lang" : "postgres",
-          "module" : "statsdb.common.type-campaign-contest",
-          "id" : "CampaignContest"
-        },
-        "rval" : "contest_entries",
-        "type" : "forward",
-        "key" : "contest",
-        "val" : "contest",
-        "rkey" : "_contest",
-        "rident" : "contest_entries"
-      },
-      "scope" : "ref",
-      "order" : 1,
-      "ident" : "contest"
-    },
-    "contest_leaderboard_entries" : {
-      "ident" : "contest_leaderboard_entries",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestLeaderboardEntry",
-        "type" : "reverse",
-        "val" : "contest_leaderboard_entries",
-        "key" : "_entry",
-        "rval" : "entry",
-        "rkey" : "entry",
-        "rident" : "entry",
-        "link" : {
-          "id" : "ContestLeaderboardEntry",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    }
-  },
   "Social" : {
     "social_connections" : {
       "ident" : "social_connections",
@@ -2035,11 +1443,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -2053,7 +1461,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -2153,146 +1560,6 @@
       "ident" : "time_created"
     }
   },
-  "ContestLeaderboardEntry" : {
-    "entry" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "ContestEntry",
-        "link" : {
-          "section" : "code",
-          "lang" : "postgres",
-          "module" : "statsdb.common.type-campaign-contest",
-          "id" : "ContestEntry"
-        },
-        "rval" : "contest_leaderboard_entries",
-        "type" : "forward",
-        "key" : "entry",
-        "val" : "entry",
-        "rkey" : "_entry",
-        "rident" : "contest_leaderboard_entries"
-      },
-      "scope" : "ref",
-      "order" : 2,
-      "ident" : "entry"
-    },
-    "score" : {
-      "type" : "numeric",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "score"
-    },
-    "time_updated" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 3,
-      "scope" : "data",
-      "order" : 9,
-      "ident" : "time_updated"
-    },
-    "detail" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 5,
-      "ident" : "detail",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "id" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "primary" : "default",
-      "priority" : 0,
-      "scope" : "id",
-      "order" : 0,
-      "ident" : "id"
-    },
-    "rank" : {
-      "type" : "integer",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 3,
-      "ident" : "rank"
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 6,
-      "ident" : "op_created"
-    },
-    "op_updated" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
-      "scope" : "data",
-      "order" : 7,
-      "ident" : "op_updated"
-    },
-    "contest_awards" : {
-      "ident" : "contest_awards",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestAward",
-        "type" : "reverse",
-        "val" : "contest_awards",
-        "key" : "_leaderboard_entry",
-        "rval" : "leaderboard_entry",
-        "rkey" : "leaderboard_entry",
-        "rident" : "leaderboard_entry",
-        "link" : {
-          "id" : "ContestAward",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "leaderboard" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "ContestLeaderboard",
-        "link" : {
-          "section" : "code",
-          "lang" : "postgres",
-          "module" : "statsdb.common.type-campaign-contest",
-          "id" : "ContestLeaderboard"
-        },
-        "rval" : "contest_leaderboard_entries",
-        "type" : "forward",
-        "key" : "leaderboard",
-        "val" : "leaderboard",
-        "rkey" : "_leaderboard",
-        "rident" : "contest_leaderboard_entries"
-      },
-      "scope" : "ref",
-      "order" : 1,
-      "ident" : "leaderboard"
-    },
-    "time_created" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 2,
-      "scope" : "data",
-      "order" : 8,
-      "ident" : "time_created"
-    }
-  },
   "ItemTx" : {
     "time_created" : {
       "type" : "time",
@@ -2368,11 +1635,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     }
   },
   "Country" : {
@@ -2424,11 +1691,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -2634,11 +1901,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -2690,13 +1957,52 @@
       "ident" : "playable"
     }
   },
-  "ContestLeaderboard" : {
-    "published_at" : {
-      "type" : "time",
+  "AccessInviteEmail" : {
+    "class_context" : {
+      "ident" : "class_context",
+      "priority" : 3,
+      "scope" : "hidden",
+      "order" : 2,
+      "type" : "enum",
+      "foreign" : {
+        "access" : {
+          "ns" : "Access",
+          "column" : "class_context",
+          "link" : {
+            "id" : "Access",
+            "module" : "statsdb.common.type-user-access",
+            "lang" : "postgres",
+            "section" : "code"
+          }
+        }
+      },
       "cardinality" : "one",
-      "scope" : "data",
-      "order" : 5,
-      "ident" : "published_at"
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "access" : {
+      "ident" : "access",
+      "scope" : "id",
+      "order" : 3,
+      "required" : true,
+      "type" : "ref",
+      "ref" : {
+        "ns" : "Access",
+        "link" : {
+          "id" : "Access",
+          "module" : "statsdb.common.type-user-access",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "access_invite_emails",
+        "type" : "forward",
+        "key" : "access",
+        "val" : "access",
+        "rkey" : "_access",
+        "rident" : "access_invite_emails"
+      },
+      "cardinality" : "one"
     },
     "time_updated" : {
       "type" : "time",
@@ -2704,28 +2010,87 @@
       "priority" : 200,
       "priority_index" : 3,
       "scope" : "data",
-      "order" : 9,
+      "order" : 13,
       "ident" : "time_updated"
     },
-    "key" : {
-      "type" : "citext",
+    "detail" : {
+      "type" : "map",
       "cardinality" : "one",
       "required" : true,
-      "scope" : "data",
-      "order" : 2,
-      "ident" : "key",
+      "priority" : 51,
+      "scope" : "detail",
+      "order" : 8,
+      "ident" : "detail",
       "sql" : {
-        "default" : "overall"
+        "default" : "{}"
       }
     },
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
+    },
+    "email" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "id",
+      "order" : 4,
+      "ident" : "email"
+    },
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "foreign" : {
+        "access" : {
+          "ns" : "Access",
+          "column" : "class_table",
+          "link" : {
+            "id" : "Access",
+            "module" : "statsdb.common.type-user-access",
+            "lang" : "postgres",
+            "section" : "code"
+          }
+        }
+      },
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "log" : {
+      "ident" : "log",
+      "priority" : 90,
+      "shape" : "array",
+      "items" : {
+        "type" : "map",
+        "map" : {
+          "status" : {
+            "type" : "text"
+          },
+          "message" : {
+            "type" : "text"
+          },
+          "error" : {
+            "type" : "text"
+          }
+        }
+      },
+      "scope" : "detail",
+      "order" : 9,
+      "required" : true,
+      "type" : "array",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "[]"
+      }
     },
     "op_created" : {
       "type" : "uuid",
@@ -2733,21 +2098,21 @@
       "priority" : 200,
       "priority_index" : 0,
       "scope" : "data",
-      "order" : 6,
+      "order" : 10,
       "ident" : "op_created"
     },
     "status" : {
       "type" : "enum",
       "cardinality" : "one",
       "required" : true,
+      "scope" : "info",
       "enum" : {
-        "ns" : "statsdb.common.type-campaign-contest/EnumContestLeaderboardStatus"
+        "ns" : "statsdb.common.type-user-access/EnumAccessInviteEmailStatus"
       },
-      "scope" : "data",
-      "order" : 4,
+      "order" : 7,
       "ident" : "status",
       "sql" : {
-        "default" : "draft"
+        "default" : "pending"
       }
     },
     "op_updated" : {
@@ -2756,16 +2121,39 @@
       "priority" : 200,
       "priority_index" : 1,
       "scope" : "data",
-      "order" : 7,
+      "order" : 11,
       "ident" : "op_updated"
     },
-    "source_event_id" : {
-      "type" : "citext",
+    "secret" : {
+      "type" : "text",
       "cardinality" : "one",
       "required" : true,
-      "scope" : "data",
-      "order" : 3,
-      "ident" : "source_event_id"
+      "scope" : "hidden",
+      "order" : 5,
+      "ident" : "secret"
+    },
+    "from" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "User",
+        "link" : {
+          "id" : "User",
+          "module" : "statsdb.common.type-user",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "access_invite_emails",
+        "type" : "forward",
+        "key" : "from",
+        "val" : "from",
+        "rkey" : "_from",
+        "rident" : "access_invite_emails"
+      },
+      "scope" : "ref",
+      "order" : 6,
+      "ident" : "from"
     },
     "time_created" : {
       "type" : "time",
@@ -2773,51 +2161,8 @@
       "priority" : 200,
       "priority_index" : 2,
       "scope" : "data",
-      "order" : 8,
+      "order" : 12,
       "ident" : "time_created"
-    },
-    "contest" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "CampaignContest",
-        "link" : {
-          "section" : "code",
-          "lang" : "postgres",
-          "module" : "statsdb.common.type-campaign-contest",
-          "id" : "CampaignContest"
-        },
-        "rval" : "contest_leaderboards",
-        "type" : "forward",
-        "key" : "contest",
-        "val" : "contest",
-        "rkey" : "_contest",
-        "rident" : "contest_leaderboards"
-      },
-      "scope" : "ref",
-      "order" : 1,
-      "ident" : "contest"
-    },
-    "contest_leaderboard_entries" : {
-      "ident" : "contest_leaderboard_entries",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestLeaderboardEntry",
-        "type" : "reverse",
-        "val" : "contest_leaderboard_entries",
-        "key" : "_leaderboard",
-        "rval" : "leaderboard",
-        "rkey" : "leaderboard",
-        "rident" : "leaderboard",
-        "link" : {
-          "id" : "ContestLeaderboardEntry",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
     }
   },
   "SupportCase" : {
@@ -2881,11 +2226,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "resolved_at" : {
       "type" : "bigint",
@@ -3043,11 +2388,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "created_by" : {
       "type" : "uuid",
@@ -3196,6 +2541,136 @@
       "ident" : "owner_type"
     }
   },
+  "MarketingAudience" : {
+    "saved" : {
+      "type" : "boolean",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "saved",
+      "sql" : {
+        "default" : true
+      }
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "recipient_set" : {
+      "ident" : "recipient_set",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 6,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "created_by" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "ref" : {
+        "ns" : "User",
+        "link" : {
+          "id" : "User",
+          "module" : "statsdb.common.type-user",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "marketing_audiences",
+        "type" : "forward",
+        "key" : "created_by",
+        "val" : "created_by",
+        "rkey" : "_created_by",
+        "rident" : "marketing_audiences"
+      },
+      "scope" : "ref",
+      "order" : 7,
+      "ident" : "created_by"
+    },
+    "class_ref" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "required" : true,
+      "priority" : 4,
+      "scope" : "data",
+      "order" : 2,
+      "ident" : "class_ref"
+    },
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "name" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "name"
+    },
+    "marketing_campaigns" : {
+      "ident" : "marketing_campaigns",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "MarketingCampaign",
+        "type" : "reverse",
+        "val" : "marketing_campaigns",
+        "key" : "_audience",
+        "rval" : "audience",
+        "rkey" : "audience",
+        "rident" : "audience",
+        "link" : {
+          "id" : "MarketingCampaign",
+          "module" : "statsdb.common.type-marketing",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "op_created"
+    },
+    "source" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "source"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "time_created"
+    }
+  },
   "ProspectStakeTx" : {
     "wallet" : {
       "type" : "ref",
@@ -3223,11 +2698,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "spend_balance" : {
       "type" : "numeric",
@@ -3409,7 +2884,6 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 2,
       "type" : "enum",
@@ -3492,11 +2966,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -3530,7 +3004,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -3734,11 +3207,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -3828,7 +3301,7 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -3851,7 +3324,7 @@
     },
     "access" : {
       "ident" : "access",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -3897,7 +3370,7 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 0,
       "type" : "enum",
@@ -4011,7 +3484,7 @@
     },
     "to" : {
       "ident" : "to",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 3,
       "required" : true,
@@ -4091,11 +3564,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "claim" : {
       "type" : "enum",
@@ -4184,11 +3657,204 @@
       }
     }
   },
+  "SystemCatalogPlan" : {
+    "currency" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "currency",
+      "sql" : {
+        "default" : "AUD"
+      }
+    },
+    "catalog_item" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "SystemCatalogItem",
+        "link" : {
+          "id" : "SystemCatalogItem",
+          "module" : "statsdb.common.type-system-catalog",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "system_catalog_plans",
+        "type" : "forward",
+        "key" : "catalog_item",
+        "val" : "catalog_item",
+        "rkey" : "_catalog_item",
+        "rident" : "system_catalog_plans"
+      },
+      "scope" : "ref",
+      "order" : 2,
+      "ident" : "catalog_item"
+    },
+    "time_updated" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 3,
+      "scope" : "data",
+      "order" : 17,
+      "ident" : "time_updated"
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "effective_to" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "effective_to"
+    },
+    "interval" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "interval",
+      "sql" : {
+        "default" : "month"
+      }
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-catalog/EnumSystemCatalogItemStatus"
+      },
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "status",
+      "sql" : {
+        "default" : "draft"
+      }
+    },
+    "op_updated" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "op_updated"
+    },
+    "title" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "title"
+    },
+    "effective_from" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "effective_from"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 2,
+      "scope" : "data",
+      "order" : 16,
+      "ident" : "time_created"
+    },
+    "tier" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "tier",
+      "sql" : {
+        "default" : "standard"
+      }
+    },
+    "features" : {
+      "ident" : "features",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 10,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "variable_rate" : {
+      "type" : "numeric",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "variable_rate",
+      "sql" : {
+        "default" : 0
+      }
+    },
+    "code" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "code"
+    },
+    "base_cost" : {
+      "type" : "numeric",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "base_cost",
+      "sql" : {
+        "default" : 0
+      }
+    }
+  },
   "McpApproval" : {
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -4224,7 +3890,7 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 0,
       "type" : "enum",
@@ -4261,7 +3927,7 @@
     },
     "connection" : {
       "ident" : "connection",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -4403,7 +4069,6 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 2,
       "type" : "enum",
@@ -4445,11 +4110,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "created_by" : {
       "type" : "ref",
@@ -4485,7 +4150,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -4625,11 +4289,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -4652,7 +4316,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -5123,11 +4786,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "newsroom_insight_views" : {
       "ident" : "newsroom_insight_views",
@@ -5957,11 +5620,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "payload_hash" : {
       "type" : "citext",
@@ -5982,7 +5645,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -6130,44 +5792,53 @@
       }
     }
   },
-  "Manifest" : {
-    "manifest_items" : {
-      "ident" : "manifest_items",
+  "WorkflowProvider" : {
+    "properties" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "properties",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "workflow_definitions" : {
+      "ident" : "workflow_definitions",
       "cardinality" : "many",
       "type" : "ref",
       "ref" : {
-        "ns" : "ManifestItem",
+        "ns" : "WorkflowDefinition",
         "type" : "reverse",
-        "val" : "manifest_items",
-        "key" : "_manifest",
-        "rval" : "manifest",
-        "rkey" : "manifest",
-        "rident" : "manifest",
+        "val" : "workflow_definitions",
+        "key" : "_provider",
+        "rval" : "provider",
+        "rkey" : "provider",
+        "rident" : "provider",
         "link" : {
-          "id" : "ManifestItem",
-          "module" : "statsdb.common.type-addon-manifest",
+          "id" : "WorkflowDefinition",
+          "module" : "statsdb.common.type-system-workflow",
           "lang" : "postgres",
           "section" : "code"
         }
       }
     },
+    "label" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "label"
+    },
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "op_created"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -6175,33 +5846,12 @@
       "required" : true,
       "priority" : 4,
       "scope" : "data",
-      "order" : 3,
+      "order" : 2,
       "ident" : "class_ref"
-    },
-    "campaign_contests" : {
-      "ident" : "campaign_contests",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "CampaignContest",
-        "type" : "reverse",
-        "val" : "campaign_contests",
-        "key" : "_manifest",
-        "rval" : "manifest",
-        "rkey" : "manifest",
-        "rident" : "manifest",
-        "link" : {
-          "id" : "CampaignContest",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
     },
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -6210,17 +5860,14 @@
         "ns" : "statsdb.common.type-system-seed/EnumClassType"
       }
     },
-    "class_context" : {
-      "ident" : "class_context",
-      "priority" : 3,
-      "primary" : "default",
-      "scope" : "hidden",
-      "order" : 2,
-      "type" : "enum",
+    "op_created" : {
+      "type" : "uuid",
       "cardinality" : "one",
-      "enum" : {
-        "ns" : "statsdb.common.type-system-seed/EnumClassType"
-      }
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "op_created"
     },
     "time_created" : {
       "type" : "time",
@@ -6228,82 +5875,395 @@
       "priority" : 200,
       "priority_index" : 1,
       "scope" : "data",
-      "order" : 5,
+      "order" : 7,
       "ident" : "time_created"
+    },
+    "description" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "description"
     }
   },
-  "OrgRewardBudget" : {
-    "org" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "Org",
-        "link" : {
-          "id" : "Org",
-          "module" : "statsdb.common.type-org-base",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "org_reward_budgets",
-        "type" : "forward",
-        "key" : "org",
-        "val" : "org",
-        "rkey" : "_org",
-        "rident" : "org_reward_budgets"
+  "WorkflowDefinition" : {
+    "transitions" : {
+      "ident" : "transitions",
+      "shape" : "array",
+      "items" : {
+        "type" : "map"
       },
-      "scope" : "ref",
-      "order" : 1,
-      "ident" : "org"
+      "scope" : "data",
+      "order" : 17,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one"
     },
-    "token" : {
+    "output_schema" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 19,
+      "ident" : "output_schema",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "capabilities" : {
+      "ident" : "capabilities",
+      "shape" : "array",
+      "items" : {
+        "type" : "text"
+      },
+      "scope" : "data",
+      "order" : 14,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "[]"
+      }
+    },
+    "properties" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "properties",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "workflow_runs" : {
+      "ident" : "workflow_runs",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "WorkflowRun",
+        "type" : "reverse",
+        "val" : "workflow_runs",
+        "key" : "_definition",
+        "rval" : "definition",
+        "rkey" : "definition",
+        "rident" : "definition",
+        "link" : {
+          "id" : "WorkflowRun",
+          "module" : "statsdb.common.type-system-workflow",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "timeout_us" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 21,
+      "ident" : "timeout_us"
+    },
+    "provider_class" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      },
+      "foreign" : {
+        "provider" : {
+          "ns" : "WorkflowProvider",
+          "column" : "class_table",
+          "link" : {
+            "section" : "code",
+            "lang" : "postgres",
+            "module" : "statsdb.common.type-system-workflow",
+            "id" : "WorkflowProvider"
+          }
+        }
+      },
+      "scope" : "data",
+      "order" : 1,
+      "ident" : "provider_class"
+    },
+    "trigger_mode" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-workflow/EnumWorkflowTriggerMode"
+      },
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "trigger_mode",
+      "sql" : {
+        "default" : "manual"
+      }
+    },
+    "input_schema" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 18,
+      "ident" : "input_schema",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "key" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "key"
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "states" : {
+      "ident" : "states",
+      "shape" : "array",
+      "items" : {
+        "type" : "map"
+      },
+      "scope" : "data",
+      "order" : 16,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one"
+    },
+    "provider" : {
       "type" : "ref",
       "cardinality" : "one",
       "required" : true,
       "ref" : {
-        "ns" : "Token",
+        "group" : "provider",
+        "key" : "provider",
+        "rkey" : "_provider",
         "link" : {
-          "id" : "Token",
-          "module" : "statsdb.common.type-system-token",
+          "section" : "code",
           "lang" : "postgres",
-          "section" : "code"
+          "module" : "statsdb.common.type-system-workflow",
+          "id" : "WorkflowProvider"
         },
-        "rval" : "org_reward_budgets",
         "type" : "forward",
-        "key" : "token",
-        "val" : "token",
-        "rkey" : "_token",
-        "rident" : "org_reward_budgets"
+        "rident" : "workflow_definitions",
+        "rval" : "workflow_definitions",
+        "ns" : "WorkflowProvider",
+        "val" : "provider"
       },
       "scope" : "ref",
       "order" : 2,
-      "ident" : "token"
+      "ident" : "provider"
     },
-    "reserved" : {
-      "type" : "numeric",
+    "executor" : {
+      "type" : "citext",
       "cardinality" : "one",
       "required" : true,
       "scope" : "data",
-      "order" : 5,
-      "ident" : "reserved",
+      "order" : 12,
+      "ident" : "executor"
+    },
+    "initial_state" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "initial_state"
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 23,
+      "ident" : "op_created"
+    },
+    "success_state" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "success_state",
       "sql" : {
-        "default" : 0
+        "default" : "succeeded"
       }
     },
-    "time_updated" : {
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-workflow/EnumWorkflowDefinitionStatus"
+      },
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "status",
+      "sql" : {
+        "default" : "draft"
+      }
+    },
+    "scope" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-workflow/EnumWorkflowScope"
+      },
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "scope",
+      "sql" : {
+        "default" : "system"
+      }
+    },
+    "kind" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "kind",
+      "sql" : {
+        "default" : "workflow"
+      }
+    },
+    "triggers" : {
+      "ident" : "triggers",
+      "shape" : "array",
+      "items" : {
+        "type" : "map"
+      },
+      "scope" : "data",
+      "order" : 13,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "[]"
+      }
+    },
+    "failure_state" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "failure_state",
+      "sql" : {
+        "default" : "failed"
+      }
+    },
+    "version" : {
+      "type" : "integer",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "version"
+    },
+    "time_created" : {
       "type" : "time",
       "cardinality" : "one",
       "priority" : 200,
-      "priority_index" : 3,
+      "priority_index" : 1,
       "scope" : "data",
-      "order" : 14,
-      "ident" : "time_updated"
+      "order" : 24,
+      "ident" : "time_created"
+    },
+    "retry_policy" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 20,
+      "ident" : "retry_policy",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "description" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 22,
+      "ident" : "description"
+    }
+  },
+  "FinanceException" : {
+    "owner" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "ref" : {
+        "ns" : "User",
+        "link" : {
+          "id" : "User",
+          "module" : "statsdb.common.type-user",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "finance_exceptions",
+        "type" : "forward",
+        "key" : "owner",
+        "val" : "owner",
+        "rkey" : "_owner",
+        "rident" : "finance_exceptions"
+      },
+      "scope" : "ref",
+      "order" : 9,
+      "ident" : "owner"
+    },
+    "settlement" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "FinanceSettlement",
+        "link" : {
+          "id" : "FinanceSettlement",
+          "module" : "statsdb.common.type-finance-settlement",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "finance_exceptions",
+        "type" : "forward",
+        "key" : "settlement",
+        "val" : "settlement",
+        "rkey" : "_settlement",
+        "rident" : "finance_exceptions"
+      },
+      "scope" : "ref",
+      "order" : 2,
+      "ident" : "settlement"
+    },
+    "currency" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "currency"
+    },
+    "reference_type" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "reference_type"
     },
     "detail" : {
       "ident" : "detail",
       "shape" : "map",
       "scope" : "data",
-      "order" : 10,
+      "order" : 5,
       "required" : true,
       "type" : "jsonb",
       "cardinality" : "one",
@@ -6314,28 +6274,159 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
-    "ends_at" : {
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "foreign" : {
+        "settlement" : {
+          "ns" : "FinanceSettlement",
+          "column" : "class_table",
+          "link" : {
+            "id" : "FinanceSettlement",
+            "module" : "statsdb.common.type-finance-settlement",
+            "lang" : "postgres",
+            "section" : "code"
+          }
+        }
+      },
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "resolved_at" : {
       "type" : "bigint",
       "cardinality" : "one",
       "scope" : "data",
-      "order" : 9,
-      "ident" : "ends_at"
+      "order" : 13,
+      "ident" : "resolved_at"
     },
-    "limit" : {
-      "type" : "numeric",
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-finance-settlement/EnumFinanceExceptionStatus"
+      },
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "status",
+      "sql" : {
+        "default" : "open"
+      }
+    },
+    "title" : {
+      "type" : "text",
       "cardinality" : "one",
       "required" : true,
       "scope" : "data",
       "order" : 4,
-      "ident" : "limit",
+      "ident" : "title"
+    },
+    "amount" : {
+      "type" : "numeric",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "amount"
+    },
+    "exception_type" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "exception_type"
+    },
+    "reference_id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "reference_id"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "time_created"
+    },
+    "resolution" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "resolution"
+    }
+  },
+  "EmailTemplate" : {
+    "key" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 1,
+      "ident" : "key"
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "locale" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 2,
+      "ident" : "locale",
       "sql" : {
-        "default" : 0
+        "default" : "EN"
+      }
+    },
+    "marketing_campaigns" : {
+      "ident" : "marketing_campaigns",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "MarketingCampaign",
+        "type" : "reverse",
+        "val" : "marketing_campaigns",
+        "key" : "_template",
+        "rval" : "template",
+        "rkey" : "template",
+        "rident" : "template",
+        "link" : {
+          "id" : "MarketingCampaign",
+          "module" : "statsdb.common.type-marketing",
+          "lang" : "postgres",
+          "section" : "code"
+        }
       }
     },
     "op_created" : {
@@ -6344,7 +6435,7 @@
       "priority" : 200,
       "priority_index" : 0,
       "scope" : "data",
-      "order" : 11,
+      "order" : 12,
       "ident" : "op_created"
     },
     "status" : {
@@ -6352,93 +6443,153 @@
       "cardinality" : "one",
       "required" : true,
       "enum" : {
-        "ns" : "statsdb.common.type-org-rewards/EnumOrgRewardBudgetStatus"
+        "ns" : "statsdb.common.type-system-email/EnumEmailTemplateStatus"
       },
       "scope" : "data",
-      "order" : 7,
+      "order" : 4,
       "ident" : "status",
       "sql" : {
         "default" : "draft"
       }
     },
-    "op_updated" : {
-      "type" : "uuid",
+    "subject" : {
+      "type" : "text",
       "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
+      "required" : true,
       "scope" : "data",
-      "order" : 12,
-      "ident" : "op_updated"
+      "order" : 5,
+      "ident" : "subject"
     },
-    "awarded" : {
-      "type" : "numeric",
+    "email_deliveries" : {
+      "ident" : "email_deliveries",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "EmailDelivery",
+        "type" : "reverse",
+        "val" : "email_deliveries",
+        "key" : "_template",
+        "rval" : "template",
+        "rkey" : "template",
+        "rident" : "template",
+        "link" : {
+          "id" : "EmailDelivery",
+          "module" : "statsdb.common.type-system-email",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "body_text" : {
+      "type" : "text",
       "cardinality" : "one",
       "required" : true,
       "scope" : "data",
       "order" : 6,
-      "ident" : "awarded",
-      "sql" : {
-        "default" : 0
-      }
+      "ident" : "body_text"
+    },
+    "preheader" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "preheader"
+    },
+    "version" : {
+      "type" : "integer",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "version"
+    },
+    "body_html" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "body_html"
     },
     "time_created" : {
       "type" : "time",
       "cardinality" : "one",
       "priority" : 200,
-      "priority_index" : 2,
+      "priority_index" : 1,
       "scope" : "data",
       "order" : 13,
       "ident" : "time_created"
     },
-    "playable" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "Playable",
-        "link" : {
-          "id" : "Playable",
-          "module" : "statsdb.common.type-system-playable",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "org_reward_budgets",
-        "type" : "forward",
-        "key" : "playable",
-        "val" : "playable",
-        "rkey" : "_playable",
-        "rident" : "org_reward_budgets"
+    "content_blocks" : {
+      "ident" : "content_blocks",
+      "shape" : "array",
+      "items" : {
+        "type" : "map",
+        "map" : {
+          "align" : {
+            "type" : "text"
+          },
+          "height" : {
+            "type" : "text"
+          },
+          "label" : {
+            "type" : "text"
+          },
+          "id" : {
+            "type" : "text"
+          },
+          "src" : {
+            "type" : "text"
+          },
+          "href" : {
+            "type" : "text"
+          },
+          "level" : {
+            "type" : "integer"
+          },
+          "alt" : {
+            "type" : "text"
+          },
+          "text" : {
+            "type" : "text"
+          },
+          "type" : {
+            "type" : "text"
+          },
+          "italic" : {
+            "type" : "boolean"
+          },
+          "bold" : {
+            "type" : "boolean"
+          }
+        }
       },
-      "scope" : "ref",
-      "order" : 3,
-      "ident" : "playable"
+      "scope" : "data",
+      "order" : 9,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "[]"
+      }
     },
-    "starts_at" : {
-      "type" : "bigint",
+    "param_schema" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "param_schema",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "description" : {
+      "type" : "text",
       "cardinality" : "one",
       "scope" : "data",
-      "order" : 8,
-      "ident" : "starts_at"
-    },
-    "org_reward_ledgers" : {
-      "ident" : "org_reward_ledgers",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "OrgRewardLedger",
-        "type" : "reverse",
-        "val" : "org_reward_ledgers",
-        "key" : "_budget",
-        "rval" : "budget",
-        "rkey" : "budget",
-        "rident" : "budget",
-        "link" : {
-          "id" : "OrgRewardLedger",
-          "module" : "statsdb.common.type-org-rewards",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
+      "order" : 11,
+      "ident" : "description"
     }
   },
   "Topic" : {
@@ -6770,11 +6921,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_table" : {
       "ignore" : true,
@@ -7258,6 +7409,444 @@
       }
     }
   },
+  "MarketingCampaign" : {
+    "destination" : {
+      "ident" : "destination",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 6,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "scheduled_at" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "scheduled_at"
+    },
+    "time_updated" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 3,
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "time_updated"
+    },
+    "detail" : {
+      "type" : "map",
+      "cardinality" : "one",
+      "required" : true,
+      "priority" : 51,
+      "scope" : "detail",
+      "order" : 11,
+      "ident" : "detail",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "created_by" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "ref" : {
+        "ns" : "User",
+        "link" : {
+          "id" : "User",
+          "module" : "statsdb.common.type-user",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "marketing_campaigns",
+        "type" : "forward",
+        "key" : "created_by",
+        "val" : "created_by",
+        "rkey" : "_created_by",
+        "rident" : "marketing_campaigns"
+      },
+      "scope" : "ref",
+      "order" : 9,
+      "ident" : "created_by"
+    },
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "foreign" : {
+        "audience" : {
+          "ns" : "MarketingAudience",
+          "column" : "class_table",
+          "link" : {
+            "id" : "MarketingAudience",
+            "module" : "statsdb.common.type-marketing",
+            "lang" : "postgres",
+            "section" : "code"
+          }
+        }
+      },
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "last_activity_at" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "last_activity_at"
+    },
+    "expires_at" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "expires_at"
+    },
+    "name" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "name"
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-marketing/EnumMarketingCampaignStatus"
+      },
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "status",
+      "sql" : {
+        "default" : "draft"
+      }
+    },
+    "op_updated" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "op_updated"
+    },
+    "template" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "EmailTemplate",
+        "link" : {
+          "id" : "EmailTemplate",
+          "module" : "statsdb.common.type-system-email",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "marketing_campaigns",
+        "type" : "forward",
+        "key" : "template",
+        "val" : "template",
+        "rkey" : "_template",
+        "rident" : "marketing_campaigns"
+      },
+      "scope" : "ref",
+      "order" : 3,
+      "ident" : "template"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 2,
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "time_created"
+    },
+    "audience" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "MarketingAudience",
+        "link" : {
+          "id" : "MarketingAudience",
+          "module" : "statsdb.common.type-marketing",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "marketing_campaigns",
+        "type" : "forward",
+        "key" : "audience",
+        "val" : "audience",
+        "rkey" : "_audience",
+        "rident" : "marketing_campaigns"
+      },
+      "scope" : "ref",
+      "order" : 2,
+      "ident" : "audience"
+    }
+  },
+  "WorkflowRun" : {
+    "workflow_works" : {
+      "ident" : "workflow_works",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "WorkflowWork",
+        "type" : "reverse",
+        "val" : "workflow_works",
+        "key" : "_run",
+        "rval" : "run",
+        "rkey" : "run",
+        "rident" : "run",
+        "link" : {
+          "id" : "WorkflowWork",
+          "module" : "statsdb.common.type-system-workflow",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "correlation_id" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "correlation_id"
+    },
+    "output" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "output"
+    },
+    "input_ref" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "input_ref",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "time_updated" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 3,
+      "scope" : "data",
+      "order" : 17,
+      "ident" : "time_updated"
+    },
+    "error" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "error"
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "revision" : {
+      "type" : "integer",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "revision",
+      "sql" : {
+        "default" : 0
+      }
+    },
+    "idempotency_key" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 2,
+      "ident" : "idempotency_key"
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-workflow/EnumWorkflowRunStatus"
+      },
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "status",
+      "sql" : {
+        "default" : "queued"
+      }
+    },
+    "op_updated" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "op_updated"
+    },
+    "email_deliveries" : {
+      "ident" : "email_deliveries",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "EmailDelivery",
+        "type" : "reverse",
+        "val" : "email_deliveries",
+        "key" : "_workflow_run",
+        "rval" : "workflow_run",
+        "rkey" : "workflow_run",
+        "rident" : "workflow_run",
+        "link" : {
+          "id" : "EmailDelivery",
+          "module" : "statsdb.common.type-system-email",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "definition" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "WorkflowDefinition",
+        "link" : {
+          "section" : "code",
+          "lang" : "postgres",
+          "module" : "statsdb.common.type-system-workflow",
+          "id" : "WorkflowDefinition"
+        },
+        "rval" : "workflow_runs",
+        "type" : "forward",
+        "key" : "definition",
+        "val" : "definition",
+        "rkey" : "_definition",
+        "rident" : "workflow_runs"
+      },
+      "scope" : "ref",
+      "order" : 1,
+      "ident" : "definition"
+    },
+    "state" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "state"
+    },
+    "time_started" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "time_started"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 2,
+      "scope" : "data",
+      "order" : 16,
+      "ident" : "time_created"
+    },
+    "subject_ref" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "subject_ref"
+    },
+    "workflow_transitions" : {
+      "ident" : "workflow_transitions",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "WorkflowTransition",
+        "type" : "reverse",
+        "val" : "workflow_transitions",
+        "key" : "_run",
+        "rval" : "run",
+        "rkey" : "run",
+        "rident" : "run",
+        "link" : {
+          "id" : "WorkflowTransition",
+          "module" : "statsdb.common.type-system-workflow",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "subject_type" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "subject_type"
+    },
+    "time_completed" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "time_completed"
+    }
+  },
   "BillingAccount" : {
     "org" : {
       "ident" : "org",
@@ -7317,11 +7906,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "billing_payment_methods" : {
       "ident" : "billing_payment_methods",
@@ -7482,160 +8071,6 @@
       }
     }
   },
-  "ContestAward" : {
-    "time_updated" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 3,
-      "scope" : "data",
-      "order" : 12,
-      "ident" : "time_updated"
-    },
-    "id" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "primary" : "default",
-      "priority" : 0,
-      "scope" : "id",
-      "order" : 0,
-      "ident" : "id"
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 9,
-      "ident" : "op_created"
-    },
-    "status" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-campaign-contest/EnumContestAwardStatus"
-      },
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "status",
-      "sql" : {
-        "default" : "pending"
-      }
-    },
-    "op_updated" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
-      "scope" : "data",
-      "order" : 10,
-      "ident" : "op_updated"
-    },
-    "leaderboard_entry" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "ContestLeaderboardEntry",
-        "link" : {
-          "section" : "code",
-          "lang" : "postgres",
-          "module" : "statsdb.common.type-campaign-contest",
-          "id" : "ContestLeaderboardEntry"
-        },
-        "rval" : "contest_awards",
-        "type" : "forward",
-        "key" : "leaderboard_entry",
-        "val" : "leaderboard_entry",
-        "rkey" : "_leaderboard_entry",
-        "rident" : "contest_awards"
-      },
-      "scope" : "ref",
-      "order" : 1,
-      "ident" : "leaderboard_entry"
-    },
-    "awarded_at" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 5,
-      "ident" : "awarded_at"
-    },
-    "fulfilled_at" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 7,
-      "ident" : "fulfilled_at"
-    },
-    "fulfillment" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 8,
-      "ident" : "fulfillment",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "time_created" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 2,
-      "scope" : "data",
-      "order" : 11,
-      "ident" : "time_created"
-    },
-    "award_key" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 2,
-      "ident" : "award_key"
-    },
-    "award_snapshot" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "required" : true,
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 3,
-      "ident" : "award_snapshot"
-    },
-    "claimed_at" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 6,
-      "ident" : "claimed_at"
-    },
-    "org_reward_ledgers" : {
-      "ident" : "org_reward_ledgers",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "OrgRewardLedger",
-        "type" : "reverse",
-        "val" : "org_reward_ledgers",
-        "key" : "_contest_award",
-        "rval" : "contest_award",
-        "rkey" : "contest_award",
-        "rident" : "contest_award",
-        "link" : {
-          "id" : "OrgRewardLedger",
-          "module" : "statsdb.common.type-org-rewards",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    }
-  },
   "ComputeTopup" : {
     "token" : {
       "type" : "ref",
@@ -7703,11 +8138,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "idempotency_key" : {
       "type" : "citext",
@@ -7852,11 +8287,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "wallet" : {
       "type" : "ref",
@@ -8118,6 +8553,26 @@
         "default" : false
       }
     },
+    "newsroom_submissions" : {
+      "ident" : "newsroom_submissions",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "NewsroomSubmission",
+        "type" : "reverse",
+        "val" : "newsroom_submissions",
+        "key" : "_organization",
+        "rval" : "organization",
+        "rkey" : "organization",
+        "rident" : "organization",
+        "link" : {
+          "id" : "NewsroomSubmission",
+          "module" : "statsdb.common.type-newsroom-handoff",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
     "rev" : {
       "ident" : "rev",
       "priority" : 99,
@@ -8226,14 +8681,34 @@
       "order" : 15,
       "ident" : "website"
     },
+    "newsroom_publications" : {
+      "ident" : "newsroom_publications",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "NewsroomPublication",
+        "type" : "reverse",
+        "val" : "newsroom_publications",
+        "key" : "_organization",
+        "rval" : "organization",
+        "rkey" : "organization",
+        "rident" : "organization",
+        "link" : {
+          "id" : "NewsroomPublication",
+          "module" : "statsdb.common.type-newsroom-handoff",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "newsroom_insight_views" : {
       "ident" : "newsroom_insight_views",
@@ -8906,11 +9381,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -8971,7 +9446,6 @@
     },
     "playable" : {
       "ident" : "playable",
-      "primary" : "default",
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -9012,477 +9486,6 @@
       "ident" : "total_supply"
     }
   },
-  "CampaignContest" : {
-    "class_context" : {
-      "ignore" : true,
-      "ident" : "class_context",
-      "priority" : 3,
-      "scope" : "hidden",
-      "order" : 2,
-      "type" : "enum",
-      "foreign" : {
-        "rev" : {
-          "ns" : "Rev",
-          "column" : "class_context",
-          "link" : {
-            "id" : "Rev",
-            "module" : "statsdb.common.type-system-base",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        },
-        "lock" : {
-          "ns" : "Lock",
-          "column" : "class_context",
-          "link" : {
-            "id" : "Lock",
-            "module" : "statsdb.common.type-system-base",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        },
-        "manifest" : {
-          "ns" : "Manifest",
-          "column" : "class_context",
-          "link" : {
-            "id" : "Manifest",
-            "module" : "statsdb.common.type-addon-manifest",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        }
-      },
-      "cardinality" : "one",
-      "enum" : {
-        "ns" : "statsdb.common.type-system-seed/EnumClassType"
-      }
-    },
-    "time_start" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 14,
-      "ident" : "time_start"
-    },
-    "authority" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-campaign-contest/EnumCampaignContestAuthority"
-      },
-      "scope" : "data",
-      "order" : 8,
-      "ident" : "authority",
-      "sql" : {
-        "default" : "org_snapshot"
-      }
-    },
-    "is_archived" : {
-      "type" : "boolean",
-      "cardinality" : "one",
-      "required" : true,
-      "priority" : 89,
-      "scope" : "data",
-      "order" : 20,
-      "ident" : "is_archived",
-      "sql" : {
-        "default" : false
-      }
-    },
-    "contest_tasks" : {
-      "ident" : "contest_tasks",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestTask",
-        "type" : "reverse",
-        "val" : "contest_tasks",
-        "key" : "_contest",
-        "rval" : "contest",
-        "rkey" : "contest",
-        "rident" : "contest",
-        "link" : {
-          "id" : "ContestTask",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "entry_policy" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 10,
-      "ident" : "entry_policy",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "rev" : {
-      "ident" : "rev",
-      "priority" : 99,
-      "scope" : "ref",
-      "order" : 21,
-      "required" : true,
-      "type" : "ref",
-      "ref" : {
-        "ns" : "Rev",
-        "link" : {
-          "id" : "Rev",
-          "module" : "statsdb.common.type-system-base",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "campaign_contests",
-        "type" : "forward",
-        "key" : "rev",
-        "val" : "rev",
-        "rkey" : "_rev",
-        "rident" : "campaign_contests"
-      },
-      "cardinality" : "one"
-    },
-    "time_updated" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 3,
-      "scope" : "data",
-      "order" : 25,
-      "ident" : "time_updated"
-    },
-    "leaderboard_policy" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 12,
-      "ident" : "leaderboard_policy",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "detail" : {
-      "type" : "map",
-      "cardinality" : "one",
-      "required" : true,
-      "priority" : 51,
-      "scope" : "detail",
-      "order" : 16,
-      "ident" : "detail",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "tags" : {
-      "type" : "array",
-      "cardinality" : "one",
-      "scope" : "info",
-      "priority" : 52,
-      "profile" : { },
-      "order" : 17,
-      "ident" : "tags",
-      "sql" : {
-        "default" : "[]"
-      }
-    },
-    "contest_topics" : {
-      "ident" : "contest_topics",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestTopic",
-        "type" : "reverse",
-        "val" : "contest_topics",
-        "key" : "_contest",
-        "rval" : "contest",
-        "rkey" : "contest",
-        "rident" : "contest",
-        "link" : {
-          "id" : "ContestTopic",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "id" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "primary" : "default",
-      "priority" : 0,
-      "scope" : "id",
-      "order" : 0,
-      "ident" : "id"
-    },
-    "class_table" : {
-      "ignore" : true,
-      "ident" : "class_table",
-      "priority" : 1,
-      "scope" : "hidden",
-      "order" : 1,
-      "type" : "enum",
-      "foreign" : {
-        "rev" : {
-          "ns" : "Rev",
-          "column" : "class_table",
-          "link" : {
-            "id" : "Rev",
-            "module" : "statsdb.common.type-system-base",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        },
-        "lock" : {
-          "ns" : "Lock",
-          "column" : "class_table",
-          "link" : {
-            "id" : "Lock",
-            "module" : "statsdb.common.type-system-base",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        },
-        "manifest" : {
-          "ns" : "Manifest",
-          "column" : "class_table",
-          "link" : {
-            "id" : "Manifest",
-            "module" : "statsdb.common.type-addon-manifest",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        }
-      },
-      "cardinality" : "one",
-      "enum" : {
-        "ns" : "statsdb.common.type-system-seed/EnumClassType"
-      }
-    },
-    "time_end" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 15,
-      "ident" : "time_end"
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 22,
-      "ident" : "op_created"
-    },
-    "campaign" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "Campaign",
-        "link" : {
-          "id" : "Campaign",
-          "module" : "statsdb.common.type-org-campaign",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "campaign_contests",
-        "type" : "forward",
-        "key" : "campaign",
-        "val" : "campaign",
-        "rkey" : "_campaign",
-        "rident" : "campaign_contests"
-      },
-      "scope" : "ref",
-      "order" : 6,
-      "ident" : "campaign"
-    },
-    "status" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-campaign-contest/EnumCampaignContestStatus"
-      },
-      "scope" : "data",
-      "order" : 9,
-      "ident" : "status",
-      "sql" : {
-        "default" : "draft"
-      }
-    },
-    "contest_entries" : {
-      "ident" : "contest_entries",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestEntry",
-        "type" : "reverse",
-        "val" : "contest_entries",
-        "key" : "_contest",
-        "rval" : "contest",
-        "rkey" : "contest",
-        "rident" : "contest",
-        "link" : {
-          "id" : "ContestEntry",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "op_updated" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
-      "scope" : "data",
-      "order" : 23,
-      "ident" : "op_updated"
-    },
-    "scoring_policy" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 11,
-      "ident" : "scoring_policy",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "title" : {
-      "type" : "text",
-      "cardinality" : "one",
-      "required" : true,
-      "priority" : 10,
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "title"
-    },
-    "type" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-campaign-contest/EnumCampaignContestType"
-      },
-      "scope" : "data",
-      "order" : 7,
-      "ident" : "type",
-      "sql" : {
-        "default" : "forecast"
-      }
-    },
-    "lock" : {
-      "ident" : "lock",
-      "priority" : 66,
-      "scope" : "ref",
-      "order" : 19,
-      "required" : true,
-      "type" : "ref",
-      "ref" : {
-        "ns" : "Lock",
-        "link" : {
-          "id" : "Lock",
-          "module" : "statsdb.common.type-system-base",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "campaign_contests",
-        "type" : "forward",
-        "key" : "lock",
-        "val" : "lock",
-        "rkey" : "_lock",
-        "rident" : "campaign_contests"
-      },
-      "cardinality" : "one"
-    },
-    "manifest" : {
-      "ident" : "manifest",
-      "priority" : 53,
-      "scope" : "ref",
-      "order" : 18,
-      "required" : true,
-      "type" : "ref",
-      "ref" : {
-        "ns" : "Manifest",
-        "link" : {
-          "id" : "Manifest",
-          "module" : "statsdb.common.type-addon-manifest",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "campaign_contests",
-        "type" : "forward",
-        "key" : "manifest",
-        "val" : "manifest",
-        "rkey" : "_manifest",
-        "rident" : "campaign_contests"
-      },
-      "cardinality" : "one"
-    },
-    "time_created" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 2,
-      "scope" : "data",
-      "order" : 24,
-      "ident" : "time_created"
-    },
-    "award_policy" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 13,
-      "ident" : "award_policy",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "contest_leaderboards" : {
-      "ident" : "contest_leaderboards",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestLeaderboard",
-        "type" : "reverse",
-        "val" : "contest_leaderboards",
-        "key" : "_contest",
-        "rval" : "contest",
-        "rkey" : "contest",
-        "rident" : "contest",
-        "link" : {
-          "id" : "ContestLeaderboard",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "code" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "scope" : "info",
-      "priority" : 8,
-      "order" : 3,
-      "ident" : "code"
-    },
-    "description" : {
-      "type" : "text",
-      "cardinality" : "one",
-      "priority" : 11,
-      "scope" : "data",
-      "order" : 5,
-      "ident" : "description"
-    }
-  },
   "Op" : {
     "data" : {
       "type" : "map",
@@ -9509,11 +9512,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "tag" : {
       "type" : "citext",
@@ -9559,11 +9562,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "position" : {
       "type" : "integer",
@@ -9712,11 +9715,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "paid_at" : {
       "type" : "bigint",
@@ -9739,7 +9742,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -9954,11 +9956,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "failure_message" : {
       "type" : "text",
@@ -9970,7 +9972,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -10126,11 +10127,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -10220,6 +10221,203 @@
       "ident" : "topic"
     }
   },
+  "EmailDelivery" : {
+    "transport" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "transport",
+      "sql" : {
+        "default" : "smtp"
+      }
+    },
+    "recipient_masked" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "recipient_masked"
+    },
+    "safe_params" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "safe_params",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "recipient_hash" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "recipient_hash"
+    },
+    "source_type" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "source_type"
+    },
+    "time_updated" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 3,
+      "scope" : "data",
+      "order" : 18,
+      "ident" : "time_updated"
+    },
+    "safe_preview" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "safe_preview"
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "time_accepted" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "time_accepted"
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "op_created"
+    },
+    "smtp_response" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "smtp_response"
+    },
+    "source_ref" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "source_ref"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-system-email/EnumEmailDeliveryStatus"
+      },
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "status",
+      "sql" : {
+        "default" : "queued"
+      }
+    },
+    "op_updated" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 16,
+      "ident" : "op_updated"
+    },
+    "workflow_run" : {
+      "ident" : "workflow_run",
+      "unique" : true,
+      "scope" : "ref",
+      "order" : 1,
+      "required" : true,
+      "type" : "ref",
+      "ref" : {
+        "ns" : "WorkflowRun",
+        "link" : {
+          "id" : "WorkflowRun",
+          "module" : "statsdb.common.type-system-workflow",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "email_deliveries",
+        "type" : "forward",
+        "key" : "workflow_run",
+        "val" : "workflow_run",
+        "rkey" : "_workflow_run",
+        "rident" : "email_deliveries"
+      },
+      "cardinality" : "one"
+    },
+    "template" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "EmailTemplate",
+        "link" : {
+          "section" : "code",
+          "lang" : "postgres",
+          "module" : "statsdb.common.type-system-email",
+          "id" : "EmailTemplate"
+        },
+        "rval" : "email_deliveries",
+        "type" : "forward",
+        "key" : "template",
+        "val" : "template",
+        "rkey" : "_template",
+        "rident" : "email_deliveries"
+      },
+      "scope" : "ref",
+      "order" : 2,
+      "ident" : "template"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 2,
+      "scope" : "data",
+      "order" : 17,
+      "ident" : "time_created"
+    },
+    "provider_id" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "provider_id"
+    },
+    "last_error" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "last_error"
+    }
+  },
   "SystemPlatformApproval" : {
     "time_updated" : {
       "type" : "time",
@@ -10233,16 +10431,15 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -10438,7 +10635,6 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 2,
       "type" : "enum",
@@ -10519,11 +10715,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -10551,7 +10747,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -10668,6 +10863,160 @@
       }
     }
   },
+  "BillingSubscription" : {
+    "product_key" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 2,
+      "ident" : "product_key"
+    },
+    "cancel_at_period_end" : {
+      "type" : "boolean",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "cancel_at_period_end",
+      "sql" : {
+        "default" : false
+      }
+    },
+    "currency" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "currency",
+      "sql" : {
+        "default" : "AUD"
+      }
+    },
+    "time_updated" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 3,
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "time_updated"
+    },
+    "grace_end" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "grace_end"
+    },
+    "period_start" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "period_start"
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "period_end" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "period_end"
+    },
+    "interval" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "interval",
+      "sql" : {
+        "default" : "month"
+      }
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-org-billing/EnumBillingSubscriptionStatus"
+      },
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "status",
+      "sql" : {
+        "default" : "pending"
+      }
+    },
+    "op_updated" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "op_updated"
+    },
+    "account" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "BillingAccount",
+        "link" : {
+          "section" : "code",
+          "lang" : "postgres",
+          "module" : "statsdb.common.type-org-billing",
+          "id" : "BillingAccount"
+        },
+        "rval" : "billing_subscriptions",
+        "type" : "forward",
+        "key" : "account",
+        "val" : "account",
+        "rkey" : "_account",
+        "rident" : "billing_subscriptions"
+      },
+      "scope" : "ref",
+      "order" : 1,
+      "ident" : "account"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 2,
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "time_created"
+    },
+    "price_cents" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "price_cents"
+    }
+  },
   "SocialPublication" : {
     "permalink" : {
       "type" : "text",
@@ -10728,11 +11077,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "connection" : {
       "type" : "ref",
@@ -10881,11 +11230,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "created_by" : {
       "type" : "ref",
@@ -10932,7 +11281,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -11083,11 +11431,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "expires_at" : {
       "type" : "bigint",
@@ -11392,11 +11740,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "token_erc20_options" : {
       "ident" : "token_erc20_options",
@@ -11590,11 +11938,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -11752,11 +12100,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -11770,7 +12118,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -11818,6 +12165,202 @@
       "ident" : "time_created"
     }
   },
+  "ContentControl" : {
+    "class_context" : {
+      "ident" : "class_context",
+      "priority" : 3,
+      "scope" : "hidden",
+      "order" : 2,
+      "type" : "enum",
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "due_at" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "due_at"
+    },
+    "freshness" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 16,
+      "ident" : "freshness"
+    },
+    "priority" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-content-control/EnumContentControlPriority"
+      },
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "priority",
+      "sql" : {
+        "default" : "normal"
+      }
+    },
+    "source_url" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 12,
+      "ident" : "source_url"
+    },
+    "oracle" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "oracle"
+    },
+    "source_type" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "source_type"
+    },
+    "detail" : {
+      "ident" : "detail",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 17,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "class_ref" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "required" : true,
+      "priority" : 4,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "class_ref"
+    },
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 18,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-content-control/EnumContentControlStatus"
+      },
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "status",
+      "sql" : {
+        "default" : "open"
+      }
+    },
+    "kind" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-content-control/EnumContentControlKind"
+      },
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "kind"
+    },
+    "title" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "title"
+    },
+    "publisher" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "publisher"
+    },
+    "reason" : {
+      "type" : "text",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "reason"
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 19,
+      "ident" : "time_created"
+    },
+    "actor" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "ref" : {
+        "ns" : "User",
+        "link" : {
+          "id" : "User",
+          "module" : "statsdb.common.type-user",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "content_controls",
+        "type" : "forward",
+        "key" : "actor",
+        "val" : "actor",
+        "rkey" : "_actor",
+        "rident" : "content_controls"
+      },
+      "scope" : "ref",
+      "order" : 7,
+      "ident" : "actor"
+    },
+    "horizon" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "horizon"
+    }
+  },
   "LockLog" : {
     "time_created" : {
       "type" : "time",
@@ -11842,7 +12385,7 @@
     "op_created" : {
       "ident" : "op_created",
       "priority" : 200,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 6,
       "type" : "uuid",
@@ -11863,7 +12406,7 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -11886,7 +12429,7 @@
     },
     "lock" : {
       "ident" : "lock",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -11923,7 +12466,7 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 0,
       "type" : "enum",
@@ -11949,7 +12492,6 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 2,
       "type" : "enum",
@@ -12001,11 +12543,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -12019,7 +12561,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -12122,7 +12663,7 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -12145,7 +12686,7 @@
     },
     "member" : {
       "ident" : "member",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 5,
       "required" : true,
@@ -12169,7 +12710,7 @@
     },
     "access" : {
       "ident" : "access",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 4,
       "required" : true,
@@ -12215,7 +12756,7 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 0,
       "type" : "enum",
@@ -12341,11 +12882,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -12359,7 +12900,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -12478,16 +13018,15 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -12499,7 +13038,6 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 2,
       "type" : "enum",
@@ -12615,11 +13153,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "holdings_tax" : {
       "type" : "numeric",
@@ -12881,7 +13419,7 @@
     "op_created" : {
       "ident" : "op_created",
       "priority" : 200,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 4,
       "type" : "uuid",
@@ -12914,7 +13452,7 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -12938,7 +13476,7 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 0,
       "type" : "enum",
@@ -12970,7 +13508,7 @@
     },
     "audit" : {
       "ident" : "audit",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -13002,9 +13540,9 @@
       "enum" : {
         "ns" : "statsdb.common.type-system-seed/EnumClassType"
       },
-      "primary" : "default",
       "order" : 1,
-      "ident" : "class_context"
+      "ident" : "class_context",
+      "primary" : true
     },
     "event_kind" : {
       "type" : "enum",
@@ -13044,14 +13582,14 @@
       "enum" : {
         "ns" : "statsdb.common.type-system-seed/EnumClassType"
       },
-      "primary" : "default",
       "order" : 0,
-      "ident" : "class_table"
+      "ident" : "class_table",
+      "primary" : true
     },
     "op_created" : {
       "ident" : "op_created",
       "priority" : 200,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 11,
       "type" : "uuid",
@@ -13060,7 +13598,7 @@
     },
     "case" : {
       "ident" : "case",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -13161,11 +13699,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "asset_overrides" : {
       "ident" : "asset_overrides",
@@ -13423,11 +13961,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "compute_usages" : {
       "ident" : "compute_usages",
@@ -13834,11 +14372,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "summary" : {
       "type" : "text",
@@ -14065,11 +14603,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "purchased_shares" : {
       "type" : "bigint",
@@ -14259,16 +14797,15 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -14406,7 +14943,6 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 2,
       "type" : "enum",
@@ -14478,11 +15014,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -14496,7 +15032,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -14659,7 +15194,6 @@
     "owner" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "required" : true,
       "scope" : "id",
       "order" : 3,
@@ -14667,7 +15201,6 @@
     },
     "token" : {
       "ident" : "token",
-      "primary" : "default",
       "scope" : "id",
       "order" : 1,
       "required" : true,
@@ -14701,11 +15234,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -14728,7 +15261,6 @@
     "spender" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "required" : true,
       "scope" : "id",
       "order" : 4,
@@ -14756,7 +15288,6 @@
     },
     "playable" : {
       "ident" : "playable",
-      "primary" : "default",
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -14857,10 +15388,10 @@
       "type" : "uuid",
       "cardinality" : "one",
       "required" : true,
-      "primary" : "default",
       "scope" : "id",
       "order" : 1,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "held_tokens" : {
       "type" : "numeric",
@@ -14937,7 +15468,6 @@
     },
     "prospect" : {
       "ident" : "prospect",
-      "primary" : "default",
       "scope" : "id",
       "order" : 0,
       "required" : true,
@@ -15025,13 +15555,13 @@
       "enum" : {
         "ns" : "statsdb.common.type-system-seed/EnumClassType"
       },
-      "primary" : "default",
       "order" : 1,
-      "ident" : "class_context"
+      "ident" : "class_context",
+      "primary" : true
     },
     "activity" : {
       "ident" : "activity",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -15068,7 +15598,7 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 0,
       "type" : "enum",
@@ -15101,7 +15631,7 @@
     "op_created" : {
       "ident" : "op_created",
       "priority" : 200,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 7,
       "type" : "uuid",
@@ -15189,11 +15719,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "value" : {
       "type" : "map",
@@ -15535,11 +16065,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "token_erc20_options" : {
       "ident" : "token_erc20_options",
@@ -15883,11 +16413,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "revision" : {
       "type" : "integer",
@@ -16077,16 +16607,15 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -16188,376 +16717,6 @@
       "ident" : "verified_at"
     }
   },
-  "Task" : {
-    "token" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "Token",
-        "link" : {
-          "id" : "Token",
-          "module" : "statsdb.common.type-system-token",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "tasks",
-        "type" : "forward",
-        "key" : "token",
-        "val" : "token",
-        "rkey" : "_token",
-        "rident" : "tasks"
-      },
-      "scope" : "ref",
-      "order" : 6,
-      "ident" : "token"
-    },
-    "is_archived" : {
-      "type" : "boolean",
-      "cardinality" : "one",
-      "required" : true,
-      "priority" : 89,
-      "scope" : "data",
-      "order" : 18,
-      "ident" : "is_archived",
-      "sql" : {
-        "default" : false
-      }
-    },
-    "contest_tasks" : {
-      "ident" : "contest_tasks",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "ContestTask",
-        "type" : "reverse",
-        "val" : "contest_tasks",
-        "key" : "_task",
-        "rval" : "task",
-        "rkey" : "task",
-        "rident" : "task",
-        "link" : {
-          "id" : "ContestTask",
-          "module" : "statsdb.common.type-campaign-contest",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "timezone" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 14,
-      "ident" : "timezone",
-      "sql" : {
-        "default" : "UTC"
-      }
-    },
-    "task_records" : {
-      "ident" : "task_records",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "TaskRecord",
-        "type" : "reverse",
-        "val" : "task_records",
-        "key" : "_task",
-        "rval" : "task",
-        "rkey" : "task",
-        "rident" : "task",
-        "link" : {
-          "id" : "TaskRecord",
-          "module" : "statsdb.common.type-addon-task",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "points" : {
-      "type" : "numeric",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "data",
-      "order" : 12,
-      "ident" : "points",
-      "sql" : {
-        "default" : 0
-      }
-    },
-    "time_updated" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 3,
-      "scope" : "data",
-      "order" : 22,
-      "ident" : "time_updated"
-    },
-    "detail" : {
-      "type" : "map",
-      "cardinality" : "one",
-      "required" : true,
-      "priority" : 51,
-      "scope" : "detail",
-      "order" : 17,
-      "ident" : "detail",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "id" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "primary" : "default",
-      "priority" : 0,
-      "scope" : "id",
-      "order" : 0,
-      "ident" : "id"
-    },
-    "class_table" : {
-      "ident" : "class_table",
-      "priority" : 1,
-      "primary" : "default",
-      "scope" : "hidden",
-      "order" : 1,
-      "type" : "enum",
-      "foreign" : {
-        "provider" : {
-          "ns" : "TaskProvider",
-          "column" : "class_table",
-          "link" : {
-            "id" : "TaskProvider",
-            "module" : "statsdb.common.type-addon-task",
-            "lang" : "postgres",
-            "section" : "code"
-          }
-        }
-      },
-      "cardinality" : "one",
-      "enum" : {
-        "ns" : "statsdb.common.type-system-seed/EnumClassType"
-      }
-    },
-    "provider" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "TaskProvider",
-        "link" : {
-          "id" : "TaskProvider",
-          "module" : "statsdb.common.type-addon-task",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "tasks",
-        "type" : "forward",
-        "key" : "provider",
-        "val" : "provider",
-        "rkey" : "_provider",
-        "rident" : "tasks"
-      },
-      "scope" : "ref",
-      "order" : 5,
-      "ident" : "provider"
-    },
-    "name" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "required" : true,
-      "scope" : "info",
-      "priority" : 7,
-      "order" : 2,
-      "ident" : "name"
-    },
-    "interval" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-addon-task/EnumTaskInterval"
-      },
-      "scope" : "data",
-      "order" : 9,
-      "ident" : "interval",
-      "sql" : {
-        "default" : "once"
-      }
-    },
-    "op_created" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 0,
-      "scope" : "data",
-      "order" : 19,
-      "ident" : "op_created"
-    },
-    "status" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-addon-task/EnumTaskStatus"
-      },
-      "scope" : "data",
-      "order" : 10,
-      "ident" : "status",
-      "sql" : {
-        "default" : "draft"
-      }
-    },
-    "op_updated" : {
-      "type" : "uuid",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 1,
-      "scope" : "data",
-      "order" : 20,
-      "ident" : "op_updated"
-    },
-    "title" : {
-      "type" : "text",
-      "cardinality" : "one",
-      "required" : true,
-      "priority" : 10,
-      "scope" : "data",
-      "order" : 3,
-      "ident" : "title"
-    },
-    "type" : {
-      "type" : "enum",
-      "cardinality" : "one",
-      "required" : true,
-      "enum" : {
-        "ns" : "statsdb.common.type-addon-task/EnumTaskType"
-      },
-      "scope" : "data",
-      "order" : 8,
-      "ident" : "type",
-      "sql" : {
-        "default" : "manual"
-      }
-    },
-    "time_created" : {
-      "type" : "time",
-      "cardinality" : "one",
-      "priority" : 200,
-      "priority_index" : 2,
-      "scope" : "data",
-      "order" : 21,
-      "ident" : "time_created"
-    },
-    "playable" : {
-      "type" : "ref",
-      "cardinality" : "one",
-      "required" : true,
-      "ref" : {
-        "ns" : "Playable",
-        "link" : {
-          "id" : "Playable",
-          "module" : "statsdb.common.type-system-playable",
-          "lang" : "postgres",
-          "section" : "code"
-        },
-        "rval" : "tasks",
-        "type" : "forward",
-        "key" : "playable",
-        "val" : "playable",
-        "rkey" : "_playable",
-        "rident" : "tasks"
-      },
-      "scope" : "ref",
-      "order" : 7,
-      "ident" : "playable"
-    },
-    "category" : {
-      "type" : "citext",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 11,
-      "ident" : "category"
-    },
-    "task_events" : {
-      "ident" : "task_events",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "TaskEvent",
-        "type" : "reverse",
-        "val" : "task_events",
-        "key" : "_task",
-        "rval" : "task",
-        "rkey" : "task",
-        "rident" : "task",
-        "link" : {
-          "id" : "TaskEvent",
-          "module" : "statsdb.common.type-addon-task",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    },
-    "max_per_week" : {
-      "type" : "numeric",
-      "cardinality" : "one",
-      "scope" : "data",
-      "order" : 13,
-      "ident" : "max_per_week"
-    },
-    "description" : {
-      "type" : "text",
-      "cardinality" : "one",
-      "priority" : 11,
-      "scope" : "data",
-      "order" : 4,
-      "ident" : "description"
-    },
-    "conditions" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 15,
-      "ident" : "conditions",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "resolution" : {
-      "type" : "jsonb",
-      "cardinality" : "one",
-      "shape" : "map",
-      "scope" : "data",
-      "order" : 16,
-      "ident" : "resolution",
-      "sql" : {
-        "default" : "{}"
-      }
-    },
-    "org_reward_ledgers" : {
-      "ident" : "org_reward_ledgers",
-      "cardinality" : "many",
-      "type" : "ref",
-      "ref" : {
-        "ns" : "OrgRewardLedger",
-        "type" : "reverse",
-        "val" : "org_reward_ledgers",
-        "key" : "_task",
-        "rval" : "task",
-        "rkey" : "task",
-        "rident" : "task",
-        "link" : {
-          "id" : "OrgRewardLedger",
-          "module" : "statsdb.common.type-org-rewards",
-          "lang" : "postgres",
-          "section" : "code"
-        }
-      }
-    }
-  },
   "Starred" : {
     "starred_entries" : {
       "ident" : "starred_entries",
@@ -16622,11 +16781,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "class_ref" : {
       "type" : "uuid",
@@ -16640,7 +16799,6 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -16712,7 +16870,7 @@
     "class_context" : {
       "ident" : "class_context",
       "priority" : 3,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 1,
       "type" : "enum",
@@ -16757,7 +16915,7 @@
     },
     "access" : {
       "ident" : "access",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 2,
       "required" : true,
@@ -16791,7 +16949,7 @@
     "class_table" : {
       "ident" : "class_table",
       "priority" : 1,
-      "primary" : "default",
+      "primary" : true,
       "scope" : "hidden",
       "order" : 0,
       "type" : "enum",
@@ -16873,7 +17031,7 @@
     },
     "from" : {
       "ident" : "from",
-      "primary" : "default",
+      "primary" : true,
       "scope" : "id",
       "order" : 3,
       "required" : true,
@@ -16965,10 +17123,10 @@
       "type" : "uuid",
       "cardinality" : "one",
       "required" : true,
-      "primary" : "default",
       "scope" : "id",
       "order" : 1,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "position" : {
       "type" : "integer",
@@ -17035,7 +17193,6 @@
     },
     "prospect" : {
       "ident" : "prospect",
-      "primary" : "default",
       "scope" : "id",
       "order" : 0,
       "required" : true,
@@ -17253,11 +17410,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "social_assets" : {
       "ident" : "social_assets",
@@ -17415,11 +17572,11 @@
     "id" : {
       "type" : "uuid",
       "cardinality" : "one",
-      "primary" : "default",
       "priority" : 0,
       "scope" : "id",
       "order" : 0,
-      "ident" : "id"
+      "ident" : "id",
+      "primary" : true
     },
     "op_created" : {
       "type" : "uuid",
@@ -17504,6 +17661,206 @@
           "section" : "code"
         }
       }
+    }
+  },
+  "FinanceSettlement" : {
+    "currency" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 6,
+      "ident" : "currency",
+      "sql" : {
+        "default" : "AUD"
+      }
+    },
+    "time_updated" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 3,
+      "scope" : "data",
+      "order" : 16,
+      "ident" : "time_updated"
+    },
+    "detail" : {
+      "ident" : "detail",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 12,
+      "required" : true,
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "sql" : {
+        "default" : "{}"
+      }
+    },
+    "error" : {
+      "type" : "jsonb",
+      "cardinality" : "one",
+      "shape" : "map",
+      "scope" : "data",
+      "order" : 11,
+      "ident" : "error"
+    },
+    "id" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 0,
+      "scope" : "id",
+      "order" : 0,
+      "ident" : "id",
+      "primary" : true
+    },
+    "fee_amount" : {
+      "type" : "numeric",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 5,
+      "ident" : "fee_amount",
+      "sql" : {
+        "default" : 0
+      }
+    },
+    "class_table" : {
+      "ident" : "class_table",
+      "priority" : 1,
+      "scope" : "hidden",
+      "order" : 1,
+      "type" : "enum",
+      "cardinality" : "one",
+      "enum" : {
+        "ns" : "statsdb.common.type-system-seed/EnumClassType"
+      }
+    },
+    "provider" : {
+      "type" : "citext",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 8,
+      "ident" : "provider"
+    },
+    "gross_amount" : {
+      "type" : "numeric",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 4,
+      "ident" : "gross_amount",
+      "sql" : {
+        "default" : 0
+      }
+    },
+    "op_created" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 0,
+      "scope" : "data",
+      "order" : 13,
+      "ident" : "op_created"
+    },
+    "status" : {
+      "type" : "enum",
+      "cardinality" : "one",
+      "required" : true,
+      "enum" : {
+        "ns" : "statsdb.common.type-finance-settlement/EnumFinanceSettlementStatus"
+      },
+      "scope" : "data",
+      "order" : 7,
+      "ident" : "status",
+      "sql" : {
+        "default" : "queued"
+      }
+    },
+    "op_updated" : {
+      "type" : "uuid",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 1,
+      "scope" : "data",
+      "order" : 14,
+      "ident" : "op_updated"
+    },
+    "processed_at" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 10,
+      "ident" : "processed_at"
+    },
+    "finance_exceptions" : {
+      "ident" : "finance_exceptions",
+      "cardinality" : "many",
+      "type" : "ref",
+      "ref" : {
+        "ns" : "FinanceException",
+        "type" : "reverse",
+        "val" : "finance_exceptions",
+        "key" : "_settlement",
+        "rval" : "settlement",
+        "rkey" : "settlement",
+        "rident" : "settlement",
+        "link" : {
+          "id" : "FinanceException",
+          "module" : "statsdb.common.type-finance-settlement",
+          "lang" : "postgres",
+          "section" : "code"
+        }
+      }
+    },
+    "participant_count" : {
+      "type" : "integer",
+      "cardinality" : "one",
+      "required" : true,
+      "scope" : "data",
+      "order" : 3,
+      "ident" : "participant_count",
+      "sql" : {
+        "default" : 0
+      }
+    },
+    "time_created" : {
+      "type" : "time",
+      "cardinality" : "one",
+      "priority" : 200,
+      "priority_index" : 2,
+      "scope" : "data",
+      "order" : 15,
+      "ident" : "time_created"
+    },
+    "market" : {
+      "type" : "ref",
+      "cardinality" : "one",
+      "required" : true,
+      "ref" : {
+        "ns" : "Topic",
+        "link" : {
+          "id" : "Topic",
+          "module" : "statsdb.common.type-topic-base",
+          "lang" : "postgres",
+          "section" : "code"
+        },
+        "rval" : "finance_settlements",
+        "type" : "forward",
+        "key" : "market",
+        "val" : "market",
+        "rkey" : "_market",
+        "rident" : "finance_settlements"
+      },
+      "scope" : "ref",
+      "order" : 2,
+      "ident" : "market"
+    },
+    "queued_at" : {
+      "type" : "bigint",
+      "cardinality" : "one",
+      "scope" : "data",
+      "order" : 9,
+      "ident" : "queued_at"
     }
   }
 }

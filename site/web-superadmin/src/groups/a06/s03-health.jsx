@@ -1,0 +1,123 @@
+import * as common from '@statstrade/web-superadmin/lib/substrate-model-common.jsx'
+
+// statstrade-superadmin.groups.a06.s03-health/Group [29] 
+export var Group = {
+  "area":"superadmin",
+  "label":"System health",
+  "key":"health",
+  "id":"superadmin/health",
+  "href":"/superadmin/health",
+  "gaps":[],
+  "commands":{
+    "integration_providers":["activate","pause","revoke"],
+    "integration_events":["replay","ignore"]
+  },
+  "number":"A06.S03",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s03-health",
+  "models":{
+    "snapshot":{
+      "kind":"rpc",
+      "rpc":{
+        "id":"super-operations-snapshot",
+        "schema":"stats_rpc",
+        "input":[{"name":"actor_id","symbol":"actor_id","type":"uuid"}],
+        "return":"jsonb",
+        "flags":{}
+      },
+      "requires-actor":true,
+      "model":{"defaults":{"args":[],"output":null},"options":{}}
+    },
+    "providers":{
+      "model":{
+        "options":{"refresh":{"IntegrationProvider":true}},
+        "defaults":{"output":[],"args":[{"return_args":[],"select_args":[]}]}
+      },
+      "dataview":{
+        "select_entry":{
+          "input":[],
+          "view":{"table":"IntegrationProvider","type":"select","query":{}}
+        },
+        "select_args":[],
+        "table":"IntegrationProvider",
+        "return_entry":{
+          "input":[{"symbol":"i_id","type":"uuid"}],
+          "view":{
+            "table":"IntegrationProvider",
+            "type":"return",
+            "query":[
+              "id",
+              "name",
+              "provider_type",
+              "status",
+              "last_check_at",
+              "latency_ms"
+            ],
+            "identity":["id"]
+          }
+        },
+        "return_args":[]
+      },
+      "select":{},
+      "kind":"dataview",
+      "fields":[
+        "id",
+        "name",
+        "provider_type",
+        "status",
+        "last_check_at",
+        "latency_ms"
+      ]
+    },
+    "events":{
+      "model":{
+        "options":{"refresh":{"IntegrationEvent":true}},
+        "defaults":{"output":[],"args":[{"return_args":[],"select_args":[]}]}
+      },
+      "dataview":{
+        "select_entry":{
+          "input":[],
+          "view":{"table":"IntegrationEvent","type":"select","query":{}}
+        },
+        "select_args":[],
+        "table":"IntegrationEvent",
+        "return_entry":{
+          "input":[{"symbol":"i_id","type":"uuid"}],
+          "view":{
+            "table":"IntegrationEvent",
+            "type":"return",
+            "query":["id","event_type","status","attempts","received_at"],
+            "identity":["id"]
+          }
+        },
+        "return_args":[]
+      },
+      "select":{},
+      "kind":"dataview",
+      "fields":["id","event_type","status","attempts","received_at"]
+    }
+  },
+  "actions":{
+    "command":{
+      "rpc":{
+        "id":"super-operations-command",
+        "schema":"stats_rpc",
+        "input":[
+          {"name":"actor_id","symbol":"actor_id","type":"uuid"},
+          {"name":"resource","symbol":"resource","type":"citext"},
+          {"name":"target_id","symbol":"target_id","type":"uuid"},
+          {"name":"action","symbol":"action","type":"citext"},
+          {"name":"payload","symbol":"payload","type":"jsonb"}
+        ],
+        "return":"jsonb",
+        "flags":{}
+      }
+    }
+  }
+};
+
+// statstrade-superadmin.groups.a06.s03-health/createPageSpec [31] 
+export function createPageSpec(bindings){
+  return common.createPageSpec(Group,bindings);
+}

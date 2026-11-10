@@ -110,3 +110,44 @@ vitest.it("provides guest state and leaves the SharedWorker disconnected",functi
   vitest.expect(markup).toContain("loading");
   vitest.expect(client_auth.getEntry("default")["ready"]).toBe(false);
 });
+
+// statstrade-web.lib.auth-runtime-test/test-verified-oauth-user [124] 
+vitest.describe("verified OAuth user",function (){
+  vitest.afterEach(function (){
+    vitest.vi.unstubAllGlobals();
+  });
+  vitest.it("uses bearer headers and returns a verified user",async function (){
+    let fetcher = vitest.vi.fn(async function (url,options){
+      vitest.expect(url).toBe("https://db.example/auth/v1/user");
+      vitest.expect(options.headers.Authorization).toBe("Bearer callback-token");
+      return {
+        "ok":true,
+        "json":async function (){
+                return {"id":"member-1"};
+              }
+      };
+    });
+    vitest.vi.stubGlobal("fetch",fetcher);
+    vitest.expect(
+      await sut.verifiedOAuthUser("https://db.example/","public","callback-token")
+    ).toEqual({"id":"member-1"});
+  },vitest.it("rejects failed verification and incomplete user responses",async function (){
+    vitest.vi.stubGlobal("fetch",async function (){
+      return {"ok":false};
+    });
+    await vitest.expect(
+      sut.verifiedOAuthUser("https://db.example","public","token")
+    ).rejects.toThrow("Unable to verify");
+    vitest.vi.stubGlobal("fetch",async function (){
+      return {
+        "ok":true,
+        "json":async function (){
+                return {};
+              }
+      };
+    });
+    await vitest.expect(
+      sut.verifiedOAuthUser("https://db.example","public","token")
+    ).rejects.toThrow("did not include a user");
+  }));
+});

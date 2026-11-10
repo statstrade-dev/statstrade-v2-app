@@ -2,6 +2,8 @@ const xtd = require("@xtalk/lang/common-data.js")
 
 const kernel_supabase = require("@xtalk/db/node/kernel-supabase.js")
 
+const backend_supabase = require("@xtalk/db/system/backend-supabase.js")
+
 const supabase = require("@xtalk/db/node/client-supabase.js")
 
 const page_core = require("@xtalk/substrate/page-core.js")
@@ -143,7 +145,13 @@ function attach_auth_profile_models(node,service_id,page_args){
 function create_auth_profile_node(client_defaults,service_id,page_args){
   service_id = (service_id || DEFAULT_SERVICE_ID);
   let node = substrate.node_create({});
-  let impl = db_main.create_impl("supabase",client_defaults,null,null);
+  let impl = db_main.create_impl(
+    "supabase",
+    client_defaults,
+    null,
+    null,
+    {"supabase":backend_supabase.provider()}
+  );
   substrate.set_service(node,service_id,impl);
   kernel_supabase.init_handlers(node);
   attach_auth_profile_models(node,service_id,page_args);

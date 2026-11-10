@@ -1,28 +1,33 @@
-const js_sqlite = require("@xtalk/net/net/conn-sqlite.js")
-
-const js_ws = require("@xtalk/net/net/ws-native.js")
-
-const js_postgres = require("@xtalk/net/net/conn-postgres.js")
-
-const addon = require("@xtalk/net/addon-supabase.js")
-
-const js_fetch = require("@xtalk/net/net/http-fetch.js")
-
-function create_client(type,defaults){
-  if(type == "sqlite"){
-    return js_sqlite.create(defaults);
+function get_provider(type,backends){
+  let selected = backends || {};
+  let provider = selected[type];
+  if(null == provider){
+    throw Object.assign(
+      new Error("Database backend is not selected"),
+      {"data":{"type":type,"selected":Object.keys(selected)}}
+    );
   }
-  else if(type == "postgres"){
-    return js_postgres.create(defaults);
-  }
-  else if(type == "supabase"){
-    let client = js_fetch.create(defaults,addon.middleware_supabase());
-    client["create_ws_client"] = js_ws.create;
-    return client;
-  }
-  else{
-    return null;
-  }
+  return provider;
 }
 
-module.exports = {["create_client"]:create_client}
+function create_client(type,defaults,...optional){
+  let backends = (optional.length > 0) ? optional[0] : null;
+  if(type == "memory"){
+    return null;
+  }
+  let provider = get_provider(type,backends);
+  let create = provider["create_client"];
+  if(!("function" == (typeof create))){
+    throw "Backend provider is missing create_client";
+  }
+  let client = create(defaults);
+  if(null == client){
+    throw "Selected backend has no client for this runtime";
+  }
+  return client;
+}
+
+module.exports = {
+  ["get_provider"]:get_provider,
+  ["create_client"]:create_client
+}

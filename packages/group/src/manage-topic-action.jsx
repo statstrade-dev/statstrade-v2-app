@@ -1,12 +1,12 @@
 import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
-import * as rq from '@statstrade/edge/lib/js/lib/react-query.jsx'
-
 import * as api_public from '@statstrade/edge/remote/api-public.jsx'
 
 import * as qm_topic from '@statstrade/edge/remote/query-manage-topic.jsx'
 
-// statsui.group.manage-topic-action/topicApi [22] 
+import * as page_api from '@statstrade/edge/substrate/page-api.jsx'
+
+// statsui.group.manage-topic-action/topicApi [23] 
 export var topicApi = {
   "queries":{
     "topics_list":{
@@ -59,7 +59,7 @@ export var topicApi = {
   }
 };
 
-// statsui.group.manage-topic-action/schemaTopicCreate [90] 
+// statsui.group.manage-topic-action/schemaTopicCreate [91] 
 export var schemaTopicCreate = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "description":hf.Z.string().optional(),
@@ -67,19 +67,19 @@ export var schemaTopicCreate = hf.Z.object({
   "detail":hf.Z.any().optional()
 });
 
-// statsui.group.manage-topic-action/schemaTopicUpdateDraft [98] 
+// statsui.group.manage-topic-action/schemaTopicUpdateDraft [99] 
 export var schemaTopicUpdateDraft = hf.Z.object({
   "title":hf.Z.string().min(1,hf.t("Title is required.")),
   "description":hf.Z.string().optional(),
   "detail":hf.Z.any().optional()
 });
 
-// statsui.group.manage-topic-action/schemaTopicRevokeApikey [105] 
+// statsui.group.manage-topic-action/schemaTopicRevokeApikey [106] 
 export var schemaTopicRevokeApikey = hf.Z.object({
   "key_lookup":hf.Z.string().min(1,hf.t("Key lookup is required."))
 });
 
-// statsui.group.manage-topic-action/formStateTopic [110] 
+// statsui.group.manage-topic-action/formStateTopic [111] 
 export var formStateTopic = {
   "topic_create":{
     "defaultValues":{"title":"","description":"","campaign_id":"","detail":{}},
@@ -95,9 +95,9 @@ export var formStateTopic = {
   }
 };
 
-// statsui.group.manage-topic-action/useManageTopicContext [128] 
+// statsui.group.manage-topic-action/useManageTopicContext [129] 
 export function useManageTopicContext(){
-  let api = rq.useApi(topicApi);
+  let api = page_api.usePageApi("markets",topicApi);
   let forms = hf.useFormStateMap(formStateTopic);
   return {api,forms};
 }

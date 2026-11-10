@@ -216,6 +216,8 @@ export function ManagerSidebar({collapsed,hideNav,isEmpty,onToggleSidebar}){
       animation="quick">
       <T.Popover
         open={controls.showOrgSelector}
+        disableFocus={true}
+        keepChildrenMounted={false}
         onOpenChange={controls.setShowOrgSelector}
         placement="bottom-start"
         offset={4}>
@@ -256,95 +258,103 @@ export function ManagerSidebar({collapsed,hideNav,isEmpty,onToggleSidebar}){
             </T.XStack>
           </T.Button>
         </T.Popover.Trigger>
-        <T.Popover.Content
-          elevation="$8"
-          animation={["quick",{"opacity":{"overshootClamping":true}}]}
-          borderRadius="$4"
-          borderColor="$borderColor"
-          shadowRadius={20}
-          width={260}
-          shadowOpacity={0.1}
-          borderWidth={1}
-          shadowColor="$shadowColor"
-          enterStyle={{"y":-10,"opacity":0}}
-          elevate={true}
-          padding="$2"
-          exitStyle={{"y":-10,"opacity":0}}
-          shadowOffset={{"width":0,"height":4}}>
-          <T.Popover.Arrow borderWidth={1} borderColor="$borderColor"/>
-          <T.YStack>
-            <T.Text
-              fontSize={11}
-              color="$color10"
-              fontWeight="600"
-              textTransform="uppercase"
-              letterSpacing={1}
-              marginBottom="$2"
-              paddingHorizontal="$2"
-              paddingTop="$2">Select Organisation
-            </T.Text>
-            {orgs.map(function (item){
-              return (
-                <T.Button
-                  onPress={function (){
-                      setOrg(item);
-                      controls.setShowCreateOrg(false);
-                      controls.setShowOrgSelector(false);
-                    }}
-                  key={item.id}
-                  borderRadius="$3"
-                  hoverStyle={{
-                      "backgroundColor":(item.id == displayOrg.id) ? "$color3" : "$color2"
-                    }}
-                  chromeless={true}
-                  justifyContent="flex-start"
-                  marginBottom={2}
-                  backgroundColor={(item.id == displayOrg.id) ? "$color3" : "transparent"}
-                  height={48}>
-                  <T.XStack gap="$3" alignItems="center" width="100%">
-                    <T.View
-                      width={28}
-                      height={28}
-                      borderRadius="$1"
-                      backgroundColor={item.color || "$color4"}
-                      alignItems="center"
-                      justifyContent="center">
-                      <T.Text fontSize={11} fontWeight="700" color="$color11">{item.initials || item.name.substring(0,1)}</T.Text>
-                    </T.View>
-                    <T.YStack flex={1} gap={0} alignItems="flex-start">
-                      <T.Text color="$color12" fontWeight="600" fontSize="$3">{item.name}</T.Text>
-                    </T.YStack>
-                    {(item.id == displayOrg.id) ? (
-                      <Check size={14} color="$color11"/>) : null}
-                  </T.XStack>
-                </T.Button>);
-            })}
-            <T.View height={1} backgroundColor="$borderColor" marginVertical="$2"/>
-            <T.Button
-              chromeless={true}
-              justifyContent="flex-start"
-              height={48}
-              borderRadius="$3"
-              onPress={function (){
-                  controls.setShowCreateOrg(true);
-                  controls.setShowOrgSelector(false);
-                }}>
-              <T.XStack gap="$3" alignItems="center">
-                <T.View
-                  width={28}
-                  height={28}
-                  borderRadius="$1"
-                  borderWidth={1}
-                  borderColor="$color8"
-                  borderStyle="dashed"
-                  alignItems="center"
-                  justifyContent="center"><Plus size={14} color="$color11"/>
-                </T.View>
-                <T.Text color="$color12" fontSize="$3">Create New Organisation</T.Text>
-              </T.XStack>
-            </T.Button>
-          </T.YStack>
-        </T.Popover.Content>
+        {controls.showOrgSelector ? (
+          <T.Popover.Content
+            onCloseAutoFocus={function (event){
+                if(controls.showCreateOrg){
+                  event.preventDefault();
+                }
+              }}
+            elevation="$8"
+            animation={["quick",{"opacity":{"overshootClamping":true}}]}
+            borderRadius="$4"
+            borderColor="$borderColor"
+            shadowRadius={20}
+            width={260}
+            shadowOpacity={0.1}
+            disableFocusScope={!controls.showOrgSelector}
+            borderWidth={1}
+            shadowColor="$shadowColor"
+            enterStyle={{"y":-10,"opacity":0}}
+            elevate={true}
+            padding="$2"
+            exitStyle={{"y":-10,"opacity":0}}
+            trapFocus={controls.showOrgSelector}
+            shadowOffset={{"width":0,"height":4}}>
+            <T.Popover.Arrow borderWidth={1} borderColor="$borderColor"/>
+            <T.YStack>
+              <T.Text
+                fontSize={11}
+                color="$color10"
+                fontWeight="600"
+                textTransform="uppercase"
+                letterSpacing={1}
+                marginBottom="$2"
+                paddingHorizontal="$2"
+                paddingTop="$2">Select Organisation
+              </T.Text>
+              {orgs.map(function (item){
+                return (
+                  <T.Button
+                    onPress={function (){
+                        setOrg(item);
+                        controls.setShowCreateOrg(false);
+                        controls.setShowOrgSelector(false);
+                      }}
+                    key={item.id}
+                    borderRadius="$3"
+                    hoverStyle={{
+                        "backgroundColor":(item.id == displayOrg.id) ? "$color3" : "$color2"
+                      }}
+                    chromeless={true}
+                    justifyContent="flex-start"
+                    marginBottom={2}
+                    backgroundColor={(item.id == displayOrg.id) ? "$color3" : "transparent"}
+                    height={48}>
+                    <T.XStack gap="$3" alignItems="center" width="100%">
+                      <T.View
+                        width={28}
+                        height={28}
+                        borderRadius="$1"
+                        backgroundColor={item.color || "$color4"}
+                        alignItems="center"
+                        justifyContent="center">
+                        <T.Text fontSize={11} fontWeight="700" color="$color11">{item.initials || item.name.substring(0,1)}</T.Text>
+                      </T.View>
+                      <T.YStack flex={1} gap={0} alignItems="flex-start">
+                        <T.Text color="$color12" fontWeight="600" fontSize="$3">{item.name}</T.Text>
+                      </T.YStack>
+                      {(item.id == displayOrg.id) ? (
+                        <Check size={14} color="$color11"/>) : null}
+                    </T.XStack>
+                  </T.Button>);
+              })}
+              <T.View height={1} backgroundColor="$borderColor" marginVertical="$2"/>
+              <T.Button
+                chromeless={true}
+                justifyContent="flex-start"
+                height={48}
+                borderRadius="$3"
+                onPress={function (){
+                    controls.setShowCreateOrg(true);
+                    controls.setShowOrgSelector(false);
+                  }}>
+                <T.XStack gap="$3" alignItems="center">
+                  <T.View
+                    width={28}
+                    height={28}
+                    borderRadius="$1"
+                    borderWidth={1}
+                    borderColor="$color8"
+                    borderStyle="dashed"
+                    alignItems="center"
+                    justifyContent="center"><Plus size={14} color="$color11"/>
+                  </T.View>
+                  <T.Text color="$color12" fontSize="$3">Create New Organisation</T.Text>
+                </T.XStack>
+              </T.Button>
+            </T.YStack>
+          </T.Popover.Content>) : null}
       </T.Popover>
       {(!hideNav && (navGroups.length > 0)) ? (
         <T.ScrollView flex={1} showsVerticalScrollIndicator={false}>
@@ -422,7 +432,7 @@ export function ManagerSidebar({collapsed,hideNav,isEmpty,onToggleSidebar}){
     </T.YStack>);
 }
 
-// statsui.basic.layout.manage.frame-manage/LayoutManage [361] 
+// statsui.basic.layout.manage.frame-manage/LayoutManage [367] 
 export function LayoutManage({children}){
   let {api,controls} = React.useContext(context_manage.LayoutManageContext);
   let media = T.useMedia();
@@ -433,7 +443,7 @@ export function LayoutManage({children}){
   },[isSmall]);
   let q_orgs = api.queries.organisations_list;
   let orgs = q_orgs.output || [];
-  let isEmpty = !q_orgs.isLoading && (orgs.length == 0);
+  let isEmpty = !q_orgs.error && !q_orgs.isLoading && (orgs.length == 0);
   let router = ui_router.useRouter();
   let pathname = ui_router.usePathname();
   React.useEffect(function (){
@@ -461,15 +471,20 @@ export function LayoutManage({children}){
               }}/>) : (
           <T.YStack flex={1}>
             <ManagerTopBar collapsed={collapsed}/>
-            {isEmpty ? (
+            {q_orgs.error ? (
+              <T.YStack padding="$5" gap="$3">
+                <T.Text role="alert">{q_orgs.error.message || String(q_orgs.error)}</T.Text>
+                <T.Button onPress={q_orgs.refetch}>Retry brand list</T.Button>
+              </T.YStack>) : (q_orgs.isLoading ? (
+              <T.Text padding="$5" role="status">Loading your brands…</T.Text>) : (isEmpty ? (
               <frame_manage_blank.FrameManageBlank/>) : (
-              <T.ScrollView flex={1} contentContainerStyle={{"flexGrow":1}}>{children}</T.ScrollView>)}
+              <T.ScrollView flex={1} contentContainerStyle={{"flexGrow":1}}>{children}</T.ScrollView>)))}
           </T.YStack>)}
       </T.YStack>
     </T.XStack>);
 }
 
-// statsui.basic.layout.manage.frame-manage/LayoutManageWrapper [413] 
+// statsui.basic.layout.manage.frame-manage/LayoutManageWrapper [424] 
 export function LayoutManageWrapper({children,setUserType,userType}){
   let context = context_manage.useLayoutManageContext({"userType":userType,"setUserType":setUserType});
   return (

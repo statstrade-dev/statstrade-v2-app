@@ -1,0 +1,10 @@
+{
+  "version" : 1,
+  "site" : "web-admindebug",
+  "schema_url" : "/worker/site-map/schema.json",
+  "lookup_url" : "/worker/site-map/lookup.json",
+  "rpc_url" : "/worker/site-map/rpc.json",
+  "tables" : [ "Access", "ApikeyProvider", "Playable", "Wallet", "Token", "Asset", "FeedProvider", "Lock", "Rev", "Social", "Starred", "TaskProvider", "Org", "Campaign", "Topic", "Prospect", "ProspectOrder", "ProspectOrderStrike", "ProspectStake", "User" ],
+  "rpcs" : [ "newsroom-publications", "user-topic-buy-full", "user-topic-cancel-full", "user-topic-market-state", "user-topic-portfolio", "user-topic-sell-full" ],
+  "pages" : [ "statstrade-admindebug.pages._app", "statstrade-admindebug.pages.index", "statstrade-admindebug.pages.newsroom" ]
+}

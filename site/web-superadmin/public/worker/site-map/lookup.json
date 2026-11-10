@@ -1,230 +1,318 @@
 {
   "TokenSupply" : {
-    "position" : 73
+    "position" : 76,
+    "schema" : "stats_type"
   },
   "ComputeUsage" : {
-    "position" : 30
+    "position" : 30,
+    "schema" : "stats_type"
   },
   "Campaign" : {
-    "position" : 23
-  },
-  "OrgSettings" : {
-    "position" : 50
+    "position" : 25,
+    "schema" : "stats_type"
   },
   "ComplianceRecord" : {
-    "position" : 27
+    "position" : 27,
+    "schema" : "stats_type"
   },
   "Commodity" : {
-    "position" : 26
-  },
-  "OrgRewardLedger" : {
-    "position" : 49
-  },
-  "ContestEntry" : {
-    "position" : 31
+    "position" : 26,
+    "schema" : "stats_type"
   },
   "Social" : {
-    "position" : 3
-  },
-  "ContestLeaderboardEntry" : {
-    "position" : 33
+    "position" : 3,
+    "schema" : "stats_type"
   },
   "ItemTx" : {
-    "position" : 40
+    "position" : 45,
+    "schema" : "stats_type"
   },
   "Country" : {
-    "position" : 35
+    "position" : 32,
+    "schema" : "stats_type"
   },
   "Asset" : {
-    "position" : 15
+    "position" : 16,
+    "schema" : "stats_type"
   },
-  "ContestLeaderboard" : {
-    "position" : 32
+  "AccessInviteEmail" : {
+    "position" : 7,
+    "schema" : "stats_type"
   },
   "SupportCase" : {
-    "position" : 68
+    "position" : 70,
+    "schema" : "stats_type"
   },
   "ComputeConnection" : {
-    "position" : 28
+    "position" : 28,
+    "schema" : "stats_type"
+  },
+  "MarketingAudience" : {
+    "position" : 47,
+    "schema" : "stats_type"
   },
   "ProspectStakeTx" : {
-    "position" : 59
+    "position" : 61,
+    "schema" : "stats_type"
   },
   "Rev" : {
-    "position" : 2
+    "position" : 2,
+    "schema" : "stats_type"
   },
   "ProspectMarketSnapshot" : {
-    "position" : 54
+    "position" : 56,
+    "schema" : "stats_type"
   },
   "AccessInviteInternal" : {
-    "position" : 7
+    "position" : 8,
+    "schema" : "stats_type"
   },
   "ProspectStake" : {
-    "position" : 57
+    "position" : 59,
+    "schema" : "stats_type"
+  },
+  "SystemCatalogPlan" : {
+    "position" : 72,
+    "schema" : "stats_type"
   },
   "McpApproval" : {
-    "position" : 43
+    "position" : 50,
+    "schema" : "stats_type"
   },
   "McpConnection" : {
-    "position" : 42
+    "position" : 49,
+    "schema" : "stats_type"
   },
   "Activity" : {
-    "position" : 10
+    "position" : 11,
+    "schema" : "stats_type"
   },
   "User" : {
-    "position" : 6
+    "position" : 6,
+    "schema" : "stats_type"
   },
   "IntegrationEvent" : {
-    "position" : 38
+    "position" : 43,
+    "schema" : "stats_type"
   },
-  "Manifest" : {
-    "position" : 24
+  "WorkflowProvider" : {
+    "position" : 34,
+    "schema" : "stats_type"
   },
-  "OrgRewardBudget" : {
-    "position" : 47
+  "WorkflowDefinition" : {
+    "position" : 35,
+    "schema" : "stats_type"
+  },
+  "FinanceException" : {
+    "position" : 40,
+    "schema" : "stats_type"
+  },
+  "EmailTemplate" : {
+    "position" : 33,
+    "schema" : "stats_type"
   },
   "Topic" : {
-    "position" : 52
+    "position" : 38,
+    "schema" : "stats_type"
+  },
+  "MarketingCampaign" : {
+    "position" : 48,
+    "schema" : "stats_type"
+  },
+  "WorkflowRun" : {
+    "position" : 36,
+    "schema" : "stats_type"
   },
   "BillingAccount" : {
-    "position" : 21
-  },
-  "ContestAward" : {
-    "position" : 34
+    "position" : 22,
+    "schema" : "stats_type"
   },
   "ComputeTopup" : {
-    "position" : 29
+    "position" : 29,
+    "schema" : "stats_type"
   },
   "WalletAddress" : {
-    "position" : 75
+    "position" : 78,
+    "schema" : "stats_type"
   },
   "Org" : {
-    "position" : 20
+    "position" : 21,
+    "schema" : "stats_type"
   },
   "TokenErc20Option" : {
-    "position" : 72
-  },
-  "CampaignContest" : {
-    "position" : 25
+    "position" : 75,
+    "schema" : "stats_type"
   },
   "Op" : {
-    "position" : 44
+    "position" : 51,
+    "schema" : "stats_type"
   },
   "SocialAsset" : {
-    "position" : 63
+    "position" : 65,
+    "schema" : "stats_type"
   },
   "OrgBillingInvoice" : {
-    "position" : 45
+    "position" : 52,
+    "schema" : "stats_type"
   },
   "OrgBillingPayment" : {
-    "position" : 46
+    "position" : 53,
+    "schema" : "stats_type"
   },
   "TopicCall" : {
-    "position" : 74
+    "position" : 77,
+    "schema" : "stats_type"
+  },
+  "EmailDelivery" : {
+    "position" : 37,
+    "schema" : "stats_type"
   },
   "SystemPlatformApproval" : {
-    "position" : 70
+    "position" : 73,
+    "schema" : "stats_type"
   },
   "Access" : {
-    "position" : 0
+    "position" : 0,
+    "schema" : "stats_type"
+  },
+  "BillingSubscription" : {
+    "position" : 23,
+    "schema" : "stats_type"
   },
   "SocialPublication" : {
-    "position" : 67
+    "position" : 69,
+    "schema" : "stats_type"
   },
   "IntegrationProvider" : {
-    "position" : 37
+    "position" : 42,
+    "schema" : "stats_type"
   },
   "PlatformGrant" : {
-    "position" : 51
+    "position" : 54,
+    "schema" : "stats_type"
   },
   "Playable" : {
-    "position" : 13
+    "position" : 14,
+    "schema" : "stats_type"
   },
   "SystemCatalogItem" : {
-    "position" : 69
+    "position" : 71,
+    "schema" : "stats_type"
   },
   "TaskProvider" : {
-    "position" : 19
+    "position" : 20,
+    "schema" : "stats_type"
+  },
+  "ContentControl" : {
+    "position" : 31,
+    "schema" : "stats_type"
   },
   "LockLog" : {
-    "position" : 41
+    "position" : 46,
+    "schema" : "stats_type"
   },
   "ApikeyProvider" : {
-    "position" : 12
+    "position" : 13,
+    "schema" : "stats_type"
   },
   "AccessRole" : {
-    "position" : 9
+    "position" : 10,
+    "schema" : "stats_type"
   },
   "FeedProvider" : {
-    "position" : 22
+    "position" : 24,
+    "schema" : "stats_type"
   },
   "Audit" : {
-    "position" : 17
+    "position" : 18,
+    "schema" : "stats_type"
   },
   "Prospect" : {
-    "position" : 53
+    "position" : 55,
+    "schema" : "stats_type"
   },
   "AuditLog" : {
-    "position" : 18
+    "position" : 19,
+    "schema" : "stats_type"
   },
   "SafetyCaseEvent" : {
-    "position" : 61
+    "position" : 63,
+    "schema" : "stats_type"
   },
   "SocialVariant" : {
-    "position" : 66
+    "position" : 68,
+    "schema" : "stats_type"
   },
   "Wallet" : {
-    "position" : 5
+    "position" : 5,
+    "schema" : "stats_type"
   },
   "SafetyCase" : {
-    "position" : 60
+    "position" : 62,
+    "schema" : "stats_type"
   },
   "TopicAllocation" : {
-    "position" : 58
+    "position" : 60,
+    "schema" : "stats_type"
   },
   "SocialConnection" : {
-    "position" : 64
+    "position" : 66,
+    "schema" : "stats_type"
   },
   "Lock" : {
-    "position" : 1
+    "position" : 1,
+    "schema" : "stats_type"
   },
   "TokenAllowance" : {
-    "position" : 71
+    "position" : 74,
+    "schema" : "stats_type"
   },
   "ProspectOrder" : {
-    "position" : 55
+    "position" : 57,
+    "schema" : "stats_type"
   },
   "ActivityLog" : {
-    "position" : 11
+    "position" : 12,
+    "schema" : "stats_type"
   },
   "Item" : {
-    "position" : 39
+    "position" : 44,
+    "schema" : "stats_type"
   },
   "Token" : {
-    "position" : 14
+    "position" : 15,
+    "schema" : "stats_type"
   },
   "Global" : {
-    "position" : 36
+    "position" : 41,
+    "schema" : "stats_type"
   },
   "SocialHandle" : {
-    "position" : 65
-  },
-  "Task" : {
-    "position" : 48
+    "position" : 67,
+    "schema" : "stats_type"
   },
   "Starred" : {
-    "position" : 4
+    "position" : 4,
+    "schema" : "stats_type"
   },
   "AccessRequest" : {
-    "position" : 8
+    "position" : 9,
+    "schema" : "stats_type"
   },
   "ProspectOrderStrike" : {
-    "position" : 56
+    "position" : 58,
+    "schema" : "stats_type"
   },
   "SocialContent" : {
-    "position" : 62
+    "position" : 64,
+    "schema" : "stats_type"
   },
   "AssetTx" : {
-    "position" : 16
+    "position" : 17,
+    "schema" : "stats_type"
+  },
+  "FinanceSettlement" : {
+    "position" : 39,
+    "schema" : "stats_type"
   }
 }

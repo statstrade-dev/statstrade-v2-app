@@ -4,17 +4,61 @@ import React from 'react'
 
 import {Building2,CreditCard,UserRoundCog} from '@tamagui/lucide-icons'
 
+import * as group_system from '@statstrade/web-superadmin/groups/a03/s01-system.jsx'
+
+import * as group_shell from '@statstrade/web-superadmin/groups/a00/s01-shell.jsx'
+
+import * as group_market from '@statstrade/web-superadmin/groups/a04/s01-market.jsx'
+
+import * as group_newsroom from '@statstrade/web-superadmin/groups/a05/s01/t01-newsroom.jsx'
+
+import * as group_integrations from '@statstrade/web-superadmin/groups/a04/s02-integrations.jsx'
+
 import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
 
+import * as group_users from '@statstrade/web-superadmin/groups/a01/s02-users.jsx'
+
+import * as group_organisations from '@statstrade/web-superadmin/groups/a02/s02-organisations.jsx'
+
+import * as group_tables from '@statstrade/web-superadmin/groups/a00/s02-tables.jsx'
+
 import * as ext_page from '@statstrade/edge/lib/js/react/ext-page.js'
+
+import * as group_catalog from '@statstrade/web-superadmin/groups/a03/s02-catalog.jsx'
+
+import * as group_inventory from '@statstrade/web-superadmin/groups/a03/s03-inventory.jsx'
 
 import * as global_table from '@statstrade/web-superadmin/a03/s03/global-table.jsx'
 
 import * as page_core from '@xtalk/substrate/page-core.js'
 
+import * as group_user_operations from '@statstrade/web-superadmin/groups/a02/s01-user-operations.jsx'
+
 import * as substrate from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
 
-// statstrade-superadmin.adminweb.workspace/WORKSPACES [461] 
+import * as group_billing from '@statstrade/web-superadmin/groups/a02/s03-billing.jsx'
+
+import * as group_global from '@statstrade/web-superadmin/groups/a03/s01/t01-global.jsx'
+
+// statstrade-superadmin.adminweb.workspace/WORKSPACE-GROUPS [511] 
+export var WORKSPACE_GROUPS = {
+  "super/system/swap":group_market.Group,
+  "super/system/service":group_integrations.Group,
+  "super/global":group_global.Group,
+  "user":group_user_operations.Group,
+  "super/admin/newsroom":group_newsroom.Group,
+  "billing":group_billing.Group,
+  "organisation":group_organisations.Group,
+  "super/system/room":group_market.Group,
+  "super":group_system.Group,
+  "super/admin/organisation":group_organisations.Group,
+  "super/system/template":group_catalog.Group,
+  "super/admin/user":group_users.Group,
+  "room":group_market.Group,
+  "chain":group_inventory.Group
+};
+
+// statstrade-superadmin.adminweb.workspace/WORKSPACES [527] 
 export var WORKSPACES = {
   "user":[
     {
@@ -1056,19 +1100,21 @@ export var WORKSPACES = {
   ]
 };
 
-// statstrade-superadmin.adminweb.workspace/WORKSPACE-AREA-SPECS [462] 
+// statstrade-superadmin.adminweb.workspace/WORKSPACE-AREA-SPECS [528] 
 export var WORKSPACE_AREA_SPECS = {
   "user":[
     {
     "key":"personal",
     "number":"A02.S04",
     "title":"Personal",
+    "href":"/a02/s04-personal",
     "tables":["User","Activity","Starred"]
   },
     {
     "key":"account",
     "number":"A02.S05",
     "title":"Account",
+    "href":"/a02/s05-account",
     "tables":[
       "AccessRole",
       "PlatformGrant",
@@ -1081,6 +1127,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"crypto",
     "number":"A02.S06",
     "title":"Crypto",
+    "href":"/a02/s06-crypto",
     "tables":[
       "Wallet",
       "Token",
@@ -1096,6 +1143,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"swap",
     "number":"A04.S02",
     "title":"Swap",
+    "href":"/a04/s02-swap",
     "tables":[
       "ProspectOrder",
       "ProspectStake",
@@ -1112,6 +1160,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"vault",
     "number":"A04.S03",
     "title":"Vault",
+    "href":"/a04/s03-vault",
     "tables":[
       "TopicAllocation",
       "TopicCall",
@@ -1125,6 +1174,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"prediction",
     "number":"A04.S04",
     "title":"Prediction",
+    "href":"/a04/s04-prediction",
     "tables":[
       "Topic",
       "Prospect",
@@ -1154,6 +1204,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"admin",
     "number":"A03.S04",
     "title":"Admin",
+    "href":"/a03/s04-admin",
     "tables":[
       "PlatformGrant",
       "SafetyCase",
@@ -1168,6 +1219,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"system",
     "number":"A03.S05",
     "title":"System",
+    "href":"/a03/s05-system",
     "tables":[
       "SystemCatalogItem",
       "IntegrationProvider",
@@ -1183,6 +1235,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"admin/user",
     "number":"A03.S06",
     "title":"Admin users",
+    "href":"/a03/s06-admin-user",
     "source-section":"user",
     "tables":[
       "User",
@@ -1196,6 +1249,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"admin/organisation",
     "number":"A03.S07",
     "title":"Admin organizations",
+    "href":"/a03/s07-admin-organisation",
     "source-section":"organisation",
     "tables":[
       "Org",
@@ -1210,9 +1264,17 @@ export var WORKSPACE_AREA_SPECS = {
     ]
   },
     {
+    "key":"admin/newsroom",
+    "number":"A03.S14",
+    "title":"Newsroom imports",
+    "href":"/newsroom/imports",
+    "tables":[]
+  },
+    {
     "key":"admin/campaign",
     "number":"A03.S08",
     "title":"Campaigns",
+    "href":"/a03/s08-admin-campaign",
     "source-section":"organisation",
     "tables":["Campaign"]
   },
@@ -1220,6 +1282,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"system/service",
     "number":"A03.S09",
     "title":"Services",
+    "href":"/a03/s09-service",
     "source-section":"super",
     "tables":[
       "IntegrationProvider",
@@ -1233,6 +1296,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"system/template",
     "number":"A03.S10",
     "title":"Templates",
+    "href":"/a03/s10-template",
     "source-section":"super",
     "tables":["SystemCatalogItem"]
   },
@@ -1240,6 +1304,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"system/room",
     "number":"A03.S11",
     "title":"System rooms",
+    "href":"/a03/s11-system-room",
     "source-section":"room",
     "tables":["Topic","Prospect"]
   },
@@ -1247,6 +1312,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"system/swap",
     "number":"A03.S12",
     "title":"System swap",
+    "href":"/a03/s12-system-swap",
     "source-section":"room",
     "tables":[
       "ProspectOrder",
@@ -1264,6 +1330,7 @@ export var WORKSPACE_AREA_SPECS = {
     "key":"system/brand",
     "number":"A03.S13",
     "title":"System brands",
+    "href":"/a03/s13-system-brand",
     "source-section":"brand",
     "tables":[
       "Social",
@@ -1278,7 +1345,7 @@ export var WORKSPACE_AREA_SPECS = {
   ]
 };
 
-// statstrade-superadmin.adminweb.workspace/ADMINWEB-NAVIGATION-SPECS [463] 
+// statstrade-superadmin.adminweb.workspace/ADMINWEB-NAVIGATION-SPECS [529] 
 export var ADMINWEB_NAVIGATION_SPECS = [
   {
   "id":"operations",
@@ -1286,10 +1353,34 @@ export var ADMINWEB_NAVIGATION_SPECS = [
   "label":"operations",
   "items":[
     {
-    "section":"index",
+    "section":"overview",
     "number":"A01.S01",
-    "href":"/adminweb",
+    "href":"/a01/s01-index",
     "label":"Overview"
+  },
+    {
+    "section":"health",
+    "number":"A01.S02",
+    "href":"/a01/s02-health",
+    "label":"Health"
+  },
+    {
+    "section":"access",
+    "number":"A01.S03",
+    "href":"/a01/s03-access",
+    "label":"Access"
+  },
+    {
+    "section":"approvals",
+    "number":"A01.S04",
+    "href":"/a01/s04-approvals",
+    "label":"Approvals"
+  },
+    {
+    "section":"audit",
+    "number":"A01.S05",
+    "href":"/a01/s05-audit",
+    "label":"Audit"
   }
   ]
 },
@@ -1301,7 +1392,7 @@ export var ADMINWEB_NAVIGATION_SPECS = [
     {
     "section":"user",
     "number":"A02.S01",
-    "href":"/adminweb/user",
+    "href":"/a02/s01-user",
     "label":"User operations",
     "icon":"manage_accounts",
     "index-label":"User operations"
@@ -1309,7 +1400,7 @@ export var ADMINWEB_NAVIGATION_SPECS = [
     {
     "section":"organisation",
     "number":"A02.S02",
-    "href":"/adminweb/organisation",
+    "href":"/a02/s02-organisation",
     "label":"Organisations",
     "icon":"business",
     "index-label":"Organisations"
@@ -1317,7 +1408,7 @@ export var ADMINWEB_NAVIGATION_SPECS = [
     {
     "section":"billing",
     "number":"A02.S03",
-    "href":"/adminweb/billing",
+    "href":"/a02/s03-billing",
     "label":"Billing operations",
     "icon":"payments",
     "index-label":"Billing operations"
@@ -1332,14 +1423,14 @@ export var ADMINWEB_NAVIGATION_SPECS = [
     {
     "section":"chain",
     "number":"A03.S01",
-    "href":"/adminweb/chain",
+    "href":"/a03/s01-chain",
     "label":"Chain",
     "index-label":"Tokens and assets"
   },
     {
     "section":"super",
     "number":"A03.S02",
-    "href":"/adminweb/super",
+    "href":"/a03/s02-system",
     "label":"System",
     "index-label":"Platform administration"
   },
@@ -1360,7 +1451,7 @@ export var ADMINWEB_NAVIGATION_SPECS = [
     {
     "section":"room",
     "number":"A04.S01",
-    "href":"/adminweb/room",
+    "href":"/a04/s01-markets",
     "label":"Markets",
     "index-label":"Topics and markets"
   }
@@ -1374,7 +1465,7 @@ export var ADMINWEB_NAVIGATION_SPECS = [
     {
     "section":"brand",
     "number":"A05.S01",
-    "href":"/adminweb/brand",
+    "href":"/a05/s01-brand",
     "label":"Brand",
     "index-label":"Social and brand"
   }
@@ -1382,12 +1473,42 @@ export var ADMINWEB_NAVIGATION_SPECS = [
 }
 ];
 
-// statstrade-superadmin.adminweb.workspace/ADMINWEB-SECTION-SPECS [464] 
+// statstrade-superadmin.adminweb.workspace/ADMINWEB-SECTION-SPECS [530] 
 export var ADMINWEB_SECTION_SPECS = [
+  {
+  "section":"overview",
+  "number":"A01.S01",
+  "href":"/a01/s01-index",
+  "label":"Overview"
+},
+  {
+  "section":"health",
+  "number":"A01.S02",
+  "href":"/a01/s02-health",
+  "label":"Health"
+},
+  {
+  "section":"access",
+  "number":"A01.S03",
+  "href":"/a01/s03-access",
+  "label":"Access"
+},
+  {
+  "section":"approvals",
+  "number":"A01.S04",
+  "href":"/a01/s04-approvals",
+  "label":"Approvals"
+},
+  {
+  "section":"audit",
+  "number":"A01.S05",
+  "href":"/a01/s05-audit",
+  "label":"Audit"
+},
   {
   "section":"user",
   "number":"A02.S01",
-  "href":"/adminweb/user",
+  "href":"/a02/s01-user",
   "label":"User operations",
   "icon":"manage_accounts",
   "index-label":"User operations"
@@ -1395,7 +1516,7 @@ export var ADMINWEB_SECTION_SPECS = [
   {
   "section":"organisation",
   "number":"A02.S02",
-  "href":"/adminweb/organisation",
+  "href":"/a02/s02-organisation",
   "label":"Organisations",
   "icon":"business",
   "index-label":"Organisations"
@@ -1403,7 +1524,7 @@ export var ADMINWEB_SECTION_SPECS = [
   {
   "section":"billing",
   "number":"A02.S03",
-  "href":"/adminweb/billing",
+  "href":"/a02/s03-billing",
   "label":"Billing operations",
   "icon":"payments",
   "index-label":"Billing operations"
@@ -1411,14 +1532,14 @@ export var ADMINWEB_SECTION_SPECS = [
   {
   "section":"chain",
   "number":"A03.S01",
-  "href":"/adminweb/chain",
+  "href":"/a03/s01-chain",
   "label":"Chain",
   "index-label":"Tokens and assets"
 },
   {
   "section":"super",
   "number":"A03.S02",
-  "href":"/adminweb/super",
+  "href":"/a03/s02-system",
   "label":"System",
   "index-label":"Platform administration"
 },
@@ -1432,40 +1553,45 @@ export var ADMINWEB_SECTION_SPECS = [
   {
   "section":"room",
   "number":"A04.S01",
-  "href":"/adminweb/room",
+  "href":"/a04/s01-markets",
   "label":"Markets",
   "index-label":"Topics and markets"
 },
   {
   "section":"brand",
   "number":"A05.S01",
-  "href":"/adminweb/brand",
+  "href":"/a05/s01-brand",
   "label":"Brand",
   "index-label":"Social and brand"
 }
 ];
 
-// statstrade-superadmin.adminweb.workspace/WORKSPACE-PAGE-NUMBERS-SPEC [465] 
+// statstrade-superadmin.adminweb.workspace/WORKSPACE-PAGE-NUMBERS-SPEC [531] 
 export var WORKSPACE_PAGE_NUMBERS_SPEC = {
   "user/crypto":"A02.S06",
   "super/system/brand":"A03.S13",
   "super/admin":"A03.S04",
   "super/admin/campaign":"A03.S08",
-  "index":"A01.S01",
   "super/system/swap":"A03.S12",
   "brand":"A05.S01",
   "super/system/service":"A03.S09",
+  "health":"A01.S02",
   "user/account":"A02.S05",
+  "access":"A01.S03",
   "super/global":"A03.S03",
   "user":"A02.S01",
   "room/prediction":"A04.S04",
+  "super/admin/newsroom":"A03.S14",
   "billing":"A02.S03",
   "organisation":"A02.S02",
   "super/system/room":"A03.S11",
   "super":"A03.S02",
+  "approvals":"A01.S04",
+  "overview":"A01.S01",
   "super/admin/organisation":"A03.S07",
   "room/swap":"A04.S02",
   "user/personal":"A02.S04",
+  "audit":"A01.S05",
   "super/system/template":"A03.S10",
   "room/vault":"A04.S03",
   "super/admin/user":"A03.S06",
@@ -1475,7 +1601,42 @@ export var WORKSPACE_PAGE_NUMBERS_SPEC = {
   "chain":"A03.S01"
 };
 
-// statstrade-superadmin.adminweb.workspace/WORKSPACE-POSTGREST-REFS [466] 
+// statstrade-superadmin.adminweb.workspace/WORKSPACE-PAGE-HREFS-SPEC [532] 
+export var WORKSPACE_PAGE_HREFS_SPEC = {
+  "user/crypto":"/a02/s06-crypto",
+  "super/system/brand":"/a03/s13-system-brand",
+  "super/admin":"/a03/s04-admin",
+  "super/admin/campaign":"/a03/s08-admin-campaign",
+  "super/system/swap":"/a03/s12-system-swap",
+  "brand":"/a05/s01-brand",
+  "super/system/service":"/a03/s09-service",
+  "health":"/a01/s02-health",
+  "user/account":"/a02/s05-account",
+  "access":"/a01/s03-access",
+  "super/global":"/a03/s03-index",
+  "user":"/a02/s01-user",
+  "room/prediction":"/a04/s04-prediction",
+  "super/admin/newsroom":"/newsroom/imports",
+  "billing":"/a02/s03-billing",
+  "organisation":"/a02/s02-organisation",
+  "super/system/room":"/a03/s11-system-room",
+  "super":"/a03/s02-system",
+  "approvals":"/a01/s04-approvals",
+  "overview":"/a01/s01-index",
+  "super/admin/organisation":"/a03/s07-admin-organisation",
+  "room/swap":"/a04/s02-swap",
+  "user/personal":"/a02/s04-personal",
+  "audit":"/a01/s05-audit",
+  "super/system/template":"/a03/s10-template",
+  "room/vault":"/a04/s03-vault",
+  "super/admin/user":"/a03/s06-admin-user",
+  "room":"/a04/s01-markets",
+  "super/system":"/a03/s05-system",
+  "global":"/a03/s03-index",
+  "chain":"/a03/s01-chain"
+};
+
+// statstrade-superadmin.adminweb.workspace/WORKSPACE-POSTGREST-REFS [533] 
 export var WORKSPACE_POSTGREST_REFS = {
   "TokenSupply":["token","playable"],
   "ComputeUsage":["wallet","token","playable","connection"],
@@ -1570,7 +1731,7 @@ export var WORKSPACE_POSTGREST_REFS = {
   "AssetTx":["asset"]
 };
 
-// statstrade-superadmin.adminweb.workspace/ADMIN-ACTIONS [467] 
+// statstrade-superadmin.adminweb.workspace/ADMIN-ACTIONS [534] 
 export var ADMIN_ACTIONS = {
   "actions":{
     "check-super":{
@@ -1585,13 +1746,13 @@ export var ADMIN_ACTIONS = {
   }
 };
 
-// statstrade-superadmin.adminweb.workspace/getPageNumber [469] 
+// statstrade-superadmin.adminweb.workspace/getPageNumber [536] 
 export function getPageNumber(section,area){
   let key = area ? (section + "/" + area) : section;
   return WORKSPACE_PAGE_NUMBERS_SPEC[key];
 }
 
-// statstrade-superadmin.adminweb.workspace/getTabNumber [475] 
+// statstrade-superadmin.adminweb.workspace/getTabNumber [542] 
 export function getTabNumber(section,area,tab_index){
   let page_number = getPageNumber(section,area);
   let digits = tab_index.toString();
@@ -1599,7 +1760,7 @@ export function getTabNumber(section,area,tab_index){
   return page_number ? (page_number + ".T" + padded) : null;
 }
 
-// statstrade-superadmin.adminweb.workspace/shellRouteModel [483] 
+// statstrade-superadmin.adminweb.workspace/shellRouteModel [550] 
 export function shellRouteModel(section,area){
   return {
     "handler":function (_context){
@@ -1610,16 +1771,16 @@ export function shellRouteModel(section,area){
   };
 }
 
-// statstrade-superadmin.adminweb.workspace/AdminwebShell [492] 
+// statstrade-superadmin.adminweb.workspace/AdminwebShell [559] 
 export function AdminwebShell({section,area,children}){
   let provider_state = substrate.useSubstrateContext();
   let resource = provider_state["resource"];
   let node = resource["client"];
   let space_id = substrate.pageSpaceId(
     resource["scope-id"],
-    "shell/adminweb/" + section + "/" + (area || "root")
+    "shell/superadmin/" + section + "/" + (area || "root")
   );
-  let group_id = "navigation";
+  let group_id = group_shell.Group["id"];
   let route_model = React.useMemo(function (){
     return shellRouteModel(section,area);
   },[section,area]);
@@ -1666,7 +1827,7 @@ export function AdminwebShell({section,area,children}){
           paddingBottom="$3"
           borderBottomWidth={1}
           borderColor="$borderColor">
-          <T.Text fontSize="$5" fontWeight="700">Adminweb</T.Text>
+          <T.Text fontSize="$5" fontWeight="700">Superadmin</T.Text>
           <T.Anchor href="/" color="$color10">Home</T.Anchor>
         </T.XStack>
         {groups.map(function (group){
@@ -1708,16 +1869,16 @@ export function AdminwebShell({section,area,children}){
                     {(selected && (area_links.length > 0)) ? (
                       <T.YStack gap="$1" paddingLeft="$3">
                         {area_links.map(function (area_entry){
-                          let active_area = active_area == area_entry["key"];
+                          let area_selected = active_area == area_entry["key"];
                           return (
                             <T.Anchor
                               key={area_entry["key"]}
-                              href={area_entry["href"] || ("/adminweb/" + section + "/" + area_entry["key"])}
-                              ariaCurrent={active_area ? "page" : null}
+                              href={area_entry["href"] || WORKSPACE_PAGE_HREFS_SPEC[section + "/" + area_entry["key"]]}
+                              ariaCurrent={area_selected ? "page" : null}
                               paddingHorizontal="$2"
                               paddingVertical="$1"
                               borderRadius="$2"
-                              backgroundColor={active_area ? "$color3" : "transparent"}>
+                              backgroundColor={area_selected ? "$color3" : "transparent"}>
                               <T.XStack alignItems="center" gap="$2">
                                 <T.Text fontFamily="monospace" fontSize="$1" color="$color10">{area_entry["number"]}</T.Text>
                                 <T.Text fontSize="$2">{area_entry["title"]}</T.Text>
@@ -1734,7 +1895,7 @@ export function AdminwebShell({section,area,children}){
     </T.XStack>);
 }
 
-// statstrade-superadmin.adminweb.workspace/useTableRows [619] 
+// statstrade-superadmin.adminweb.workspace/useTableRows [687] 
 export function useTableRows(table,fields,context){
   let reference_fields = WORKSPACE_POSTGREST_REFS[table] || [];
   let request_fields = fields.map(function (field){
@@ -1743,14 +1904,15 @@ export function useTableRows(table,fields,context){
   return global_table.useTableRows(table,request_fields,context);
 }
 
-// statstrade-superadmin.adminweb.workspace/WorkspaceContent [631] 
+// statstrade-superadmin.adminweb.workspace/WorkspaceContent [699] 
 export function WorkspaceContent(props){
   let {area,section} = props;
-  let actor_id = props["actorId"];
+  let actor_id = props["actor_id"] || props["actorId"] || props["actor-id"];
   let provider_state = substrate.useSubstrateContext();
   let resource = provider_state["resource"];
   let runtime_context = {
     "node":resource["client"],
+    "group":WORKSPACE_GROUPS[section + "/" + (area || "")] || WORKSPACE_GROUPS[section] || group_tables.Group,
     "primary-id":resource["config"]["primary"]["id"],
     "space-id":substrate.pageSpaceId(
         resource["scope-id"],
@@ -1826,7 +1988,7 @@ export function WorkspaceContent(props){
     </AdminwebShell>);
 }
 
-// statstrade-superadmin.adminweb.workspace/CampaignManagement [955] 
+// statstrade-superadmin.adminweb.workspace/CampaignManagement [1026] 
 export function CampaignManagement({section,area}){
   let [target_user_id,set_target_user_id] = React.useState("");
   let [reason,set_reason] = React.useState("");
@@ -1905,7 +2067,7 @@ export function CampaignManagement({section,area}){
     </AdminwebShell>);
 }
 
-// statstrade-superadmin.adminweb.workspace/SuperadminGate [1021] 
+// statstrade-superadmin.adminweb.workspace/SuperadminGate [1092] 
 export function SuperadminGate({children}){
   let provider_state = substrate.useSubstrateContext();
   let resource = provider_state["resource"];
@@ -1947,40 +2109,48 @@ export function SuperadminGate({children}){
     </T.YStack>);
 }
 
-// statstrade-superadmin.adminweb.workspace/AdminWorkspaceGuard [1070] 
+// statstrade-superadmin.adminweb.workspace/AdminWorkspaceGuard [1141] 
 export function AdminWorkspaceGuard(props){
   let {area,section} = props;
-  let actor_id = props["actorId"];
-  let content = (area == "admin/campaign") ? (
-    <CampaignManagement section={section} area={area} actorId={actor_id}/>) : (
-    <WorkspaceContent section={section} area={area} actorId={actor_id}/>);
-  let requires_super = (section == "chain") || (section == "super") || (section == "billing");
+  let actor_id = props["actor_id"] || props["actorId"] || props["actor-id"];
+  let component = props["content"];
+  let content = component ? (
+    <AdminwebShell section={section} area={area}>{React.createElement(component,{"actor_id":actor_id})}</AdminwebShell>) : ((area == "admin/campaign") ? (
+    <CampaignManagement section={section} area={area} actor_id={actor_id}/>) : (
+    <WorkspaceContent section={section} area={area} actor_id={actor_id}/>));
+  let requires_super = component || (section == "chain") || (section == "super") || (section == "billing");
   return requires_super ? (
     <SuperadminGate>{content}</SuperadminGate>) : content;
 }
 
-// statstrade-superadmin.adminweb.workspace/AdminWorkspace [1088] 
-export function AdminWorkspace({section,area}){
+// statstrade-superadmin.adminweb.workspace/AdminWorkspace [1163] 
+export function AdminWorkspace({section,area,content}){
   let [session] = sb.useListenSession();
   let current_session = session || {};
   let user = current_session["user"] || {};
   let actor_id = user["id"];
   let token = current_session["access_token"];
   return token ? (
-    <AdminWorkspaceGuard section={section} area={area} actorId={actor_id}/>) : (
+    <AdminWorkspaceGuard
+      section={section}
+      area={area}
+      actor_id={actor_id}
+      content={content}/>) : (
     <T.YStack gap="$3" padding="$4">
       <T.Text fontSize="$5" fontWeight="600">Sign in to view admin data.</T.Text>
       <T.Anchor href="/auth/sign-in">Sign in</T.Anchor>
     </T.YStack>);
 }
 
-// statstrade-superadmin.adminweb.workspace/MODULE [1106] 
+// statstrade-superadmin.adminweb.workspace/MODULE [1181] 
 export var MODULE = {
+  "WORKSPACE_GROUPS":WORKSPACE_GROUPS,
   "WORKSPACES":WORKSPACES,
   "WORKSPACE_AREA_SPECS":WORKSPACE_AREA_SPECS,
   "ADMINWEB_NAVIGATION_SPECS":ADMINWEB_NAVIGATION_SPECS,
   "ADMINWEB_SECTION_SPECS":ADMINWEB_SECTION_SPECS,
   "WORKSPACE_PAGE_NUMBERS_SPEC":WORKSPACE_PAGE_NUMBERS_SPEC,
+  "WORKSPACE_PAGE_HREFS_SPEC":WORKSPACE_PAGE_HREFS_SPEC,
   "WORKSPACE_POSTGREST_REFS":WORKSPACE_POSTGREST_REFS,
   "ADMIN_ACTIONS":ADMIN_ACTIONS,
   "getPageNumber":getPageNumber,

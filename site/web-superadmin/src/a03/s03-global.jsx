@@ -16,7 +16,9 @@ import * as substrate from '@statstrade/web-superadmin/lib/substrate-worker.jsx'
 
 import * as workspace from '@statstrade/web-superadmin/adminweb/workspace.jsx'
 
-// statstrade-superadmin.a03.s03-global/A03S03GlobalSectionSpecs [28] 
+import * as group_global from '@statstrade/web-superadmin/groups/a03/s01/t01-global.jsx'
+
+// statstrade-superadmin.a03.s03-global/A03S03GlobalSectionSpecs [29] 
 export var A03S03GlobalSectionSpecs = [
   {"key":"sitevar","number":1,"label":"Global"},
   {"key":"currency","number":2,"label":"Commodity"},
@@ -24,7 +26,7 @@ export var A03S03GlobalSectionSpecs = [
   {"key":"token","number":4,"label":"Token"}
 ];
 
-// statstrade-superadmin.a03.s03-global/A03S03GlobalMainContent [30] 
+// statstrade-superadmin.a03.s03-global/A03S03GlobalMainContent [31] 
 export function A03S03GlobalMainContent(props){
   let {account_id,actions,debug,design,mini,route,token} = props;
   let [subSection,setSubSection] = React.useState("currency");
@@ -32,6 +34,7 @@ export function A03S03GlobalMainContent(props){
   let resource = provider_state["resource"];
   let runtime_context = {
     "node":resource["client"],
+    "group":group_global.Group,
     "runtime":{"config":resource["config"],"schema":{},"lookup":{},"opts":{}},
     "primary-id":resource["config"]["primary"]["id"],
     "space-id":substrate.pageSpaceId(resource["scope-id"],"a03/s03/global")
@@ -80,7 +83,7 @@ export function A03S03GlobalMainContent(props){
     </T.YStack>);
 }
 
-// statstrade-superadmin.a03.s03-global/A03S03GlobalMain [87] 
+// statstrade-superadmin.a03.s03-global/A03S03GlobalMain [89] 
 export function A03S03GlobalMain(props){
   let {account_id} = props;
   return (
@@ -89,7 +92,7 @@ export function A03S03GlobalMain(props){
     </workspace.AdminwebShell>);
 }
 
-// statstrade-superadmin.a03.s03-global/A03S03GlobalPage [97] 
+// statstrade-superadmin.a03.s03-global/A03S03GlobalPage [99] 
 export function A03S03GlobalPage(){
   let [session] = sb.useListenSession();
   let current_session = session || {};

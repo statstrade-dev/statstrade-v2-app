@@ -474,7 +474,7 @@ export var frameDevtoolApi = {
 export function useFrameDevtoolContext(){
   let toast = ui.useToastController();
   let [session,setSession] = sb.useListenSession();
-  let color = session ? (session.access_token ? (session.user.user_metadata.super ? "$purple8" : "$green8") : "$red8") : "$color1";
+  let color = session ? (session.access_token ? (kd.get_in(session,["user","user_metadata","super"]) ? "$purple8" : "$green8") : "$red8") : "$color1";
   let [debugContent,setDebugContent] = React.useState(null);
   let [sharedWorker,setSharedWorker] = React.useState(null);
   let api = rq.useApi(frameDevtoolApi);
@@ -505,7 +505,7 @@ export function useDevtoolSharedWorker(resource){
         setSharedWorker(null);
       };
     }
-    return null;
+    return undefined;
   },[setSharedWorker,resource]);
 }
 

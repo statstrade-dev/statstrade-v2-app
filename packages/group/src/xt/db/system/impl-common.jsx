@@ -150,6 +150,18 @@ export function process_remove_event(impl,data){
   return method_fn(impl,data);
 }
 
+// xt.db.system.impl-common/ISourceInit [] 
+export var ISourceInit = proto.create_protocol_fn(
+  "xt.db.system.impl_common/ISourceInit",
+  {"init_db":{"name":"init_db","arglist":["impl"]}}
+);
+
+// xt.db.system.impl-common/init-db [] 
+export function init_db(impl){
+  let method_fn = proto.protocol_method(impl,"xt.db.system.impl_common/ISourceInit","init_db");
+  return method_fn(impl);
+}
+
 // xt.db.system.impl-common/ISourceLifecycle [] 
 export var ISourceLifecycle = proto.create_protocol_fn(
   "xt.db.system.impl_common/ISourceLifecycle",
@@ -162,27 +174,27 @@ export function stop_db(impl){
   return method_fn(impl);
 }
 
-// xt.db.system.impl-common/add-db-listener-default [38] 
+// xt.db.system.impl-common/add-db-listener-default [41] 
 export function add_db_listener_default(impl,listener_id,handle){
   let {listeners} = impl;
   listeners[listener_id] = handle;
   return listener_id;
 }
 
-// xt.db.system.impl-common/remove-db-listener-default [44] 
+// xt.db.system.impl-common/remove-db-listener-default [47] 
 export function remove_db_listener_default(impl,listener_id){
   let {listeners} = impl;
   delete(listeners[listener_id]);
   return listener_id;
 }
 
-// xt.db.system.impl-common/get-db-listener-default [50] 
+// xt.db.system.impl-common/get-db-listener-default [53] 
 export function get_db_listener_default(impl,listener_id,handle){
   let {listeners} = impl;
   return listeners[listener_id];
 }
 
-// xt.db.system.impl-common/sync-get-tables [56] 
+// xt.db.system.impl-common/sync-get-tables [59] 
 export function sync_get_tables(payload){
   let out = {};
   let db_sync = payload["db/sync"];
@@ -200,7 +212,7 @@ export function sync_get_tables(payload){
   return Object.keys(out);
 }
 
-// xt.db.system.impl-common/sync-notify-listeners [71] 
+// xt.db.system.impl-common/sync-notify-listeners [74] 
 export function sync_notify_listeners(impl,tables,event){
   let {listeners} = impl;
   for(let [listener_id,handle] of Object.entries(listeners)){
@@ -237,7 +249,7 @@ export function sync_notify_listeners(impl,tables,event){
   return true;
 }
 
-// xt.db.system.impl-common/sync-process-payload [104] 
+// xt.db.system.impl-common/sync-process-payload [107] 
 export function sync_process_payload(impl,payload){
   let db_sync = payload["db/sync"];
   let db_remove = payload["db/remove"];

@@ -10,6 +10,8 @@ import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
 import * as rq from '@statstrade/edge/lib/js/lib/react-query.jsx'
 
+import * as ui_controls from '@statstrade/edge/ui-controls.jsx'
+
 import * as topmenu from '@statstrade/component/layout/common/frame-topmenu.jsx'
 
 import * as ui_router from '@statstrade/component/ui-router.jsx'
@@ -34,10 +36,10 @@ import * as logo from '@statstrade/component/logo/logo-statstrade.jsx'
 
 import * as logo_google from '@statstrade/component/logo/logo-google.jsx'
 
-// statsui.basic.layout.layout-guest/LayoutGuestContext [34] 
+// statsui.basic.layout.layout-guest/LayoutGuestContext [35] 
 export var LayoutGuestContext = React.createContext();
 
-// statsui.basic.layout.layout-guest/LayoutGuestLink [37] 
+// statsui.basic.layout.layout-guest/LayoutGuestLink [38] 
 export function LayoutGuestLink({link,text,size = 40}){
   return (
     <T.Anchor
@@ -54,7 +56,7 @@ export function LayoutGuestLink({link,text,size = 40}){
     </T.Anchor>);
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuestLogo [57] 
+// statsui.basic.layout.layout-guest/LayoutGuestLogo [58] 
 export function LayoutGuestLogo(){
   let {controls} = React.useContext(LayoutGuestContext);
   return (
@@ -68,7 +70,7 @@ export function LayoutGuestLogo(){
     </ui.ButtonNormal>);
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuestHeaderLoginForm [75] 
+// statsui.basic.layout.layout-guest/LayoutGuestHeaderLoginForm [76] 
 export function LayoutGuestHeaderLoginForm(){
   let context = React.useContext(LayoutGuestContext);
   let router = ui_router.useRouter();
@@ -153,7 +155,7 @@ export function LayoutGuestHeaderLoginForm(){
     </T.Form>);
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuestHeaderLogin [170] 
+// statsui.basic.layout.layout-guest/LayoutGuestHeaderLogin [171] 
 export function LayoutGuestHeaderLogin(){
   let {controls,forms} = React.useContext(LayoutGuestContext);
   return (
@@ -199,7 +201,7 @@ export function LayoutGuestHeaderLogin(){
     </React.Fragment>);
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuestHeaderMobile [219] 
+// statsui.basic.layout.layout-guest/LayoutGuestHeaderMobile [220] 
 export function LayoutGuestHeaderMobile(){
   let {controls} = React.useContext(LayoutGuestContext);
   return (
@@ -241,7 +243,7 @@ export function LayoutGuestHeaderMobile(){
     </T.XStack>);
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuestHeaderLinks [258] 
+// statsui.basic.layout.layout-guest/LayoutGuestHeaderLinks [259] 
 export function LayoutGuestHeaderLinks({size}){
   return (
     <React.Fragment>
@@ -251,7 +253,7 @@ export function LayoutGuestHeaderLinks({size}){
     </React.Fragment>);
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuestHeaderDesktop [277] 
+// statsui.basic.layout.layout-guest/LayoutGuestHeaderDesktop [278] 
 export function LayoutGuestHeaderDesktop(){
   let {controls} = React.useContext(LayoutGuestContext);
   return (
@@ -280,7 +282,7 @@ export function LayoutGuestHeaderDesktop(){
     </T.XStack>);
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuestFrame [322] 
+// statsui.basic.layout.layout-guest/LayoutGuestFrame [323] 
 export function LayoutGuestFrame({children}){
   let height = 70;
   let {controls} = React.useContext(LayoutGuestContext);
@@ -326,7 +328,7 @@ export function LayoutGuestFrame({children}){
     </T.YStack>);
 }
 
-// statsui.basic.layout.layout-guest/useLayoutGuestContext [384] 
+// statsui.basic.layout.layout-guest/useLayoutGuestContext [385] 
 export function useLayoutGuestContext(){
   let api = rq.useApi({
     "mutations":{
@@ -340,11 +342,11 @@ export function useLayoutGuestContext(){
         "schema":schemaSignIn
       })
   };
-  let controls = hf.useControls(["showSideMenu","showTopMenu","showLogin","currentError"]);
+  let controls = ui_controls.useControls(["showSideMenu","showTopMenu","showLogin","currentError"]);
   return {api,controls,forms};
 }
 
-// statsui.basic.layout.layout-guest/LayoutGuest [404] 
+// statsui.basic.layout.layout-guest/LayoutGuest [405] 
 export function LayoutGuest({children}){
   let context = useLayoutGuestContext();
   return (

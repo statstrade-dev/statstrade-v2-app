@@ -1,11 +1,12 @@
 import * as feature from '@statstrade/feature/auth/forgot-password.jsx'
 
-import * as layout_auth from '@statstrade/component/layout/layout-auth.jsx'
-
-// statstrade-web.page.forgot-password/Page [16] 
+// statstrade-web.page.forgot-password/Page [14] 
 export function Page(){
   return (
-    <layout_auth.LayoutAuth><feature.ForgotPasswordScreen/></layout_auth.LayoutAuth>);
+    <feature.ForgotPasswordScreen/>);
 }
+
+// statstrade-web.page.forgot-password/page-model-key [19] 
+Page["pageModelKey"] = "/forgot-password";
 
 export default Page

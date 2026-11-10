@@ -13,6 +13,11 @@ const conn_sql = require("@xtalk/net/conn-sql.js")
 function ImplPostgres(client,schema,lookup,listeners,opts,metadata){
   globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["xt.db.system.impl_postgres/ImplPostgres"] = true;
   proto.register_protocol_impl(
+    impl_common.ISourceInit["on"],
+    "xt.db.system.impl_postgres/ImplPostgres",
+    {"init_db":impl_postgres_init}
+  );
+  proto.register_protocol_impl(
     impl_common.ISourceRemote["on"],
     "xt.db.system.impl_postgres/ImplPostgres",
     {"pull_async":pull_async,"rpc_call_async":rpc_call_async}
@@ -29,6 +34,7 @@ function ImplPostgres(client,schema,lookup,listeners,opts,metadata){
   );
   return {
     "::/protocol-impls":{
+        [impl_common.ISourceInit["on"]]:{"init_db":impl_postgres_init},
         [impl_common.ISourceRemote["on"]]:{"pull_async":pull_async,"rpc_call_async":rpc_call_async},
         [impl_common.ISourceListener["on"]]:{
           "add_db_listener":impl_common.add_db_listener_default,
@@ -43,6 +49,7 @@ function ImplPostgres(client,schema,lookup,listeners,opts,metadata){
     "::":"xt.db.system.impl_postgres/ImplPostgres",
     "metadata":metadata,
     "::/protocols":[
+        impl_common.ISourceInit["on"],
         impl_common.ISourceRemote["on"],
         impl_common.ISourceListener["on"],
         impl_common.ISourceLifecycle["on"]
@@ -68,22 +75,22 @@ function stop_db(impl){
   return null;
 }
 
-function impl_postgres(client,schema,lookup){
-  return ImplPostgres(client,schema,lookup,{},sql_util.postgres_opts(lookup),{});
-}
-
 function impl_postgres_init(impl){
   let {client,lookup,opts,schema} = impl;
-  return conn_sql.connect(client).then(function (client){
+  return conn_sql.connect(client,{}).then(function (client){
     return impl;
   });
+}
+
+function impl_postgres(client,schema,lookup){
+  return ImplPostgres(client,schema,lookup,{},sql_util.postgres_opts(lookup),{});
 }
 
 module.exports = {
   ["pull_async"]:pull_async,
   ["rpc_call_async"]:rpc_call_async,
   ["stop_db"]:stop_db,
+  ["impl_postgres_init"]:impl_postgres_init,
   ["ImplPostgres"]:ImplPostgres,
-  ["impl_postgres"]:impl_postgres,
-  ["impl_postgres_init"]:impl_postgres_init
+  ["impl_postgres"]:impl_postgres
 }

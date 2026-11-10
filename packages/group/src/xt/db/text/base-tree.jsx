@@ -158,26 +158,37 @@ export function plan_return_bulk(schema,entry,ids,args,opts){
   return qtree;
 }
 
-// xt.db.text.base-tree/plan-combined [163] 
+// xt.db.text.base-tree/return-input [163] 
+export function return_input(entry){
+  let input = entry["input"].slice();
+  let identity = entry["view"]["identity"];
+  let count = Array.isArray(identity) ? identity.length : 1;
+  while((count > 0) && (input.length > 0)){
+    input.shift();
+    count = (count - 1);
+  }
+  return input;
+}
+
+// xt.db.text.base-tree/plan-combined [174] 
 export function plan_combined(schema,sel_entry,sel_args,ret_entry,ret_args,ret_omit,opts,as_tree){
   let sel_input = sel_entry["input"];
-  let ret_input = ret_entry["input"];
+  let ret_input = return_input(ret_entry);
   let itree = tree_combined(schema,sel_entry,ret_entry,ret_omit,[],opts);
   let qtree = tree_fill_input(
     itree,
     xtd.arr_assign(ret_args.slice(),sel_args),
     xtd.arr_assign(ret_input.slice(),sel_input),
-    (ret_input.length > 0) ? true : false
+    false
   );
   return qtree;
 }
 
-// xt.db.text.base-tree/plan-view-check [188] 
+// xt.db.text.base-tree/plan-view-check [199] 
 export function plan_view_check(entry,args,drop_first){
   let targs = entry["input"];
   if(drop_first){
-    targs = [...targs];
-    targs.shift();
+    targs = return_input(entry);
   }
   let l_ok_value = check.check_args_length(args,targs);
   let [l_ok,l_err] = l_ok_value;
@@ -192,7 +203,7 @@ export function plan_view_check(entry,args,drop_first){
   return [true,null];
 }
 
-// xt.db.text.base-tree/plan-view [206] 
+// xt.db.text.base-tree/plan-view [216] 
 export function plan_view(schema,query_spec){
   let {return_args,return_bulk,return_count,return_entry,return_id,return_omit,select_args,select_entry,table} = query_spec;
   if((null != select_entry) && (null != return_entry)){

@@ -4,7 +4,7 @@ import * as vitest from 'vitest'
 
 import * as api from '@statstrade/edge/remote/api-general.jsx'
 
-// statsui.edge.remote.api-general-test/test-api-get-session [14] 
+// statsui.edge.remote.api-general-test/test-api-get-session [13] 
 vitest.describe("get-session",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -17,7 +17,7 @@ vitest.describe("get-session",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-get-user [27] 
+// statsui.edge.remote.api-general-test/test-api-get-user [26] 
 vitest.describe("get-user",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -30,7 +30,7 @@ vitest.describe("get-user",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-sign-in [40] 
+// statsui.edge.remote.api-general-test/test-api-sign-in [39] 
 vitest.describe("sign-in",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -48,7 +48,7 @@ vitest.describe("sign-in",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-sign-out [58] 
+// statsui.edge.remote.api-general-test/test-api-sign-out [57] 
 vitest.describe("sign-out",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -65,7 +65,7 @@ vitest.describe("sign-out",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-sign-in-oauth [75] 
+// statsui.edge.remote.api-general-test/test-api-sign-in-oauth [74] 
 vitest.describe("sign-in-oauth",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -83,7 +83,7 @@ vitest.describe("sign-in-oauth",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-sign-up [93] 
+// statsui.edge.remote.api-general-test/test-api-sign-up [92] 
 vitest.describe("sign-up",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -101,7 +101,7 @@ vitest.describe("sign-up",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-password-reset [111] 
+// statsui.edge.remote.api-general-test/test-api-password-reset [110] 
 vitest.describe("password-reset",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -118,7 +118,7 @@ vitest.describe("password-reset",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-file-upload [129] 
+// statsui.edge.remote.api-general-test/test-api-file-upload [128] 
 vitest.describe("file-upload",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -143,7 +143,7 @@ vitest.describe("file-upload",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-upload-public-url [146] 
+// statsui.edge.remote.api-general-test/test-api-upload-public-url [145] 
 vitest.describe("upload-and-get-public-url",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();
@@ -163,7 +163,7 @@ vitest.describe("upload-and-get-public-url",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-upload-image [163] 
+// statsui.edge.remote.api-general-test/test-api-upload-image [162] 
 vitest.describe("upload-image",function (){
   vitest.afterEach(function (){
     vitest.vi.unstubAllGlobals();
@@ -192,7 +192,7 @@ vitest.describe("upload-image",function (){
   });
 });
 
-// statsui.edge.remote.api-general-test/test-api-list-countries [186] 
+// statsui.edge.remote.api-general-test/test-api-list-countries [185] 
 vitest.describe("list-countries",function (){
   vitest.afterEach(function (){
     vitest.vi.restoreAllMocks();

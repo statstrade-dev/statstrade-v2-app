@@ -4,7 +4,7 @@ import React from 'react'
 
 import * as client_auth from '@statstrade/edge/remote/util-supabase.jsx'
 
-import * as profile_store from '@statstrade/component/db/profile-store.jsx'
+import * as page_api from '@statstrade/edge/substrate/page-api.jsx'
 
 // statstrade-web.feature.profile.profile-editor/profile-values [11] 
 export function profile_values(profile){
@@ -79,14 +79,15 @@ export function ProfileField({hint,id,label,maxLength,onChange,type,value}){
     <T.YStack gap="$2" flex={1} minWidth={180}>
       <T.Label htmlFor={id} fontSize="$3" fontWeight="600">{label}</T.Label>
       <T.Input
-        id={id}
-        value={value || ""}
         onChangeText={onChange}
+        borderColor="$color6"
+        value={value || ""}
         type={type || "text"}
+        className="st-input"
+        id={id}
         maxLength={maxLength}
-        height={44}
         backgroundColor="$background"
-        borderColor="$color6"/>
+        height={44}/>
       {hint ? (
         <T.Text fontSize="$2" color="$color10">{hint}</T.Text>) : null}
     </T.YStack>);
@@ -96,39 +97,19 @@ export function ProfileField({hint,id,label,maxLength,onChange,type,value}){
 export function ProfileEditor(){
   let [session,_setSession,loaded] = client_auth.useListenSession();
   let userId = session && session.user && session.user.id;
+  let api = page_api.usePageApi("profile");
   let [values,setValues] = React.useState({});
   let [loading,setLoading] = React.useState(true);
   let [busy,setBusy] = React.useState(false);
   let [error,setError] = React.useState(null);
   let [message,setMessage] = React.useState(null);
   React.useEffect(function (){
-    let cancelled = false;
-    if(loaded){
-      if(userId){
-        setLoading(true);
-        setError(null);
-        profile_store.load_owner_profile(userId).then(function (profile){
-          if(!cancelled){
-            setValues(profile_values(profile));
-          }
-        }).catch(function (e){
-          if(!cancelled){
-            setError(e.message || "Could not load your profile.");
-          }
-        }).finally(function (){
-          if(!cancelled){
-            setLoading(false);
-          }
-        });
-      }
-      if(!userId){
-        setLoading(false);
-      }
+    setLoading(api.owner.status == "loading");
+    setError(api.owner.error);
+    if(api.owner.status == "ready"){
+      setValues(profile_values(api.data));
     }
-    return function (){
-      cancelled = true;
-    };
-  },[userId,session,loaded]);
+  },[userId,api.data,api.owner.status,api.owner.error]);
   let updateField = function (key,value){
     setValues(function (previous){
       return Object.assign({},previous,{[[key]]:value});
@@ -146,7 +127,7 @@ export function ProfileEditor(){
     setMessage(null);
     try{
       let payload = public_profile_payload(values);
-      await profile_store.save_public_profile(payload);
+      await api.mutations.save_public.mutateAsync({"m":payload});
       setValues(function (previous){
         return Object.assign({},previous,payload);
       });
@@ -169,7 +150,7 @@ export function ProfileEditor(){
     setMessage(null);
     try{
       let payload = secret_profile_payload(values);
-      await profile_store.save_secret_profile(payload);
+      await api.mutations.save_secret.mutateAsync({"m":payload});
       setValues(function (previous){
         return Object.assign({},previous,payload);
       });
@@ -183,9 +164,10 @@ export function ProfileEditor(){
     }
   };
   return (
-    <T.YStack gap="$5" width="100%" maxWidth={760} alignSelf="center">
+    <section className="st-profile-editor">
       <T.YStack gap="$2">
-        <T.H2 fontSize="$7" fontWeight="700">Edit your profile</T.H2>
+        <p className="st-kicker">Participant / account</p>
+        <h1>Edit your profile</h1>
         <T.Text fontSize="$3" color="$color10">
           Update public information and private details in separate sections.
         </T.Text>
@@ -199,18 +181,35 @@ export function ProfileEditor(){
           <T.Text fontSize="$3" color="$color10">Sign in to manage your profile.</T.Text>
           <T.Anchor href="/sign-in" alignSelf="flex-start"><T.Button theme="blue">Sign in</T.Button></T.Anchor>
         </T.YStack>) : null}
+      <button
+        className="st-secondary-button"
+        type="button"
+        disabled={loading || busy}
+        onClick={async function (){
+            setBusy(true);
+            setError(null);
+            try{
+              await api.mutations.publish_reputation.mutateAsync({
+                "enabled":!(api.data.public && api.data.public.reputation_public)
+              });
+              setMessage("Reputation publication preference updated.");
+            }
+            catch(e){
+              setError(e.message);
+            }
+            finally{
+              setBusy(false);
+            }
+          }}>
+        {(api.data.public && api.data.public.reputation_public) ? "Hide my brand reputation" : "Publish my brand reputation"}
+      </button>
       {loading ? (
         <T.Text role="status" color="$color10">Loading your profile…</T.Text>) : null}
       {error ? (
         <T.Text role="alert" color="$red10">{error}</T.Text>) : null}
       {(loaded && session) ? (
         <form onSubmit={onSavePublic}>
-          <T.YStack
-            gap="$4"
-            padding="$5"
-            borderWidth={1}
-            borderColor="$color5"
-            borderRadius="$4">
+          <section className="st-panel">
             <T.H3 fontSize="$5" fontWeight="600">Public profile</T.H3>
             <ProfileField
               id="profile-handle"
@@ -265,17 +264,16 @@ export function ProfileEditor(){
               onChange={function (value){
                   updateField("bio",value);
                 }}/>
-            <T.Button type="submit" disabled={loading || busy}>Save public profile</T.Button>
-          </T.YStack>
+            <button
+              className="st-primary-button"
+              type="submit"
+              disabled={loading || busy}>Save public profile
+            </button>
+          </section>
         </form>) : null}
       {(loaded && session) ? (
         <form onSubmit={onSaveSecret}>
-          <T.YStack
-            gap="$4"
-            padding="$5"
-            borderWidth={1}
-            borderColor="$color5"
-            borderRadius="$4">
+          <section className="st-panel">
             <T.H3 fontSize="$5" fontWeight="600">Private profile</T.H3>
             <T.XStack gap="$4" flexWrap="wrap">
               <ProfileField
@@ -322,10 +320,14 @@ export function ProfileEditor(){
                     updateField("language",value);
                   }}/>
             </T.XStack>
-            <T.Button type="submit" disabled={loading || busy}>Save private profile</T.Button>
-          </T.YStack>
+            <button
+              className="st-primary-button"
+              type="submit"
+              disabled={loading || busy}>Save private profile
+            </button>
+          </section>
         </form>) : null}
       {message ? (
         <T.Text role="status" color="$green10">{message}</T.Text>) : null}
-    </T.YStack>);
+    </section>);
 }

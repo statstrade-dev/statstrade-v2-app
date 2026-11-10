@@ -1,0 +1,151 @@
+{
+  "newsroom-publications" : {
+    "id" : "newsroom-publications",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "query",
+      "symbol" : "query",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  },
+  "user-topic-buy-full" : {
+    "id" : "user-topic-buy-full",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "name",
+      "symbol" : "name",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "amount",
+      "symbol" : "amount",
+      "type" : "bigint",
+      "modifiers" : [ "bigint" ],
+      "role" : "payload"
+    }, {
+      "name" : "price",
+      "symbol" : "price",
+      "type" : "numeric",
+      "modifiers" : [ "numeric" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.user.user-trade-topic",
+      "sb/grant" : "auth"
+    }
+  },
+  "user-topic-cancel-full" : {
+    "id" : "user-topic-cancel-full",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "order_id",
+      "symbol" : "order_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.user.user-trade-topic",
+      "sb/grant" : "auth"
+    }
+  },
+  "user-topic-market-state" : {
+    "id" : "user-topic-market-state",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.user.user-view-market",
+      "sb/grant" : "auth"
+    }
+  },
+  "user-topic-portfolio" : {
+    "id" : "user-topic-portfolio",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.user.user-view-market",
+      "sb/grant" : "auth"
+    }
+  },
+  "user-topic-sell-full" : {
+    "id" : "user-topic-sell-full",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "name",
+      "symbol" : "name",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "amount",
+      "symbol" : "amount",
+      "type" : "bigint",
+      "modifiers" : [ "bigint" ],
+      "role" : "payload"
+    }, {
+      "name" : "price",
+      "symbol" : "price",
+      "type" : "numeric",
+      "modifiers" : [ "numeric" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.user.user-trade-topic",
+      "sb/grant" : "auth"
+    }
+  }
+}

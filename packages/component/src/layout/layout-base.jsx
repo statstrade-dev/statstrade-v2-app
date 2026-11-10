@@ -134,6 +134,23 @@ export function LayoutBase({showDevWebsocket,showDevtool,sharedWorkerEnabled,chi
               <LayoutBaseDevWebsocket/>) : null}
             <TToast.ToastViewport left={10} top={10} zIndex={100000000}/>
             <frame_toast.FrameToast/>
+            {process.env.NEXT_PUBLIC_LOCAL_DATA_PORTAL ? (
+              <div
+                style={{
+                    "position":"fixed",
+                    "bottom":0,
+                    "right":0,
+                    "zIndex":1000000,
+                    "background":"#b71c1c",
+                    "color":"white",
+                    "padding":"6px 12px",
+                    "fontSize":12
+                  }}>
+                <a
+                  href={process.env.NEXT_PUBLIC_LOCAL_DATA_PORTAL}
+                  style={{"color":"white"}}>Local data · hosted sign-in · setup & export status
+                </a>
+              </div>) : null}
             {children}
           </devtool.FrameDevtoolProvider>
         </TToast.ToastProvider>

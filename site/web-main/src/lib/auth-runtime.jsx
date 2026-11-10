@@ -14,7 +14,7 @@ import * as client_supabase from '@xtalk/db/node/client-supabase.js'
 
 import * as supabase_addon from '@xtalk/net/addon-supabase.js'
 
-import * as browser_http from '@xtalk/net/http-fetch.js'
+import * as browser_http from '@statstrade/edge/lib/js/net/http-fetch.js'
 
 import * as impl_session from '@xtalk/db/system/impl-supabase-session.js'
 
@@ -41,12 +41,29 @@ export function authEntryFromSession(session,impersonated,actor_id,session_id){
   return null;
 }
 
-// statstrade-web.lib.auth-runtime/shouldStartWorker [34] 
+// statstrade-web.lib.auth-runtime/verifiedOAuthUser [34] 
+export function verifiedOAuthUser(url,api_key,token){
+  return fetch(url.replace(new RegExp("/$",""),"") + "/auth/v1/user",{
+    "headers":{"apikey":api_key,"Authorization":"Bearer " + token},
+    "signal":AbortSignal.timeout(20000)
+  }).then(async function (response){
+    if(!response.ok){
+      throw new Error("Unable to verify your sign-in. Please sign in again.");
+    }
+    let user = await response.json();
+    if(!user.id){
+      throw new Error("The sign-in response did not include a user.");
+    }
+    return user;
+  });
+}
+
+// statstrade-web.lib.auth-runtime/shouldStartWorker [46] 
 export function shouldStartWorker(entry){
   return Boolean(entry && entry["scope"] && entry["token"]);
 }
 
-// statstrade-web.lib.auth-runtime/startEntryWorker [39] 
+// statstrade-web.lib.auth-runtime/startEntryWorker [51] 
 export function startEntryWorker(entry,connect){
   if(shouldStartWorker(entry)){
     return connect(entry["scope"],entry["token"]);
@@ -54,7 +71,7 @@ export function startEntryWorker(entry,connect){
   return null;
 }
 
-// statstrade-web.lib.auth-runtime/authDefaults [46] 
+// statstrade-web.lib.auth-runtime/authDefaults [58] 
 export function authDefaults(url_text,api_key){
   let url = new URL(url_text);
   let secured = url["protocol"] == "https:";
@@ -67,12 +84,12 @@ export function authDefaults(url_text,api_key){
   };
 }
 
-// statstrade-web.lib.auth-runtime/workerConfig [61] 
+// statstrade-web.lib.auth-runtime/workerConfig [73] 
 export function workerConfig(url,api_key,access_token){
   return client_auth.workerConfig({"url":url["href"],"key":api_key,"token":access_token});
 }
 
-// statstrade-web.lib.auth-runtime/AuthRuntimeProvider [69] 
+// statstrade-web.lib.auth-runtime/AuthRuntimeProvider [81] 
 export function AuthRuntimeProvider({children}){
   let query_client = ReactQuery.useQueryClient();
   let [resource,setResource] = React.useState(null);
@@ -110,14 +127,16 @@ export function AuthRuntimeProvider({children}){
     let node = current["node"];
     let impl = current["impl"];
     let impersonation_response = null;
-    try{
-      impersonation_response = await fetch(
-        "/api/impersonation/token",
-        {"credentials":"same-origin","cache":"no-store"}
-      );
-    }
-    catch(_){
-      null;
+    if(!(process.env.NEXT_PUBLIC_IMPERSONATION_ENABLED == "false")){
+      try{
+        impersonation_response = await fetch(
+          "/api/impersonation/token",
+          {"credentials":"same-origin","cache":"no-store"}
+        );
+      }
+      catch(_){
+        null;
+      }
     }
     if(impersonation_response && impersonation_response["ok"]){
       let body = await impersonation_response.json();
@@ -149,13 +168,17 @@ export function AuthRuntimeProvider({children}){
         "expires_at":(Date.now() / 1000) + expires_in
       };
       impl_session.set_session(impl,callback_session);
-      let callback_user = await client_supabase.user_get(node,client_auth.SERVICE_ID,{});
+      let callback_user = await verifiedOAuthUser(
+        process.env.NEXT_PUBLIC_SUPABASE_URL,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+        callback_access_token
+      );
       callback_session["user"] = (callback_user["user"] || callback_user);
       impl_session.set_session(impl,callback_session);
       impl_session.auto_refresh_start(impl);
       localStorage.setItem(client_auth.REFRESH_TOKEN_KEY,callback_refresh_token);
       window.history.replaceState(
-        null,
+        window.history.state,
         "",
         window.location["pathname"] + window.location["search"]
       );
@@ -199,7 +222,8 @@ export function AuthRuntimeProvider({children}){
       let params = {
         "url":process.env.NEXT_PUBLIC_SUPABASE_URL,
         "key":process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-        "token":token
+        "token":token,
+        "actor_id":scope
       };
       let connect = async function (){
         try{
@@ -228,7 +252,7 @@ export function AuthRuntimeProvider({children}){
     }
     setWorker(null);
     client_auth.setWebDataClient(null);
-    return null;
+    return;
   },[resource,scope,token]);
   let status = ((null == resource) || entry_query["isPending"]) ? "loading" : "ready";
   let value = {
@@ -238,6 +262,7 @@ export function AuthRuntimeProvider({children}){
     "authenticated":Boolean(token),
     "impersonated":Boolean(entry && entry["impersonated"]),
     "worker":worker,
+    "error":entry_query["error"] && entry_query["error"]["message"],
     "refetch":entry_query["refetch"]
   };
   return (

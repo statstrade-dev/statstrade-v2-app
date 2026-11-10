@@ -1,4 +1,1186 @@
 {
+  "newsroom-publications" : {
+    "id" : "newsroom-publications",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "query",
+      "symbol" : "query",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  },
+  "org-apikey-create-scoped" : {
+    "id" : "org-apikey-create-scoped",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "label",
+      "symbol" : "label",
+      "type" : "citext",
+      "modifiers" : [ "citext" ],
+      "role" : "payload"
+    }, {
+      "name" : "scopes",
+      "symbol" : "scopes",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.org.org-manage-apikey",
+      "sb/grant" : "auth"
+    }
+  },
+  "org-apikey-revoke" : {
+    "id" : "org-apikey-revoke",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "key_lookup",
+      "symbol" : "key_lookup",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.org.org-manage-apikey",
+      "sb/grant" : "auth"
+    }
+  },
+  "org-billing-account-update" : {
+    "id" : "org-billing-account-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "currency", "financial-role" ],
+      "db/module" : "statsdb.fn.org.org-manage-billing",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-billing/BillingAccount"
+    }
+  },
+  "org-campaign-archive" : {
+    "id" : "org-campaign-archive",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "campaign_id",
+      "symbol" : "campaign_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "is-archived" ],
+      "db/module" : "statsdb.fn.org.org-manage-campaign",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-campaign/Campaign"
+    }
+  },
+  "org-campaign-create" : {
+    "id" : "org-campaign-create",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "code", "icon", "picture", "title", "description", "detail", "tags", "status", "time-start", "time-end", "domain-custom", "domain-status", "is-prime", "is-template" ],
+      "db/module" : "statsdb.fn.org.org-manage-campaign",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-campaign/Campaign"
+    }
+  },
+  "org-campaign-unarchive" : {
+    "id" : "org-campaign-unarchive",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "campaign_id",
+      "symbol" : "campaign_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "is-archived" ],
+      "db/module" : "statsdb.fn.org.org-manage-campaign",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-campaign/Campaign"
+    }
+  },
+  "org-campaign-update" : {
+    "id" : "org-campaign-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "campaign_id",
+      "symbol" : "campaign_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "code", "icon", "picture", "title", "description", "detail", "tags", "status", "time-start", "time-end", "domain-custom", "domain-status", "is-prime", "is-template" ],
+      "db/module" : "statsdb.fn.org.org-manage-campaign",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-campaign/Campaign"
+    }
+  },
+  "org-create" : {
+    "id" : "org-create",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "name", "title", "description", "color", "picture", "background", "tagline", "category", "location", "website", "audience", "detail", "tags" ],
+      "db/module" : "statsdb.fn.org.org-manage-profile",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-base/Org"
+    }
+  },
+  "org-forecast-enrol" : {
+    "id" : "org-forecast-enrol",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "policy",
+      "symbol" : "policy",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-invite-email-create" : {
+    "id" : "org-invite-email-create",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "email",
+      "symbol" : "email",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.org.org-manage-member",
+      "sb/grant" : "auth"
+    }
+  },
+  "org-invite-email-revoke" : {
+    "id" : "org-invite-email-revoke",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "email",
+      "symbol" : "email",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.org.org-manage-member",
+      "sb/grant" : "auth"
+    }
+  },
+  "org-issue-save" : {
+    "id" : "org-issue-save",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "campaign_id",
+      "symbol" : "campaign_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-member-add" : {
+    "id" : "org-member-add",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "member_id",
+      "symbol" : "member_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "level",
+      "symbol" : "level",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "scope",
+      "symbol" : "scope",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.org.org-manage-member",
+      "sb/grant" : "auth"
+    }
+  },
+  "org-member-remove" : {
+    "id" : "org-member-remove",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "member_id",
+      "symbol" : "member_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "db/module" : "statsdb.fn.org.org-manage-member",
+      "sb/grant" : "auth"
+    }
+  },
+  "org-playable-configure" : {
+    "id" : "org-playable-configure",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "token_id",
+      "symbol" : "token_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "playable_id",
+      "symbol" : "playable_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-point-token-save" : {
+    "id" : "org-point-token-save",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "token_id",
+      "symbol" : "token_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-pool-enable" : {
+    "id" : "org-pool-enable",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-pool-void" : {
+    "id" : "org-pool-void",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-reasoning-review" : {
+    "id" : "org-reasoning-review",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-reputation-activate" : {
+    "id" : "org-reputation-activate",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "rule_id",
+      "symbol" : "rule_id",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-reputation-save" : {
+    "id" : "org-reputation-save",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "expected",
+      "symbol" : "expected",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    }, {
+      "name" : "configuration",
+      "symbol" : "configuration",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-reward-budget-create" : {
+    "id" : "org-reward-budget-create",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "token_id",
+      "symbol" : "token_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "playable_id",
+      "symbol" : "playable_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "limit", "reserved", "awarded", "status", "starts-at", "ends-at", "detail" ],
+      "db/module" : "statsdb.fn.org.org-manage-rewards",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-rewards/OrgRewardBudget"
+    }
+  },
+  "org-reward-budget-update" : {
+    "id" : "org-reward-budget-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "budget_id",
+      "symbol" : "budget_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "limit", "reserved", "awarded", "status", "starts-at", "ends-at", "detail" ],
+      "db/module" : "statsdb.fn.org.org-manage-rewards",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-rewards/OrgRewardBudget"
+    }
+  },
+  "org-reward-grant" : {
+    "id" : "org-reward-grant",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "budget_id",
+      "symbol" : "budget_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "user_id",
+      "symbol" : "user_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "amount",
+      "symbol" : "amount",
+      "type" : "numeric",
+      "modifiers" : [ "numeric" ],
+      "role" : "payload"
+    }, {
+      "name" : "idempotency_key",
+      "symbol" : "idempotency_key",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "detail",
+      "symbol" : "detail",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-settings-update" : {
+    "id" : "org-settings-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "timezone", "is-discoverable", "allow-followers", "show-activity", "allow-sharing", "call-to-action", "governance", "notifications", "security", "data" ],
+      "db/module" : "statsdb.fn.org.org-manage-settings",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-base/OrgSettings"
+    }
+  },
+  "org-spending-save" : {
+    "id" : "org-spending-save",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "configuration",
+      "symbol" : "configuration",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-spending-snapshot" : {
+    "id" : "org-spending-snapshot",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "org-topic-create" : {
+    "id" : "org-topic-create",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "campaign_id",
+      "symbol" : "campaign_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "picture", "background", "icon", "title", "format", "location", "description", "rules", "tags", "time-announce", "time-open", "time-vesting-start", "time-vesting-end", "time-close", "base-price", "base-discount", "vesting-type", "vesting-coeff", "tax-burn", "tax-sell", "oracle-type", "oracle-config", "detail" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-topic-deploy" : {
+    "id" : "org-topic-deploy",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "status" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-topic-resolve" : {
+    "id" : "org-topic-resolve",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "winner_names",
+      "symbol" : "winner_names",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "status", "oracle-result" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-topic-set-close" : {
+    "id" : "org-topic-set-close",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "status", "can-mint", "can-burn", "can-trade" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-topic-set-draft" : {
+    "id" : "org-topic-set-draft",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "picture", "background", "icon", "title", "format", "location", "description", "rules", "tags", "time-announce", "time-open", "time-vesting-start", "time-vesting-end", "time-close", "base-price", "base-discount", "vesting-type", "vesting-coeff", "tax-burn", "tax-sell", "oracle-type", "oracle-config", "detail" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-topic-set-open" : {
+    "id" : "org-topic-set-open",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "status", "can-mint", "can-burn", "can-trade" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-topic-set-trading" : {
+    "id" : "org-topic-set-trading",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "status", "can-mint", "can-burn", "can-trade" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-topic-set-vesting" : {
+    "id" : "org-topic-set-vesting",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "status" ],
+      "db/module" : "statsdb.fn.org.org-manage-topic",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-topic-base/Topic"
+    }
+  },
+  "org-update" : {
+    "id" : "org-update",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "columns" : [ "name", "title", "description", "color", "picture", "background", "tagline", "category", "location", "website", "audience", "detail", "tags" ],
+      "db/module" : "statsdb.fn.org.org-manage-profile",
+      "sb/grant" : "auth",
+      "table" : "statsdb.common.type-org-base/Org"
+    }
+  },
+  "user-dive-command" : {
+    "id" : "user-dive-command",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "action",
+      "symbol" : "action",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-forecast-submit" : {
+    "id" : "user-forecast-submit",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "command_id",
+      "symbol" : "command_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "probabilities",
+      "symbol" : "probabilities",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-issue-follow" : {
+    "id" : "user-issue-follow",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "issue_id",
+      "symbol" : "issue_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "enabled",
+      "symbol" : "enabled",
+      "type" : "boolean",
+      "modifiers" : [ "boolean" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-pool-claim" : {
+    "id" : "user-pool-claim",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-pool-lock" : {
+    "id" : "user-pool-lock",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "quote_id",
+      "symbol" : "quote_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "command_id",
+      "symbol" : "command_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-pool-quote" : {
+    "id" : "user-pool-quote",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "amount",
+      "symbol" : "amount",
+      "type" : "numeric",
+      "modifiers" : [ "numeric" ],
+      "role" : "payload"
+    }, {
+      "name" : "yes_percent",
+      "symbol" : "yes_percent",
+      "type" : "integer",
+      "modifiers" : [ "integer" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-reasoning-report" : {
+    "id" : "user-reasoning-report",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "contribution_id",
+      "symbol" : "contribution_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "reason",
+      "symbol" : "reason",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-reasoning-submit" : {
+    "id" : "user-reasoning-submit",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "issue_id",
+      "symbol" : "issue_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "m",
+      "symbol" : "m",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
+  "user-reputation-publish" : {
+    "id" : "user-reputation-publish",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "enabled",
+      "symbol" : "enabled",
+      "type" : "boolean",
+      "modifiers" : [ "boolean" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "auth"
+    },
+    "meta" : {
+      "sb/grant" : "auth"
+    }
+  },
   "user-set-public" : {
     "id" : "user-set-public",
     "schema" : "stats_rpc",
@@ -16,7 +1198,7 @@
     },
     "meta" : {
       "api/ui.event" : true,
-      "columns" : [ "type", "color", "is-active", "is-onboarded", "first-name", "last-name", "country-code", "location", "bio", "picture", "detail" ],
+      "columns" : [ "handle", "type", "color", "is-active", "is-onboarded", "first-name", "last-name", "country-code", "city", "location", "bio", "picture", "detail" ],
       "db/module" : "statsdb.fn.user.user-manage-profile",
       "sb/grant" : "auth",
       "table" : "statsdb.common.type-user/User"
@@ -43,6 +1225,108 @@
       "db/module" : "statsdb.fn.user.user-manage-profile",
       "sb/grant" : "auth",
       "table" : "statsdb.common.type-user/UserSecret"
+    }
+  },
+  "web-civic-snapshot" : {
+    "id" : "web-civic-snapshot",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "page_key",
+      "symbol" : "page_key",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "params",
+      "symbol" : "params",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  },
+  "web-dive-snapshot" : {
+    "id" : "web-dive-snapshot",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "page_key",
+      "symbol" : "page_key",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "params",
+      "symbol" : "params",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  },
+  "web-page-snapshot" : {
+    "id" : "web-page-snapshot",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "page_key",
+      "symbol" : "page_key",
+      "type" : "text",
+      "modifiers" : [ "text" ],
+      "role" : "payload"
+    }, {
+      "name" : "org_id",
+      "symbol" : "org_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    }, {
+      "name" : "params",
+      "symbol" : "params",
+      "type" : "jsonb",
+      "modifiers" : [ "jsonb" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
+    }
+  },
+  "web-question" : {
+    "id" : "web-question",
+    "schema" : "stats_rpc",
+    "input" : [ {
+      "name" : "topic_id",
+      "symbol" : "topic_id",
+      "type" : "uuid",
+      "modifiers" : [ "uuid" ],
+      "role" : "payload"
+    } ],
+    "return" : "jsonb",
+    "flags" : {
+      "sb/grant" : "all"
+    },
+    "meta" : {
+      "sb/grant" : "all"
     }
   }
 }

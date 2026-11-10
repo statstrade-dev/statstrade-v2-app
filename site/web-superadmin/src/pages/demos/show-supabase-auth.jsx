@@ -194,7 +194,7 @@ function AuthContent(){
 
 // statstrade-superadmin.pages.demos.show-supabase-auth/Page [230] 
 function Page(){
-  // 45cc2703-4ef4-4f0b-8e38-577674501731
+  // bdafd2c9-e9a4-4b68-b674-49b17884eb1a
   return (
     <AuthContent/>);
 }

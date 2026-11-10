@@ -6,10 +6,12 @@ import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
 
 import * as contact_us from '@statstrade/feature/landing/landing-contact-us.jsx'
 
-// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpContext [18] 
+import * as ui_controls from '@statstrade/edge/ui-controls.jsx'
+
+// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpContext [19] 
 export var LandingFollowUpContext = React.createContext({"api":null,"controls":null,"forms":null,"toast":null});
 
-// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpApi [24] 
+// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpApi [25] 
 export function LandingFollowUpApi({onSuccess,onEmail}){
   let contactUs = contact_us.useContactUsContext({});
   return {
@@ -34,10 +36,10 @@ export function LandingFollowUpApi({onSuccess,onEmail}){
   };
 }
 
-// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpProvider [44] 
+// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpProvider [45] 
 export function LandingFollowUpProvider({onSuccess,onEmail,children}){
   let [toast,setToast] = React.useState(null);
-  let controls = hf.useControls(["submitted","success","error","busy"]);
+  let controls = ui_controls.useControls(["submitted","success","error","busy"]);
   let api = LandingFollowUpApi({"onSuccess":onSuccess,"onEmail":onEmail});
   let forms = {
     "contact":hf.useFormState({"defaultValues":contact_us.contactUsDefaults}),
@@ -55,7 +57,7 @@ export function LandingFollowUpProvider({onSuccess,onEmail,children}){
     </LandingFollowUpContext.Provider>);
 }
 
-// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpSection [65] 
+// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpSection [66] 
 export function LandingFollowUpSection({title,description,className = "",...props}){
   return (
     <T.YStack gap="$4" className={className} {...props}>
@@ -64,7 +66,7 @@ export function LandingFollowUpSection({title,description,className = "",...prop
     </T.YStack>);
 }
 
-// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpForm [79] 
+// statstrade-web.feature.landing.landing-follow-up/LandingFollowUpForm [80] 
 export function LandingFollowUpForm(){
   let context = contact_us.useContactUsContext({});
   return (
@@ -84,7 +86,7 @@ export function LandingFollowUpForm(){
     </T.YStack>);
 }
 
-// statstrade-web.feature.landing.landing-follow-up/LandingFollowUp [101] 
+// statstrade-web.feature.landing.landing-follow-up/LandingFollowUp [102] 
 export function LandingFollowUp({onSuccess,onEmail,...props}){
   return (
     <LandingFollowUpProvider onSuccess={onSuccess} onEmail={onEmail}>

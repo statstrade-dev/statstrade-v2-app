@@ -1,5 +1,4 @@
 // StatsTrade site SharedWorker; site maps are loaded through kernel-init.
-import * as Postgres from 'data:text/javascript,export default {Client: function() {}}'
 import sqlite3InitModule from './sqlite-wasm/index.mjs'
 
 function xt_lang_common_data$$is_emptyp(res){
@@ -42,10 +41,6 @@ function xt_lang_common_data$$not_emptyp(res){
   else{
     throw "Invalid type - " + String(res);
   }
-}
-
-function xt_lang_common_data$$first(arr){
-  return arr[0];
 }
 
 function xt_lang_common_data$$second(arr){
@@ -119,23 +114,6 @@ function xt_lang_common_data$$obj_first_key(obj){
     return k;
   };
   return null;
-}
-
-function xt_lang_common_data$$obj_first_val(obj){
-  for(let v of Object.values(obj)){
-    return v;
-  };
-  return null;
-}
-
-function xt_lang_common_data$$obj_keys(obj){
-  let out = [];
-  if(null != obj){
-    for(let k of Object.keys(obj)){
-      out.push(k);
-    };
-  }
-  return out;
 }
 
 function xt_lang_common_data$$obj_assign(obj,m){
@@ -996,6 +974,13 @@ function xt_lang_common_string$$sym_ns(sym){
   else{
     return null;
   }
+}
+
+function xt_lang_common_string$$ends_withp(s,match){
+  if(match.length > s.length){
+    return false;
+  }
+  return match == s.substring(s.length - match.length,s.length);
 }
 
 function xt_lang_common_string$$pad_left(s,n,ch){
@@ -3589,18 +3574,8 @@ function xt_net_conn_sql$$connect(client,opts){
   return method_fn(client,opts);
 }
 
-function xt_net_conn_sql$$disconnect(client){
-  let method_fn = xt_lang_common_protocol$$protocol_method(client,"xt.net.conn_sql/ISqlClient","disconnect");
-  return method_fn(client);
-}
-
 function xt_net_conn_sql$$query(client,input){
   let method_fn = xt_lang_common_protocol$$protocol_method(client,"xt.net.conn_sql/ISqlClient","query");
-  return method_fn(client,input);
-}
-
-function xt_net_conn_sql$$query_async(client,input){
-  let method_fn = xt_lang_common_protocol$$protocol_method(client,"xt.net.conn_sql/ISqlClient","query_async");
   return method_fn(client,input);
 }
 
@@ -3616,14 +3591,6 @@ var xt_db_text_sql_util$$OPERATORS = {
 };
 
 var xt_db_text_sql_util$$INFIX = {"||":true,"+":true,"-":true,"*":true,"/":true};
-
-var xt_db_text_sql_util$$PG = {
-  "map":"jsonb",
-  "long":"bigint",
-  "enum":"text",
-  "image":"jsonb",
-  "array":"jsonb"
-};
 
 var xt_db_text_sql_util$$SQLITE = {
   "enum":"text",
@@ -3992,39 +3959,6 @@ function xt_db_text_sql_util$$default_return_format_fn(input,nest_fn,column_fn,o
   else{
     throw "Invalid input - " + String(input);
   }
-}
-
-function xt_db_text_sql_util$$default_table_fn(table,lookup){
-  return "\"" + lookup[table]["schema"] + "\".\"" + table + "\"";
-}
-
-function xt_db_text_sql_util$$postgres_wrapper_fn(s,indent){
-  return "WITH j_ret AS (\n" + xt_lang_common_string$$pad_lines(s,2," ") + "\n) SELECT jsonb_agg(j_ret) FROM j_ret";
-}
-
-function xt_db_text_sql_util$$postgres_opts(lookup){
-  return {
-    "return_join_fn":function (arr){
-        return arr.join(", ");
-      },
-    "strict":true,
-    "wrapper_fn":xt_db_text_sql_util$$postgres_wrapper_fn,
-    "querystr_fn":xt_db_text_sql_util$$encode_query_string,
-    "types":xt_db_text_sql_util$$PG,
-    "values":{"cast":true,"replace":{}},
-    "return_link_fn":function (s,link_name){
-        return "(" + s + ") AS " + link_name;
-      },
-    "return_format_fn":xt_db_text_sql_util$$default_return_format_fn,
-    "coerce":{},
-    "return_count_fn":function (){
-        return "count" + "(*)";
-      },
-    "column_fn":xt_db_text_sql_util$$default_quote_fn,
-    "table_fn":function (table){
-        return xt_db_text_sql_util$$default_table_fn(table,lookup);
-      }
-  };
 }
 
 function xt_lang_common_tree$$tree_walk(x,pre_fn,post_fn){
@@ -4526,191 +4460,6 @@ function xt_db_text_sql_graph$$select(schema,query,opts){
   return xt_db_text_sql_graph$$select_return(schema,tree,0,opts);
 }
 
-function xt_db_text_base_check$$is_uuidp(s){
-  if(!("string" == (typeof s))){
-    return false;
-  }
-  if(!(36 == s.length)){
-    return false;
-  }
-  let parts = s.split("-");
-  return (5 == parts.length) && (8 == parts[0].length) && (4 == parts[1].length) && (4 == parts[2].length) && (4 == parts[3].length) && (12 == parts[4].length);
-}
-
-function xt_db_text_base_check$$check_arg_type(arg_type,arg){
-  if(arg_type == "any"){
-    return true;
-  }
-  else if((arg_type == "citext") || (arg_type == "inet") || (arg_type == "text")){
-    return "string" == (typeof arg);
-  }
-  else if(arg_type == "uuid"){
-    return xt_db_text_base_check$$is_uuidp(arg);
-  }
-  else if(arg_type == "boolean"){
-    return "boolean" == (typeof arg);
-  }
-  else if((arg_type == "integer") || (arg_type == "int") || (arg_type == "long") || (arg_type == "bigint") || (arg_type == "float")){
-    return "number" == (typeof arg);
-  }
-  else if(arg_type == "numeric"){
-    return ("number" == (typeof arg)) || ("string" == (typeof arg));
-  }
-  else if(arg_type == "jsonb"){
-    return ((null != arg) && ("object" == (typeof arg)) && !Array.isArray(arg)) || Array.isArray(arg);
-  }
-  else{
-    return false;
-  }
-}
-
-function xt_db_text_base_check$$check_args_type(args,targs){
-  let i = 0;
-  for(let spec of targs){
-    let arg = args[i];
-    if(!xt_db_text_base_check$$check_arg_type(spec["type"],arg)){
-      return [
-        false,
-        {
-              "status":"error",
-              "tag":"net/arg-typecheck-failed",
-              "data":{"input":arg,"spec":spec}
-            }
-      ];
-    }
-    i = (i + 1);
-  };
-  return [true,null];
-}
-
-function xt_db_text_base_check$$check_args_length(args,targs){
-  if(args.length != targs.length){
-    return [
-      false,
-      {
-          "status":"error",
-          "tag":"net/args-not-same-length",
-          "data":{"expected":targs.length,"actual":args.length,"input":args}
-        }
-    ];
-  }
-  return [true,null];
-}
-
-function xt_db_text_sql_call$$call_format_input(spec,args){
-  let targs = spec["input"];
-  let out = [];
-  for(let i = 0; i < args.length; ++i){
-    let arg = args[i];
-    let input = targs[i];
-    let dbarg = null;
-    if(input["type"] == "jsonb"){
-      if("string" == (typeof arg)){
-        dbarg = arg;
-      }
-      else{
-        dbarg = xt_db_text_sql_util$$encode_json(arg);
-      }
-    }
-    else{
-      dbarg = xt_db_text_sql_util$$encode_value(arg);
-    }
-    out.push(dbarg);
-  };
-  return out;
-}
-
-function xt_db_text_sql_call$$call_format_query(spec,args){
-  let {id,schema} = spec;
-  let dbname = "\"" + schema + "\"." + id.replace(new RegExp("-","g"),"_") + "";
-  let dbargs = xt_db_text_sql_call$$call_format_input(spec,args).join(", ");
-  return "SELECT " + dbname + "(" + dbargs + ");";
-}
-
-function xt_db_text_sql_call$$call_raw(client,spec,args){
-  let targs = spec["input"];
-  let l_ok_value = xt_db_text_base_check$$check_args_length(args,targs);
-  let [l_ok,l_err] = l_ok_value;
-  if(!l_ok){
-    throw "ERR: - " + JSON.stringify(l_err);
-  }
-  let t_ok_value = xt_db_text_base_check$$check_args_type(args,targs);
-  let [t_ok,t_err] = t_ok_value;
-  if(!t_ok){
-    throw "ERR: - " + JSON.stringify(t_err);
-  }
-  let q = xt_db_text_sql_call$$call_format_query(spec,args);
-  let success_fn = function (val){
-    if("jsonb" == spec["return"]){
-      if((null == val) || (val == "")){
-        return null;
-      }
-      else{
-        return ("string" == (typeof val)) ? JSON.parse(val) : val;
-      }
-    }
-    else{
-      return val;
-    }
-  };
-  let error_fn = function (err){
-    throw "ERR: - " + JSON.stringify(err);
-  };
-  return xt_net_conn_sql$$query_async(client,q).then(success_fn).catch(error_fn);
-}
-
-function js_net_http_fetch$$HttpFetchClient(defaults,middleware){
-  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["js.net.http_fetch/HttpFetchClient"] = true;
-  xt_lang_common_protocol$$register_protocol_impl(
-    xt_net_http_fetch$$IHttpClient["on"],
-    "js.net.http_fetch/HttpFetchClient",
-    {"request_http":js_net_http_fetch$$request_http}
-  );
-  return {
-    "::":"js.net.http_fetch/HttpFetchClient",
-    "::/protocols":[xt_net_http_fetch$$IHttpClient["on"]],
-    "::/protocol-impls":{
-        [xt_net_http_fetch$$IHttpClient["on"]]:{"request_http":js_net_http_fetch$$request_http}
-      },
-    "defaults":defaults,
-    "middleware":middleware
-  };
-}
-
-function js_net_http_fetch$$request_http_raw(client,input){
-  let {body,headers,method,url} = input;
-  return fetch(url,{"method":method,"headers":headers,"body":body}).then(function (res){
-    return res.text().then(function (text){
-      return {"status":res["status"],"headers":res["headers"],"body":text};
-    });
-  });
-}
-
-function js_net_http_fetch$$request_http(client,input){
-  let handler = xt_net_http_fetch$$prepare_middleware(client,js_net_http_fetch$$request_http_raw);
-  return handler(client,input);
-}
-
-function js_net_http_fetch$$create(defaults,middleware){
-  return js_net_http_fetch$$HttpFetchClient(
-    defaults,
-    middleware || [xt_net_http_fetch$$wrap_prepare_input]
-  );
-}
-
-var xt_db_system_impl_supabase_ws$$ISupabaseWebsocketFactory = xt_lang_common_protocol$$create_protocol_fn("xt.db.system.impl_supabase_ws/ISupabaseWebsocketFactory",{
-  "create_ws_client":{"name":"create_ws_client","arglist":["impl","defaults"]}
-});
-
-function xt_db_system_impl_supabase_ws$$create_ws_client(impl,defaults){
-  let method_fn = xt_lang_common_protocol$$protocol_method(
-    impl,
-    "xt.db.system.impl_supabase_ws/ISupabaseWebsocketFactory",
-    "create_ws_client"
-  );
-  return method_fn(impl,defaults);
-}
-
 var xt_db_text_base_schema$$CACHED_SCHEMA = new Map();
 
 var xt_db_text_base_schema$$CACHED_LOOKUP = new Map();
@@ -4725,6 +4474,31 @@ var xt_db_text_base_schema$$get_ident = function (e){
 
 function xt_db_text_base_schema$$get_ident_id(e){
   return ("ref" == e["type"]) ? (e["ident"] + "_id") : e["ident"];
+}
+
+function xt_db_text_base_schema$$primary_columns(schema,table_name){
+  let table = schema[table_name];
+  let entries = xt_lang_common_data$$arr_sort(Object.values(table).filter(function (entry){
+    return entry["primary"];
+  }),xt_db_text_base_schema$$get_order,function (x,y){
+    return x < y;
+  });
+  return (entries.length > 0) ? entries.map(xt_db_text_base_schema$$get_ident_id) : ["id"];
+}
+
+function xt_db_text_base_schema$$record_key(schema,table_name,data){
+  let values = xt_db_text_base_schema$$primary_columns(schema,table_name).map(function (column){
+    let value = data[column];
+    if((null == value) && xt_lang_common_string$$ends_withp(column,"_id")){
+      let field = column.substring(0,column.length - 3);
+      value = data[field];
+      if((null != value) && ("object" == (typeof value)) && !Array.isArray(value)){
+        value = value["id"];
+      }
+    }
+    return value;
+  });
+  return (values.length == 1) ? values[0] : JSON.stringify(values);
 }
 
 function xt_db_text_base_schema$$get_cached_schema(schema){
@@ -4870,8 +4644,8 @@ function xt_db_text_base_flatten$$flatten_get_links(obj){
   });
 }
 
-function xt_db_text_base_flatten$$flatten_merge(table_map,data_obj,ref_links,rev_links){
-  let {id} = data_obj;
+function xt_db_text_base_flatten$$flatten_merge_key(table_map,data_obj,ref_links,rev_links,record_id){
+  let id = (null == record_id) ? data_obj["id"] : record_id;
   let rec = table_map[id];
   if(!((null != rec) && ("object" == (typeof rec)) && !Array.isArray(rec))){
     rec = {"id":id,"data":{},"ref_links":{},"rev_links":{}};
@@ -4921,9 +4695,9 @@ function xt_db_text_base_flatten$$flatten_node(schema,table_name,data,parent,acc
       ref_id_links[k] = {[data[id_k]]:true};
     }
   };
-  xt_db_text_base_flatten$$flatten_merge(table_map,data_obj,xt_lang_common_data$$obj_assign_with(ref_links,ref_id_links,function (obj,other){
+  xt_db_text_base_flatten$$flatten_merge_key(table_map,data_obj,xt_lang_common_data$$obj_assign_with(ref_links,ref_id_links,function (obj,other){
     return Object.assign(obj,other);
-  }),rev_links);
+  }),rev_links,xt_db_text_base_schema$$record_key(schema,table_name,data));
   return {
     "table_map":table_map,
     "data_obj":data_obj,
@@ -5012,275 +4786,6 @@ function xt_db_text_base_flatten$$flatten_bulk_ids(schema,lookup,m){
         })
     ] : null;
   });
-}
-
-function xt_db_text_pgrest_graph$$tree_countp(custom){
-  return (custom || []).some(function (entry){
-    return entry["::"] == "sql/count";
-  });
-}
-
-function xt_db_text_pgrest_graph$$pgrest_resolve_value(value){
-  if(((null != value) && ("object" == (typeof value)) && !Array.isArray(value)) && (null != value["::"])){
-    let tcls = value["::"];
-    if(tcls == "sql/arg"){
-      return value["name"];
-    }
-    else if(tcls == "sql/cast"){
-      return xt_db_text_pgrest_graph$$pgrest_resolve_value((value["args"])[0]);
-    }
-    else if(tcls == "sql/defenum"){
-      return value["name"];
-    }
-    else{
-      return value;
-    }
-  }
-  else{
-    return value;
-  }
-}
-
-function xt_db_text_pgrest_graph$$value__gtquery_text(value){
-  value = xt_db_text_pgrest_graph$$pgrest_resolve_value(value);
-  if(null == value){
-    return "null";
-  }
-  else if("string" == (typeof value)){
-    return value;
-  }
-  else if("boolean" == (typeof value)){
-    return value ? "true" : "false";
-  }
-  else if("number" == (typeof value)){
-    return String(value);
-  }
-  else{
-    return String(value);
-  }
-}
-
-function xt_db_text_pgrest_graph$$normalise_in_values(value){
-  if(Array.isArray(value) && (1 == value.length) && Array.isArray(value[0])){
-    return value[0];
-  }
-  else if(Array.isArray(value)){
-    return value;
-  }
-  else{
-    return [value];
-  }
-}
-
-function xt_db_text_pgrest_graph$$filter_operatorp(op){
-  return (op == "eq") || (op == "neq") || (op == "gt") || (op == "gte") || (op == "lt") || (op == "lte") || (op == "like") || (op == "ilike") || (op == "is") || (op == "in");
-}
-
-function xt_db_text_pgrest_graph$$compile_filter_value(op,value){
-  if(op == "in"){
-    return op + ".(" + xt_db_text_pgrest_graph$$normalise_in_values(value).map(xt_db_text_pgrest_graph$$value__gtquery_text).join(",") + ")";
-  }
-  else{
-    return op + "." + xt_db_text_pgrest_graph$$value__gtquery_text(value);
-  }
-}
-
-function xt_db_text_pgrest_graph$$compile_filter_fragment(filter){
-  return filter["path"] + "." + xt_db_text_pgrest_graph$$compile_filter_value(filter["op"],filter["value"]);
-}
-
-function xt_db_text_pgrest_graph$$compile_clause_into(prefix,clause,out){
-  for(let key of xt_lang_common_data$$arr_sort(Object.keys(clause || {}),function (value){
-    return String(value);
-  },function (x,y){
-    return 0 > x.localeCompare(y);
-  })){
-    let value = clause[key];
-    let path = xt_lang_common_data$$not_emptyp(prefix) ? (prefix + "." + key) : key;
-    if(((null != value) && ("object" == (typeof value)) && !Array.isArray(value)) && !Array.isArray(value) && (null == value["::"])){
-      xt_db_text_pgrest_graph$$compile_clause_into(path,value,out);
-    }
-    else if(Array.isArray(value) && ("string" == (typeof value[0])) && xt_db_text_pgrest_graph$$filter_operatorp(value[0])){
-      out.push({"path":path,"op":value[0],"value":value[1]});
-    }
-    else if(Array.isArray(value) && ("string" == (typeof value[0]))){
-      throw "Unsupported filter operator - " + value[0];
-    }
-    else{
-      out.push({"path":path,"op":"eq","value":value});
-    }
-  };
-  return out;
-}
-
-function xt_db_text_pgrest_graph$$compile_or_clause(clause){
-  let fragments = xt_db_text_pgrest_graph$$compile_clause_into("",clause,[]).map(xt_db_text_pgrest_graph$$compile_filter_fragment);
-  if(0 == fragments.length){
-    return "";
-  }
-  else if(1 == fragments.length){
-    return fragments[0];
-  }
-  else{
-    return "and(" + fragments.join(",") + ")";
-  }
-}
-
-function xt_db_text_pgrest_graph$$forward_ref_columnp(schema,table_name,key){
-  let table = schema[table_name];
-  let col = table && table[key];
-  return ((null != col) && ("object" == (typeof col)) && !Array.isArray(col)) && ("ref" == col["type"]) && !("reverse" == col["ref"]["type"]);
-}
-
-function xt_db_text_pgrest_graph$$flatten_forward_ref_clause(schema,table_name,clause){
-  let out = {};
-  for(let [k,v] of Object.entries(clause)){
-    if(xt_db_text_pgrest_graph$$forward_ref_columnp(schema,table_name,k) && ((null != v) && ("object" == (typeof v)) && !Array.isArray(v)) && (null != v["id"])){
-      out[k + "_id"] = v["id"];
-    }
-    else if((null != v) && ("object" == (typeof v)) && !Array.isArray(v)){
-      out[k] = xt_db_text_pgrest_graph$$flatten_forward_ref_clause(schema,table_name,v);
-    }
-    else{
-      out[k] = v;
-    }
-  };
-  return out;
-}
-
-function xt_db_text_pgrest_graph$$flatten_forward_ref_filters(schema,table_name,where){
-  where = (Array.isArray(where) ? where : (((null != where) && ("object" == (typeof where)) && !Array.isArray(where)) ? [where] : []));
-  return where.map(function (clause){
-    return xt_db_text_pgrest_graph$$flatten_forward_ref_clause(schema,table_name,clause);
-  });
-}
-
-function xt_db_text_pgrest_graph$$compile_where_params(where){
-  where = (Array.isArray(where) ? where : (((null != where) && ("object" == (typeof where)) && !Array.isArray(where)) ? [where] : []));
-  if(0 == where.length){
-    return [];
-  }
-  if(1 == where.length){
-    return xt_db_text_pgrest_graph$$compile_clause_into("",where[0],[]).map(function (filter){
-      return filter["path"] + "=" + xt_db_text_pgrest_graph$$compile_filter_value(filter["op"],filter["value"]);
-    });
-  }
-  let clauses = where.map(xt_db_text_pgrest_graph$$compile_or_clause).filter(xt_lang_common_data$$not_emptyp);
-  return ["or=(" + clauses.join(",") + ")"];
-}
-
-function xt_db_text_pgrest_graph$$compile_tree_select_item(item,select_params_fn){
-  if("string" == (typeof item)){
-    return item;
-  }
-  else if(Array.isArray(item) && (item.length >= 3) && ("string" == (typeof item[0]))){
-    return item[0] + ":" + (xt_lang_common_data$$nth(item,2))[0] + "(" + select_params_fn(
-      xt_lang_common_data$$second(xt_lang_common_data$$nth(item,2))
-    ) + ")";
-  }
-  else{
-    return String(xt_db_text_pgrest_graph$$pgrest_resolve_value(item));
-  }
-}
-
-function xt_db_text_pgrest_graph$$compile_tree_select_params(params){
-  let {custom,data,links} = params;
-  if(xt_db_text_pgrest_graph$$tree_countp(custom)){
-    return "count";
-  }
-  let out = [];
-  xt_lang_common_data$$arr_assign(out,(data || []).map(function (item){
-    return xt_db_text_pgrest_graph$$pgrest_resolve_value(item);
-  }));
-  xt_lang_common_data$$arr_assign(out,(links || []).map(function (item){
-    return xt_db_text_pgrest_graph$$compile_tree_select_item(item,xt_db_text_pgrest_graph$$compile_tree_select_params);
-  }));
-  return (out.length > 0) ? out.join(",") : "*";
-}
-
-function xt_db_text_pgrest_graph$$compile_control_params(custom){
-  let order_cols = null;
-  let order_sort = null;
-  let limit = null;
-  let offset = null;
-  for(let entry of custom || []){
-    if(entry["::"] == "sql/keyword"){
-      let {name} = entry;
-      if(name == "ORDER BY"){
-        let tuple = (entry["args"] || [])[0];
-        order_cols = (tuple["args"] || []).map(function (arg){
-          return arg["name"];
-        });
-      }
-      else if((name == "ASC") || (name == "DESC")){
-        order_sort = name.toLowerCase();
-      }
-      else if(name == "LIMIT"){
-        limit = (entry["args"] || [])[0]["name"];
-      }
-      else if(name == "OFFSET"){
-        offset = (entry["args"] || [])[0]["name"];
-      }
-    }
-  };
-  let out = [];
-  if(Array.isArray(order_cols)){
-    out.push("order=" + order_cols.map(function (col){
-      return (null != order_sort) ? (col + "." + order_sort) : col;
-    }).join(","));
-  }
-  if(null != limit){
-    out.push(
-      "limit=" + xt_db_text_pgrest_graph$$value__gtquery_text(limit)
-    );
-  }
-  if(null != offset){
-    out.push(
-      "offset=" + xt_db_text_pgrest_graph$$value__gtquery_text(offset)
-    );
-  }
-  return out;
-}
-
-function xt_db_text_pgrest_graph$$compile_query_string(params){
-  return (params || []).join("&");
-}
-
-function xt_db_text_pgrest_graph$$compile_url(path,params){
-  let query = xt_db_text_pgrest_graph$$compile_query_string(params);
-  return xt_lang_common_data$$not_emptyp(query) ? (path + "?" + query) : path;
-}
-
-function xt_db_text_pgrest_graph$$select_return(schema,tree,indent,opts){
-  tree = xt_db_text_base_graph$$select_tree(schema,tree,opts);
-  let table_name = tree[0];
-  let params = xt_lang_common_data$$second(tree);
-  let where = xt_db_text_pgrest_graph$$flatten_forward_ref_filters(schema,table_name,params["where"] || []);
-  params["where"] = where;
-  let custom = params["custom"] || [];
-  let select = xt_db_text_pgrest_graph$$compile_tree_select_params(params);
-  let request_params = ["select=" + select];
-  request_params = request_params.concat(xt_db_text_pgrest_graph$$compile_where_params(where));
-  request_params = request_params.concat(xt_db_text_pgrest_graph$$compile_control_params(custom));
-  let path = "/rest/v1/" + table_name;
-  let query = xt_db_text_pgrest_graph$$compile_query_string(request_params);
-  let url = xt_db_text_pgrest_graph$$compile_url(path,request_params);
-  return {
-    "table":table_name,
-    "url":url,
-    "params":request_params,
-    "method":"GET",
-    "query":query,
-    "path":path,
-    "filters":where,
-    "select":select,
-    "type":"query",
-    "headers":{}
-  };
-}
-
-function xt_db_text_pgrest_graph$$select(schema,query,opts){
-  return xt_db_text_pgrest_graph$$select_return(schema,query,0,opts);
 }
 
 var xt_db_system_impl_common$$ISourceListener = xt_lang_common_protocol$$create_protocol_fn("xt.db.system.impl_common/ISourceListener",{
@@ -5384,6 +4889,16 @@ function xt_db_system_impl_common$$process_add_event(impl,data){
     "process_add_event"
   );
   return method_fn(impl,data);
+}
+
+var xt_db_system_impl_common$$ISourceInit = xt_lang_common_protocol$$create_protocol_fn(
+  "xt.db.system.impl_common/ISourceInit",
+  {"init_db":{"name":"init_db","arglist":["impl"]}}
+);
+
+function xt_db_system_impl_common$$init_db(impl){
+  let method_fn = xt_lang_common_protocol$$protocol_method(impl,"xt.db.system.impl_common/ISourceInit","init_db");
+  return method_fn(impl);
 }
 
 var xt_db_system_impl_common$$ISourceLifecycle = xt_lang_common_protocol$$create_protocol_fn(
@@ -5727,6 +5242,77 @@ function xt_db_system_memory_util$$add_bulk(rows,schema,data){
   return xt_db_system_memory_util$$add_bulk_links(rows,schema,flat);
 }
 
+function xt_db_text_base_check$$is_uuidp(s){
+  if(!("string" == (typeof s))){
+    return false;
+  }
+  if(!(36 == s.length)){
+    return false;
+  }
+  let parts = s.split("-");
+  return (5 == parts.length) && (8 == parts[0].length) && (4 == parts[1].length) && (4 == parts[2].length) && (4 == parts[3].length) && (12 == parts[4].length);
+}
+
+function xt_db_text_base_check$$check_arg_type(arg_type,arg){
+  if(arg_type == "any"){
+    return true;
+  }
+  else if((arg_type == "citext") || (arg_type == "inet") || (arg_type == "text")){
+    return "string" == (typeof arg);
+  }
+  else if(arg_type == "uuid"){
+    return xt_db_text_base_check$$is_uuidp(arg);
+  }
+  else if(arg_type == "boolean"){
+    return "boolean" == (typeof arg);
+  }
+  else if((arg_type == "integer") || (arg_type == "int") || (arg_type == "long") || (arg_type == "bigint") || (arg_type == "float")){
+    return "number" == (typeof arg);
+  }
+  else if(arg_type == "numeric"){
+    return ("number" == (typeof arg)) || ("string" == (typeof arg));
+  }
+  else if(arg_type == "jsonb"){
+    return ((null != arg) && ("object" == (typeof arg)) && !Array.isArray(arg)) || Array.isArray(arg);
+  }
+  else{
+    return false;
+  }
+}
+
+function xt_db_text_base_check$$check_args_type(args,targs){
+  let i = 0;
+  for(let spec of targs){
+    let arg = args[i];
+    if(!xt_db_text_base_check$$check_arg_type(spec["type"],arg)){
+      return [
+        false,
+        {
+              "status":"error",
+              "tag":"net/arg-typecheck-failed",
+              "data":{"input":arg,"spec":spec}
+            }
+      ];
+    }
+    i = (i + 1);
+  };
+  return [true,null];
+}
+
+function xt_db_text_base_check$$check_args_length(args,targs){
+  if(args.length != targs.length){
+    return [
+      false,
+      {
+          "status":"error",
+          "tag":"net/args-not-same-length",
+          "data":{"expected":targs.length,"actual":args.length,"input":args}
+        }
+    ];
+  }
+  return [true,null];
+}
+
 function xt_db_text_base_tree$$tree_control_array(control){
   if(xt_lang_common_data$$is_emptyp(control)){
     return [];
@@ -5856,15 +5442,26 @@ function xt_db_text_base_tree$$plan_return_bulk(schema,entry,ids,args,opts){
   return qtree;
 }
 
+function xt_db_text_base_tree$$return_input(entry){
+  let input = entry["input"].slice();
+  let identity = entry["view"]["identity"];
+  let count = Array.isArray(identity) ? identity.length : 1;
+  while((count > 0) && (input.length > 0)){
+    input.shift();
+    count = (count - 1);
+  }
+  return input;
+}
+
 function xt_db_text_base_tree$$plan_combined(schema,sel_entry,sel_args,ret_entry,ret_args,ret_omit,opts,as_tree){
   let sel_input = sel_entry["input"];
-  let ret_input = ret_entry["input"];
+  let ret_input = xt_db_text_base_tree$$return_input(ret_entry);
   let itree = xt_db_text_base_tree$$tree_combined(schema,sel_entry,ret_entry,ret_omit,[],opts);
   let qtree = xt_db_text_base_tree$$tree_fill_input(
     itree,
     xt_lang_common_data$$arr_assign(ret_args.slice(),sel_args),
     xt_lang_common_data$$arr_assign(ret_input.slice(),sel_input),
-    (ret_input.length > 0) ? true : false
+    false
   );
   return qtree;
 }
@@ -5872,8 +5469,7 @@ function xt_db_text_base_tree$$plan_combined(schema,sel_entry,sel_args,ret_entry
 function xt_db_text_base_tree$$plan_view_check(entry,args,drop_first){
   let targs = entry["input"];
   if(drop_first){
-    targs = [...targs];
-    targs.shift();
+    targs = xt_db_text_base_tree$$return_input(entry);
   }
   let l_ok_value = xt_db_text_base_check$$check_args_length(args,targs);
   let [l_ok,l_err] = l_ok_value;
@@ -5952,105 +5548,6 @@ function xt_db_text_base_tree$$plan_view(schema,query_spec){
   else{
     return [true,null];
   }
-}
-
-function js_net_conn_postgres$$PostgresClient(defaults,raw){
-  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["js.net.conn_postgres/PostgresClient"] = true;
-  xt_lang_common_protocol$$register_protocol_impl(xt_net_conn_sql$$ISqlClient["on"],"js.net.conn_postgres/PostgresClient",{
-    "connect":js_net_conn_postgres$$client_connect,
-    "disconnect":js_net_conn_postgres$$client_disconnect,
-    "query":function (client,input){
-        throw "Not Allowed";
-      },
-    "query_async":js_net_conn_postgres$$client_query_async
-  });
-  return {
-    "::":"js.net.conn_postgres/PostgresClient",
-    "::/protocols":[xt_net_conn_sql$$ISqlClient["on"]],
-    "::/protocol-impls":{
-        [xt_net_conn_sql$$ISqlClient["on"]]:{
-          "connect":js_net_conn_postgres$$client_connect,
-          "disconnect":js_net_conn_postgres$$client_disconnect,
-          "query":function (client,input){
-            throw "Not Allowed";
-          },
-          "query_async":js_net_conn_postgres$$client_query_async
-        }
-      },
-    "defaults":defaults,
-    "raw":raw
-  };
-}
-
-function js_net_conn_postgres$$coerce_number_string(value){
-  if(!("string" == (typeof value))){
-    return value;
-  }
-  let trimmed = value.trim();
-  if(trimmed == ""){
-    return value;
-  }
-  if(trimmed.match("^[+-]?(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?:[eE][+-]?\\d+)?$")){
-    return Number(trimmed);
-  }
-  else{
-    return value;
-  }
-}
-
-function js_net_conn_postgres$$normalise_scalar_output(value){
-  if((null == value) || ("boolean" == (typeof value)) || Array.isArray(value) || ((null != value) && ("object" == (typeof value)) && !Array.isArray(value))){
-    return value;
-  }
-  else if("string" == (typeof value)){
-    return js_net_conn_postgres$$coerce_number_string(value);
-  }
-  else{
-    return value;
-  }
-}
-
-function js_net_conn_postgres$$normalise_query_output(res){
-  let {rows} = res;
-  if((1 == rows.length) && (1 == xt_lang_common_data$$obj_keys(xt_lang_common_data$$first(rows)).length)){
-    return js_net_conn_postgres$$normalise_scalar_output(
-      xt_lang_common_data$$obj_first_val(xt_lang_common_data$$first(rows))
-    );
-  }
-  else{
-    return rows;
-  }
-}
-
-function js_net_conn_postgres$$client_connect(client,opts){
-  let {defaults} = client;
-  let conn = new Postgres.Client(Object.assign(Object.assign({
-    "host":"127.0.0.1",
-    "port":5432,
-    "user":"postgres",
-    "password":"postgres",
-    "database":"postgres"
-  },defaults),opts));
-  return conn.connect().then(function (){
-    client["raw"] = conn;
-    return client;
-  });
-}
-
-function js_net_conn_postgres$$client_disconnect(client){
-  let {raw} = client;
-  raw.end();
-  delete(client["raw"]);
-  return client;
-}
-
-function js_net_conn_postgres$$client_query_async(client,input){
-  let {raw} = client;
-  return raw.query(input).then(js_net_conn_postgres$$normalise_query_output);
-}
-
-function js_net_conn_postgres$$create(defaults){
-  return js_net_conn_postgres$$PostgresClient(defaults,null);
 }
 
 function xt_lang_common_sort_by$$sort_by(arr,inputs){
@@ -6438,82 +5935,487 @@ function xt_db_system_memory_graph$$pull(rows,schema,tree,opts){
   return xt_db_system_memory_graph$$pull_entries(rows,schema,tree,entries,opts);
 }
 
-function xt_db_system_impl_postgres$$ImplPostgres(client,schema,lookup,listeners,opts,metadata){
-  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["xt.db.system.impl_postgres/ImplPostgres"] = true;
-  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceRemote["on"],"xt.db.system.impl_postgres/ImplPostgres",{
-    "pull_async":xt_db_system_impl_postgres$$pull_async,
-    "rpc_call_async":xt_db_system_impl_postgres$$rpc_call_async
+function xt_db_system_impl_memory$$ImplMemory(rows,schema,lookup,listeners,metadata){
+  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["xt.db.system.impl_memory/ImplMemory"] = true;
+  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceLocal["on"],"xt.db.system.impl_memory/ImplMemory",{
+    "clear_db":xt_db_system_impl_memory$$clear_db,
+    "pull":xt_db_system_impl_memory$$pull,
+    "record_add":xt_db_system_impl_memory$$record_add,
+    "record_delete":xt_db_system_impl_memory$$record_delete,
+    "process_add_event":xt_db_system_impl_memory$$process_add_event,
+    "process_remove_event":xt_db_system_impl_memory$$process_remove_event
   });
-  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceListener["on"],"xt.db.system.impl_postgres/ImplPostgres",{
+  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceRemote["on"],"xt.db.system.impl_memory/ImplMemory",{
+    "pull_async":xt_db_system_impl_memory$$pull_async,
+    "rpc_call_async":xt_db_system_impl_memory$$rpc_call_async
+  });
+  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceListener["on"],"xt.db.system.impl_memory/ImplMemory",{
     "add_db_listener":xt_db_system_impl_common$$add_db_listener_default,
     "remove_db_listener":xt_db_system_impl_common$$remove_db_listener_default,
     "get_db_listener":xt_db_system_impl_common$$get_db_listener_default
   });
-  xt_lang_common_protocol$$register_protocol_impl(
-    xt_db_system_impl_common$$ISourceLifecycle["on"],
-    "xt.db.system.impl_postgres/ImplPostgres",
-    {"stop_db":xt_db_system_impl_postgres$$stop_db}
-  );
   return {
+    "::":"xt.db.system.impl_memory/ImplMemory",
+    "::/protocols":[
+        xt_db_system_impl_common$$ISourceLocal["on"],
+        xt_db_system_impl_common$$ISourceRemote["on"],
+        xt_db_system_impl_common$$ISourceListener["on"]
+      ],
     "::/protocol-impls":{
+        [xt_db_system_impl_common$$ISourceLocal["on"]]:{
+          "clear_db":xt_db_system_impl_memory$$clear_db,
+          "pull":xt_db_system_impl_memory$$pull,
+          "record_add":xt_db_system_impl_memory$$record_add,
+          "record_delete":xt_db_system_impl_memory$$record_delete,
+          "process_add_event":xt_db_system_impl_memory$$process_add_event,
+          "process_remove_event":xt_db_system_impl_memory$$process_remove_event
+        },
         [xt_db_system_impl_common$$ISourceRemote["on"]]:{
-          "pull_async":xt_db_system_impl_postgres$$pull_async,
-          "rpc_call_async":xt_db_system_impl_postgres$$rpc_call_async
+          "pull_async":xt_db_system_impl_memory$$pull_async,
+          "rpc_call_async":xt_db_system_impl_memory$$rpc_call_async
         },
         [xt_db_system_impl_common$$ISourceListener["on"]]:{
           "add_db_listener":xt_db_system_impl_common$$add_db_listener_default,
           "remove_db_listener":xt_db_system_impl_common$$remove_db_listener_default,
           "get_db_listener":xt_db_system_impl_common$$get_db_listener_default
-        },
-        [xt_db_system_impl_common$$ISourceLifecycle["on"]]:{"stop_db":xt_db_system_impl_postgres$$stop_db}
+        }
       },
+    "rows":rows,
     "schema":schema,
     "lookup":lookup,
-    "opts":opts,
-    "::":"xt.db.system.impl_postgres/ImplPostgres",
-    "metadata":metadata,
-    "::/protocols":[
-        xt_db_system_impl_common$$ISourceRemote["on"],
-        xt_db_system_impl_common$$ISourceListener["on"],
-        xt_db_system_impl_common$$ISourceLifecycle["on"]
-      ],
-    "client":client,
-    "listeners":listeners
+    "listeners":listeners,
+    "metadata":metadata
   };
 }
 
-function xt_db_system_impl_postgres$$pull_async(impl,tree){
-  let {client,opts,schema} = impl;
-  return xt_net_conn_sql$$query_async(client,xt_db_text_sql_graph$$select(schema,tree,opts));
+function xt_db_system_impl_memory$$pull(impl,tree){
+  let {opts,rows,schema} = impl;
+  return xt_db_system_memory_graph$$pull(rows,schema,tree,opts);
 }
 
-function xt_db_system_impl_postgres$$rpc_call_async(impl,rpc_spec,args){
-  let {client} = impl;
-  return xt_db_text_sql_call$$call_raw(client,rpc_spec,args);
+function xt_db_system_impl_memory$$pull_async(impl,tree){
+  return Promise.resolve().then(function (){
+    return xt_db_system_impl_memory$$pull(impl,tree);
+  });
 }
 
-function xt_db_system_impl_postgres$$stop_db(impl){
-  let {client} = impl;
-  xt_net_conn_sql$$disconnect(client);
+function xt_db_system_impl_memory$$record_add(impl,table_name,records){
+  let {opts,rows,schema} = impl;
+  return xt_db_system_memory_util$$add_bulk(rows,schema,{[table_name]:records});
+}
+
+function xt_db_system_impl_memory$$record_delete(impl,table_name,ids){
+  let {opts,rows,schema} = impl;
+  return xt_db_system_memory_util$$remove_bulk(rows,schema,table_name,ids);
+}
+
+function xt_db_system_impl_memory$$process_add_event(impl,data){
+  let {rows,schema} = impl;
+  return xt_db_system_memory_util$$add_bulk(rows,schema,data);
+}
+
+function xt_db_system_impl_memory$$process_remove_event(impl,data){
+  let {lookup,rows,schema} = impl;
+  let ordered = xt_db_text_base_flatten$$flatten_bulk_ids(schema,lookup,data);
+  for(let entry of ordered){
+    let [table_name,ids] = entry;
+    xt_db_system_memory_util$$remove_bulk(rows,schema,table_name,ids);
+  };
+  return ordered.map(function (arr){
+    return arr[0];
+  });
+}
+
+function xt_db_system_impl_memory$$clear_db(impl){
+  let {rows} = impl;
+  for(let table_key of Object.keys(rows)){
+    delete(rows[table_key]);
+  };
   return null;
 }
 
-function xt_db_system_impl_postgres$$impl_postgres(client,schema,lookup){
-  return xt_db_system_impl_postgres$$ImplPostgres(
-    client,
+function xt_db_system_impl_memory$$rpc_call_async(_impl,_rpc_spec,_args){
+  throw "db.impl.memory does not support rpc_call_async";
+}
+
+function xt_db_system_impl_memory$$impl_memory(schema,lookup){
+  return xt_db_system_impl_memory$$ImplMemory({},schema,lookup,{},{});
+}
+
+function xt_db_system_main_client$$get_provider(type,backends){
+  let selected = backends || {};
+  let provider = selected[type];
+  if(null == provider){
+    throw Object.assign(
+      new Error("Database backend is not selected"),
+      {"data":{"type":type,"selected":Object.keys(selected)}}
+    );
+  }
+  return provider;
+}
+
+function xt_db_system_main_client$$create_client(type,defaults,...optional){
+  let backends = (optional.length > 0) ? optional[0] : null;
+  if(type == "memory"){
+    return null;
+  }
+  let provider = xt_db_system_main_client$$get_provider(type,backends);
+  let create = provider["create_client"];
+  if(!("function" == (typeof create))){
+    throw "Backend provider is missing create_client";
+  }
+  let client = create(defaults);
+  if(null == client){
+    throw "Selected backend has no client for this runtime";
+  }
+  return client;
+}
+
+function xt_db_system_main$$create_impl(type,defaults,schema,lookup,...optional){
+  let backends = (optional.length > 0) ? optional[0] : null;
+  if(type == "memory"){
+    return xt_db_system_impl_memory$$impl_memory(schema,lookup);
+  }
+  let provider = xt_db_system_main_client$$get_provider(type,backends);
+  let create = provider["create_impl"];
+  if(!("function" == (typeof create))){
+    throw "Backend provider is missing create_impl";
+  }
+  return create(
+    xt_db_system_main_client$$create_client(type,defaults,backends),
     schema,
-    lookup,
-    {},
-    xt_db_text_sql_util$$postgres_opts(lookup),
-    {}
+    lookup
   );
 }
 
-function xt_db_system_impl_postgres$$impl_postgres_init(impl){
-  let {client,lookup,opts,schema} = impl;
-  return xt_net_conn_sql$$connect(client).then(function (client){
+function xt_db_system_main$$create_impl_init(impl){
+  if(xt_lang_common_protocol$$protocol_implements(impl,xt_db_system_impl_common$$ISourceInit["on"])){
+    return xt_db_system_impl_common$$init_db(impl);
+  }
+  return Promise.resolve().then(function (){
     return impl;
   });
+}
+
+function js_net_http_fetch$$HttpFetchClient(defaults,middleware){
+  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["js.net.http_fetch/HttpFetchClient"] = true;
+  xt_lang_common_protocol$$register_protocol_impl(
+    xt_net_http_fetch$$IHttpClient["on"],
+    "js.net.http_fetch/HttpFetchClient",
+    {"request_http":js_net_http_fetch$$request_http}
+  );
+  return {
+    "::":"js.net.http_fetch/HttpFetchClient",
+    "::/protocols":[xt_net_http_fetch$$IHttpClient["on"]],
+    "::/protocol-impls":{
+        [xt_net_http_fetch$$IHttpClient["on"]]:{"request_http":js_net_http_fetch$$request_http}
+      },
+    "defaults":defaults,
+    "middleware":middleware
+  };
+}
+
+function js_net_http_fetch$$request_http_raw(client,input){
+  let {body,headers,method,url} = input;
+  return fetch(url,{"method":method,"headers":headers,"body":body}).then(function (res){
+    return res.text().then(function (text){
+      return {"status":res["status"],"headers":res["headers"],"body":text};
+    });
+  });
+}
+
+function js_net_http_fetch$$request_http(client,input){
+  let handler = xt_net_http_fetch$$prepare_middleware(client,js_net_http_fetch$$request_http_raw);
+  return handler(client,input);
+}
+
+function js_net_http_fetch$$create(defaults,middleware){
+  return js_net_http_fetch$$HttpFetchClient(
+    defaults,
+    middleware || [xt_net_http_fetch$$wrap_prepare_input]
+  );
+}
+
+var xt_db_system_impl_supabase_ws$$ISupabaseWebsocketFactory = xt_lang_common_protocol$$create_protocol_fn("xt.db.system.impl_supabase_ws/ISupabaseWebsocketFactory",{
+  "create_ws_client":{"name":"create_ws_client","arglist":["impl","defaults"]}
+});
+
+function xt_db_system_impl_supabase_ws$$create_ws_client(impl,defaults){
+  let method_fn = xt_lang_common_protocol$$protocol_method(
+    impl,
+    "xt.db.system.impl_supabase_ws/ISupabaseWebsocketFactory",
+    "create_ws_client"
+  );
+  return method_fn(impl,defaults);
+}
+
+function xt_db_text_pgrest_graph$$tree_countp(custom){
+  return (custom || []).some(function (entry){
+    return entry["::"] == "sql/count";
+  });
+}
+
+function xt_db_text_pgrest_graph$$pgrest_resolve_value(value){
+  if(((null != value) && ("object" == (typeof value)) && !Array.isArray(value)) && (null != value["::"])){
+    let tcls = value["::"];
+    if(tcls == "sql/arg"){
+      return value["name"];
+    }
+    else if(tcls == "sql/cast"){
+      return xt_db_text_pgrest_graph$$pgrest_resolve_value((value["args"])[0]);
+    }
+    else if(tcls == "sql/defenum"){
+      return value["name"];
+    }
+    else{
+      return value;
+    }
+  }
+  else{
+    return value;
+  }
+}
+
+function xt_db_text_pgrest_graph$$value__gtquery_text(value){
+  value = xt_db_text_pgrest_graph$$pgrest_resolve_value(value);
+  if(null == value){
+    return "null";
+  }
+  else if("string" == (typeof value)){
+    return value;
+  }
+  else if("boolean" == (typeof value)){
+    return value ? "true" : "false";
+  }
+  else if("number" == (typeof value)){
+    return String(value);
+  }
+  else{
+    return String(value);
+  }
+}
+
+function xt_db_text_pgrest_graph$$normalise_in_values(value){
+  if(Array.isArray(value) && (1 == value.length) && Array.isArray(value[0])){
+    return value[0];
+  }
+  else if(Array.isArray(value)){
+    return value;
+  }
+  else{
+    return [value];
+  }
+}
+
+function xt_db_text_pgrest_graph$$filter_operatorp(op){
+  return (op == "eq") || (op == "neq") || (op == "gt") || (op == "gte") || (op == "lt") || (op == "lte") || (op == "like") || (op == "ilike") || (op == "is") || (op == "in");
+}
+
+function xt_db_text_pgrest_graph$$compile_filter_value(op,value){
+  if(op == "in"){
+    return op + ".(" + xt_db_text_pgrest_graph$$normalise_in_values(value).map(xt_db_text_pgrest_graph$$value__gtquery_text).join(",") + ")";
+  }
+  else{
+    return op + "." + xt_db_text_pgrest_graph$$value__gtquery_text(value);
+  }
+}
+
+function xt_db_text_pgrest_graph$$compile_filter_fragment(filter){
+  return filter["path"] + "." + xt_db_text_pgrest_graph$$compile_filter_value(filter["op"],filter["value"]);
+}
+
+function xt_db_text_pgrest_graph$$compile_clause_into(prefix,clause,out){
+  for(let key of xt_lang_common_data$$arr_sort(Object.keys(clause || {}),function (value){
+    return String(value);
+  },function (x,y){
+    return 0 > x.localeCompare(y);
+  })){
+    let value = clause[key];
+    let path = xt_lang_common_data$$not_emptyp(prefix) ? (prefix + "." + key) : key;
+    if(((null != value) && ("object" == (typeof value)) && !Array.isArray(value)) && !Array.isArray(value) && (null == value["::"])){
+      xt_db_text_pgrest_graph$$compile_clause_into(path,value,out);
+    }
+    else if(Array.isArray(value) && ("string" == (typeof value[0])) && xt_db_text_pgrest_graph$$filter_operatorp(value[0])){
+      out.push({"path":path,"op":value[0],"value":value[1]});
+    }
+    else if(Array.isArray(value) && ("string" == (typeof value[0]))){
+      throw "Unsupported filter operator - " + value[0];
+    }
+    else{
+      out.push({"path":path,"op":"eq","value":value});
+    }
+  };
+  return out;
+}
+
+function xt_db_text_pgrest_graph$$compile_or_clause(clause){
+  let fragments = xt_db_text_pgrest_graph$$compile_clause_into("",clause,[]).map(xt_db_text_pgrest_graph$$compile_filter_fragment);
+  if(0 == fragments.length){
+    return "";
+  }
+  else if(1 == fragments.length){
+    return fragments[0];
+  }
+  else{
+    return "and(" + fragments.join(",") + ")";
+  }
+}
+
+function xt_db_text_pgrest_graph$$forward_ref_columnp(schema,table_name,key){
+  let table = schema[table_name];
+  let col = table && table[key];
+  return ((null != col) && ("object" == (typeof col)) && !Array.isArray(col)) && ("ref" == col["type"]) && !("reverse" == col["ref"]["type"]);
+}
+
+function xt_db_text_pgrest_graph$$flatten_forward_ref_clause(schema,table_name,clause){
+  let out = {};
+  for(let [k,v] of Object.entries(clause)){
+    if(xt_db_text_pgrest_graph$$forward_ref_columnp(schema,table_name,k) && ((null != v) && ("object" == (typeof v)) && !Array.isArray(v)) && (null != v["id"])){
+      out[k + "_id"] = v["id"];
+    }
+    else if((null != v) && ("object" == (typeof v)) && !Array.isArray(v)){
+      out[k] = xt_db_text_pgrest_graph$$flatten_forward_ref_clause(schema,table_name,v);
+    }
+    else{
+      out[k] = v;
+    }
+  };
+  return out;
+}
+
+function xt_db_text_pgrest_graph$$flatten_forward_ref_filters(schema,table_name,where){
+  where = (Array.isArray(where) ? where : (((null != where) && ("object" == (typeof where)) && !Array.isArray(where)) ? [where] : []));
+  return where.map(function (clause){
+    return xt_db_text_pgrest_graph$$flatten_forward_ref_clause(schema,table_name,clause);
+  });
+}
+
+function xt_db_text_pgrest_graph$$compile_where_params(where){
+  where = (Array.isArray(where) ? where : (((null != where) && ("object" == (typeof where)) && !Array.isArray(where)) ? [where] : []));
+  if(0 == where.length){
+    return [];
+  }
+  if(1 == where.length){
+    return xt_db_text_pgrest_graph$$compile_clause_into("",where[0],[]).map(function (filter){
+      return filter["path"] + "=" + xt_db_text_pgrest_graph$$compile_filter_value(filter["op"],filter["value"]);
+    });
+  }
+  let clauses = where.map(xt_db_text_pgrest_graph$$compile_or_clause).filter(xt_lang_common_data$$not_emptyp);
+  return ["or=(" + clauses.join(",") + ")"];
+}
+
+function xt_db_text_pgrest_graph$$compile_tree_select_item(item,select_params_fn){
+  if("string" == (typeof item)){
+    return item;
+  }
+  else if(Array.isArray(item) && (item.length >= 3) && ("string" == (typeof item[0]))){
+    return item[0] + ":" + (xt_lang_common_data$$nth(item,2))[0] + "(" + select_params_fn(
+      xt_lang_common_data$$second(xt_lang_common_data$$nth(item,2))
+    ) + ")";
+  }
+  else{
+    return String(xt_db_text_pgrest_graph$$pgrest_resolve_value(item));
+  }
+}
+
+function xt_db_text_pgrest_graph$$compile_tree_select_params(params){
+  let {custom,data,links} = params;
+  if(xt_db_text_pgrest_graph$$tree_countp(custom)){
+    return "count";
+  }
+  let out = [];
+  xt_lang_common_data$$arr_assign(out,(data || []).map(function (item){
+    return xt_db_text_pgrest_graph$$pgrest_resolve_value(item);
+  }));
+  xt_lang_common_data$$arr_assign(out,(links || []).map(function (item){
+    return xt_db_text_pgrest_graph$$compile_tree_select_item(item,xt_db_text_pgrest_graph$$compile_tree_select_params);
+  }));
+  return (out.length > 0) ? out.join(",") : "*";
+}
+
+function xt_db_text_pgrest_graph$$compile_control_params(custom){
+  let order_cols = null;
+  let order_sort = null;
+  let limit = null;
+  let offset = null;
+  for(let entry of custom || []){
+    if(entry["::"] == "sql/keyword"){
+      let {name} = entry;
+      if(name == "ORDER BY"){
+        let tuple = (entry["args"] || [])[0];
+        order_cols = (tuple["args"] || []).map(function (arg){
+          return arg["name"];
+        });
+      }
+      else if((name == "ASC") || (name == "DESC")){
+        order_sort = name.toLowerCase();
+      }
+      else if(name == "LIMIT"){
+        limit = (entry["args"] || [])[0]["name"];
+      }
+      else if(name == "OFFSET"){
+        offset = (entry["args"] || [])[0]["name"];
+      }
+    }
+  };
+  let out = [];
+  if(Array.isArray(order_cols)){
+    out.push("order=" + order_cols.map(function (col){
+      return (null != order_sort) ? (col + "." + order_sort) : col;
+    }).join(","));
+  }
+  if(null != limit){
+    out.push(
+      "limit=" + xt_db_text_pgrest_graph$$value__gtquery_text(limit)
+    );
+  }
+  if(null != offset){
+    out.push(
+      "offset=" + xt_db_text_pgrest_graph$$value__gtquery_text(offset)
+    );
+  }
+  return out;
+}
+
+function xt_db_text_pgrest_graph$$compile_query_string(params){
+  return (params || []).join("&");
+}
+
+function xt_db_text_pgrest_graph$$compile_url(path,params){
+  let query = xt_db_text_pgrest_graph$$compile_query_string(params);
+  return xt_lang_common_data$$not_emptyp(query) ? (path + "?" + query) : path;
+}
+
+function xt_db_text_pgrest_graph$$select_return(schema,tree,indent,opts){
+  tree = xt_db_text_base_graph$$select_tree(schema,tree,opts);
+  let table_name = tree[0];
+  let params = xt_lang_common_data$$second(tree);
+  let where = xt_db_text_pgrest_graph$$flatten_forward_ref_filters(schema,table_name,params["where"] || []);
+  params["where"] = where;
+  let custom = params["custom"] || [];
+  let select = xt_db_text_pgrest_graph$$compile_tree_select_params(params);
+  let request_params = ["select=" + select];
+  request_params = request_params.concat(xt_db_text_pgrest_graph$$compile_where_params(where));
+  request_params = request_params.concat(xt_db_text_pgrest_graph$$compile_control_params(custom));
+  let path = "/rest/v1/" + table_name;
+  let query = xt_db_text_pgrest_graph$$compile_query_string(request_params);
+  let url = xt_db_text_pgrest_graph$$compile_url(path,request_params);
+  return {
+    "table":table_name,
+    "url":url,
+    "params":request_params,
+    "method":"GET",
+    "query":query,
+    "path":path,
+    "filters":where,
+    "select":select,
+    "type":"query",
+    "headers":{}
+  };
+}
+
+function xt_db_text_pgrest_graph$$select(schema,query,opts){
+  return xt_db_text_pgrest_graph$$select_return(schema,query,0,opts);
 }
 
 function xt_db_text_sql_raw$$raw_delete(table_name,where_params,opts){
@@ -6559,17 +6461,22 @@ function xt_db_text_sql_raw$$raw_upsert(table_name,id_column,columns,values,opts
     return x;
   }) : opts["column_fn"];
   let {upsert_clause} = opts;
+  let id_columns = Array.isArray(id_column) ? id_column : [id_column];
+  let id_lu = {};
+  for(let column of id_columns){
+    id_lu[column] = true;
+  };
   let out_arr = xt_db_text_sql_raw$$raw_insert_array(table_name,columns,values,opts);
   let col_arr = columns.filter(function (col){
-    return col != id_column;
+    return !id_lu[col];
   }).map(function (col){
     return column_fn(col) + "=coalesce(\"excluded\"." + column_fn(col) + "," + column_fn(col) + ")";
   });
-  return out_arr.join("\n") + "\n" + ("ON CONFLICT (" + column_fn(id_column) + ") DO UPDATE SET\n") + col_arr.join(",\n") + (("string" == (typeof upsert_clause)) ? ("\nWHERE " + upsert_clause) : "") + ";";
+  return out_arr.join("\n") + "\n" + ("ON CONFLICT (" + id_columns.map(column_fn).join(",") + ") ") + ((col_arr.length > 0) ? ("DO UPDATE SET\n" + col_arr.join(",\n")) : "DO NOTHING") + (((col_arr.length > 0) && ("string" == (typeof upsert_clause))) ? ("\nWHERE " + upsert_clause) : "") + ";";
 }
 
 function xt_db_text_sql_table$$table_filter_id(entry){
-  return !((0 == Object.keys(entry["ref_links"]).length) && (1 == Object.keys(entry["data"]).length));
+  return !((0 == Object.keys(entry["ref_links"]).length) && (null != entry["data"]["id"]) && (1 == Object.keys(entry["data"]).length));
 }
 
 function xt_db_text_sql_table$$table_get_data(entry){
@@ -6581,7 +6488,7 @@ function xt_db_text_sql_table$$table_get_data(entry){
 }
 
 var xt_db_text_sql_table$$table_emit_upsert = function (table_name,cols,out,opts){
-  return xt_db_text_sql_raw$$raw_upsert(table_name,"id",cols,out,opts);
+  return xt_db_text_sql_raw$$raw_upsert(table_name,opts["identity_columns"] || "id",cols,out,opts);
 };
 
 function xt_db_text_sql_table$$table_emit_flat(emit_fn,schema,lookup,flat,opts){
@@ -6615,6 +6522,7 @@ function xt_db_text_sql_table$$table_emit_flat(emit_fn,schema,lookup,flat,opts){
     else{
       sopts = Object.assign({},opts);
     }
+    sopts["identity_columns"] = xt_db_text_base_schema$$primary_columns(schema,table_name);
     if(0 < sout.length){
       return emit_fn(table_name,cols,sout,sopts);
     }
@@ -6647,7 +6555,7 @@ function xt_db_text_sql_manage$$table_create_column(schema,entry,opts){
   let irequired = entry["required"];
   let stype = (null != types[itype]) ? types[itype] : itype;
   let default_fn = function (ident){
-    return column_fn(ident) + " " + (("ref" == stype) ? "text" : stype) + ((true == iprimary) ? " PRIMARY KEY" : "") + (((true == irequired) && (true == strict)) ? " NOT NULL" : "");
+    return column_fn(ident) + " " + (("ref" == stype) ? "text" : stype) + (((true == iprimary) && !opts["composite_primary"]) ? " PRIMARY KEY" : "") + (((true == irequired) && (true == strict)) ? " NOT NULL" : "");
   };
   if((stype == "ref") && (null != schema[entry["ref"]["ns"]])){
     let rtable = entry["ref"]["ns"];
@@ -6669,9 +6577,15 @@ function xt_db_text_sql_manage$$table_create(schema,table_name,opts){
     return x;
   }) : opts["table_fn"];
   let columns = xt_db_text_base_schema$$table_entries(schema,table_name);
+  let identity = xt_db_text_base_schema$$primary_columns(schema,table_name);
+  let composite = identity.length > 1;
+  let column_fn = (null == opts["column_fn"]) ? (function (x){
+    return x;
+  }) : opts["column_fn"];
+  let column_opts = Object.assign(Object.assign({},opts),{"composite_primary":composite});
   return "CREATE TABLE IF NOT EXISTS " + table_fn(table_name) + " (\n  " + columns.map(function (e){
-    return xt_db_text_sql_manage$$table_create_column(schema,e,opts);
-  }).join(",\n  ") + "\n);";
+    return xt_db_text_sql_manage$$table_create_column(schema,e,column_opts);
+  }).join(",\n  ") + (composite ? (",\n  PRIMARY KEY (" + identity.map(column_fn).join(",") + ")") : "") + "\n);";
 }
 
 function xt_db_text_sql_manage$$table_create_all(schema,lookup,opts){
@@ -6705,6 +6619,11 @@ function xt_db_system_impl_sqlite$$ImplSqlite(client,schema,lookup,listeners,opt
     "process_add_event":xt_db_system_impl_sqlite$$process_add_event,
     "process_remove_event":xt_db_system_impl_sqlite$$process_remove_event
   });
+  xt_lang_common_protocol$$register_protocol_impl(
+    xt_db_system_impl_common$$ISourceInit["on"],
+    "xt.db.system.impl_sqlite/ImplSqlite",
+    {"init_db":xt_db_system_impl_sqlite$$impl_sqlite_init}
+  );
   xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceRemote["on"],"xt.db.system.impl_sqlite/ImplSqlite",{
     "pull_async":xt_db_system_impl_sqlite$$pull_async,
     "rpc_call_async":xt_db_system_impl_sqlite$$rpc_call_async
@@ -6724,6 +6643,7 @@ function xt_db_system_impl_sqlite$$ImplSqlite(client,schema,lookup,listeners,opt
           "process_add_event":xt_db_system_impl_sqlite$$process_add_event,
           "process_remove_event":xt_db_system_impl_sqlite$$process_remove_event
         },
+        [xt_db_system_impl_common$$ISourceInit["on"]]:{"init_db":xt_db_system_impl_sqlite$$impl_sqlite_init},
         [xt_db_system_impl_common$$ISourceRemote["on"]]:{
           "pull_async":xt_db_system_impl_sqlite$$pull_async,
           "rpc_call_async":xt_db_system_impl_sqlite$$rpc_call_async
@@ -6741,6 +6661,7 @@ function xt_db_system_impl_sqlite$$ImplSqlite(client,schema,lookup,listeners,opt
     "metadata":metadata,
     "::/protocols":[
         xt_db_system_impl_common$$ISourceLocal["on"],
+        xt_db_system_impl_common$$ISourceInit["on"],
         xt_db_system_impl_common$$ISourceRemote["on"],
         xt_db_system_impl_common$$ISourceListener["on"]
       ],
@@ -6818,6 +6739,17 @@ function xt_db_system_impl_sqlite$$rpc_call_async(_impl,_rpc_spec,_args){
   throw "ImplSqlite does not support rpc_call_async";
 }
 
+function xt_db_system_impl_sqlite$$impl_sqlite_init(impl){
+  let {client,lookup,opts,schema} = impl;
+  let sql = xt_db_text_sql_manage$$table_create_all(schema,lookup,opts).join("\n\n");
+  return xt_net_conn_sql$$connect(client,{}).then(function (client){
+    if(0 < sql.length){
+      xt_net_conn_sql$$query(client,sql);
+    }
+    return impl;
+  });
+}
+
 function xt_db_system_impl_sqlite$$impl_sqlite(client,schema,lookup){
   return xt_db_system_impl_sqlite$$ImplSqlite(client,schema,lookup,{},{
     "return_join_fn":function (arr){
@@ -6873,15 +6805,132 @@ function xt_db_system_impl_sqlite$$impl_sqlite(client,schema,lookup){
   },{});
 }
 
-function xt_db_system_impl_sqlite$$impl_sqlite_init(impl){
-  let {client,lookup,opts,schema} = impl;
-  let sql = xt_db_text_sql_manage$$table_create_all(schema,lookup,opts).join("\n\n");
-  return xt_net_conn_sql$$connect(client,{}).then(function (client){
-    if(0 < sql.length){
-      xt_net_conn_sql$$query(client,sql);
-    }
-    return impl;
+function js_net_conn_sqlite$$SqliteClient(defaults,raw){
+  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["js.net.conn_sqlite/SqliteClient"] = true;
+  xt_lang_common_protocol$$register_protocol_impl(xt_net_conn_sql$$ISqlClient["on"],"js.net.conn_sqlite/SqliteClient",{
+    "connect":js_net_conn_sqlite$$client_connect,
+    "disconnect":js_net_conn_sqlite$$client_disconnect,
+    "query":js_net_conn_sqlite$$client_query,
+    "query_async":js_net_conn_sqlite$$client_query_async
   });
+  return {
+    "::":"js.net.conn_sqlite/SqliteClient",
+    "::/protocols":[xt_net_conn_sql$$ISqlClient["on"]],
+    "::/protocol-impls":{
+        [xt_net_conn_sql$$ISqlClient["on"]]:{
+          "connect":js_net_conn_sqlite$$client_connect,
+          "disconnect":js_net_conn_sqlite$$client_disconnect,
+          "query":js_net_conn_sqlite$$client_query,
+          "query_async":js_net_conn_sqlite$$client_query_async
+        }
+      },
+    "defaults":defaults,
+    "raw":raw
+  };
+}
+
+function js_net_conn_sqlite$$decode_json_scalar(value){
+  if(("string" == (typeof value)) && (value.startsWith("[") || value.startsWith("{") || (value == "true") || (value == "false") || (value == "null"))){
+    return JSON.parse(value);
+  }
+  else{
+    return value;
+  }
+}
+
+function js_net_conn_sqlite$$raw_query(db,query){
+  let columns = [];
+  let values = db.exec({
+    "sql":query,
+    "rowMode":"array",
+    "columnNames":columns,
+    "returnValue":"resultRows"
+  });
+  if((1 == values.length) && (1 == values[0].length)){
+    return js_net_conn_sqlite$$decode_json_scalar(values[0][0]);
+  }
+  return columns.length ? [{"columns":columns,"values":values}] : values;
+}
+
+function js_net_conn_sqlite$$raw_init(sqlite3,opts){
+  let config = opts || {};
+  let filename = config["filename"] || ":memory:";
+  let flags = config["flags"] || "c";
+  let conn = new sqlite3["oo1"]["DB"](filename,flags);
+  return conn;
+}
+
+function js_net_conn_sqlite$$client_connect(client,opts){
+  let {defaults} = client;
+  let init_module = sqlite3InitModule["default"] || sqlite3InitModule;
+  return init_module().then(function (sqlite3){
+    return js_net_conn_sqlite$$raw_init(sqlite3,Object.assign(Object.assign({},defaults),opts));
+  }).then(function (raw){
+    client["raw"] = raw;
+    return client;
+  });
+}
+
+function js_net_conn_sqlite$$client_disconnect(client){
+  let {raw} = client;
+  raw.close();
+  return true;
+}
+
+function js_net_conn_sqlite$$client_query(client,query){
+  let {raw} = client;
+  return js_net_conn_sqlite$$raw_query(raw,query);
+}
+
+function js_net_conn_sqlite$$client_query_async(client,query){
+  let {raw} = client;
+  return Promise.resolve().then(function (){
+    return js_net_conn_sqlite$$raw_query(raw,query);
+  });
+}
+
+function js_net_conn_sqlite$$create(defaults){
+  return js_net_conn_sqlite$$SqliteClient(defaults,null);
+}
+
+function xt_db_system_backend_sqlite$$provider(){
+  return {
+    "create_client":xt_db_system_backend_sqlite$$create_client,
+    "create_impl":xt_db_system_impl_sqlite$$impl_sqlite
+  };
+}
+
+function xt_db_system_backend_sqlite$$create_client(defaults){
+  return js_net_conn_sqlite$$create(defaults);
+}
+
+function xt_db_node_proxy_util$$get_default_transport(node){
+  return xt_lang_common_data$$get_in(node,["state","adaptor_proxy","default_transport_id"]);
+}
+
+function xt_db_node_proxy_util$$get_transport_id(node,opts){
+  return xt_lang_common_data$$get_in(opts,["transport_id"]) || xt_db_node_proxy_util$$get_default_transport(node) || (xt_substrate$$transport_list(node))[0];
+}
+
+function xt_db_node_proxy_util$$request_meta(node,request){
+  let transport_id = xt_db_node_proxy_util$$get_transport_id(node,request);
+  return {"transport_id":transport_id};
+}
+
+function xt_db_node_proxy_util$$request_client(node,action,args,opts){
+  let local_meta = {};
+  local_meta["local"] = true;
+  return xt_substrate$$get_handler(node,action) ? xt_substrate$$request(node,null,action,args,local_meta) : xt_substrate$$request(
+    node,
+    null,
+    action,
+    args,
+    xt_db_node_proxy_util$$request_meta(node,opts)
+  );
+}
+
+function xt_db_node_client_supabase$$user_get(node,service_id,opts){
+  return xt_db_node_proxy_util$$request_client(node,"@xt.supabase/user-get",[service_id,opts || {}],opts);
 }
 
 function js_net_ws_native$$WebsocketClient(raw,defaults,state){
@@ -7013,113 +7062,6 @@ function js_net_ws_native$$create(defaults){
   return js_net_ws_native$$WebsocketClient(null,defaults,{"heartbeats":{},"callbacks":{}});
 }
 
-function xt_db_system_impl_memory$$ImplMemory(rows,schema,lookup,listeners,metadata){
-  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["xt.db.system.impl_memory/ImplMemory"] = true;
-  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceLocal["on"],"xt.db.system.impl_memory/ImplMemory",{
-    "clear_db":xt_db_system_impl_memory$$clear_db,
-    "pull":xt_db_system_impl_memory$$pull,
-    "record_add":xt_db_system_impl_memory$$record_add,
-    "record_delete":xt_db_system_impl_memory$$record_delete,
-    "process_add_event":xt_db_system_impl_memory$$process_add_event,
-    "process_remove_event":xt_db_system_impl_memory$$process_remove_event
-  });
-  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceRemote["on"],"xt.db.system.impl_memory/ImplMemory",{
-    "pull_async":xt_db_system_impl_memory$$pull_async,
-    "rpc_call_async":xt_db_system_impl_memory$$rpc_call_async
-  });
-  xt_lang_common_protocol$$register_protocol_impl(xt_db_system_impl_common$$ISourceListener["on"],"xt.db.system.impl_memory/ImplMemory",{
-    "add_db_listener":xt_db_system_impl_common$$add_db_listener_default,
-    "remove_db_listener":xt_db_system_impl_common$$remove_db_listener_default,
-    "get_db_listener":xt_db_system_impl_common$$get_db_listener_default
-  });
-  return {
-    "::":"xt.db.system.impl_memory/ImplMemory",
-    "::/protocols":[
-        xt_db_system_impl_common$$ISourceLocal["on"],
-        xt_db_system_impl_common$$ISourceRemote["on"],
-        xt_db_system_impl_common$$ISourceListener["on"]
-      ],
-    "::/protocol-impls":{
-        [xt_db_system_impl_common$$ISourceLocal["on"]]:{
-          "clear_db":xt_db_system_impl_memory$$clear_db,
-          "pull":xt_db_system_impl_memory$$pull,
-          "record_add":xt_db_system_impl_memory$$record_add,
-          "record_delete":xt_db_system_impl_memory$$record_delete,
-          "process_add_event":xt_db_system_impl_memory$$process_add_event,
-          "process_remove_event":xt_db_system_impl_memory$$process_remove_event
-        },
-        [xt_db_system_impl_common$$ISourceRemote["on"]]:{
-          "pull_async":xt_db_system_impl_memory$$pull_async,
-          "rpc_call_async":xt_db_system_impl_memory$$rpc_call_async
-        },
-        [xt_db_system_impl_common$$ISourceListener["on"]]:{
-          "add_db_listener":xt_db_system_impl_common$$add_db_listener_default,
-          "remove_db_listener":xt_db_system_impl_common$$remove_db_listener_default,
-          "get_db_listener":xt_db_system_impl_common$$get_db_listener_default
-        }
-      },
-    "rows":rows,
-    "schema":schema,
-    "lookup":lookup,
-    "listeners":listeners,
-    "metadata":metadata
-  };
-}
-
-function xt_db_system_impl_memory$$pull(impl,tree){
-  let {opts,rows,schema} = impl;
-  return xt_db_system_memory_graph$$pull(rows,schema,tree,opts);
-}
-
-function xt_db_system_impl_memory$$pull_async(impl,tree){
-  return Promise.resolve().then(function (){
-    return xt_db_system_impl_memory$$pull(impl,tree);
-  });
-}
-
-function xt_db_system_impl_memory$$record_add(impl,table_name,records){
-  let {opts,rows,schema} = impl;
-  return xt_db_system_memory_util$$add_bulk(rows,schema,{[table_name]:records});
-}
-
-function xt_db_system_impl_memory$$record_delete(impl,table_name,ids){
-  let {opts,rows,schema} = impl;
-  return xt_db_system_memory_util$$remove_bulk(rows,schema,table_name,ids);
-}
-
-function xt_db_system_impl_memory$$process_add_event(impl,data){
-  let {rows,schema} = impl;
-  return xt_db_system_memory_util$$add_bulk(rows,schema,data);
-}
-
-function xt_db_system_impl_memory$$process_remove_event(impl,data){
-  let {lookup,rows,schema} = impl;
-  let ordered = xt_db_text_base_flatten$$flatten_bulk_ids(schema,lookup,data);
-  for(let entry of ordered){
-    let [table_name,ids] = entry;
-    xt_db_system_memory_util$$remove_bulk(rows,schema,table_name,ids);
-  };
-  return ordered.map(function (arr){
-    return arr[0];
-  });
-}
-
-function xt_db_system_impl_memory$$clear_db(impl){
-  let {rows} = impl;
-  for(let table_key of Object.keys(rows)){
-    delete(rows[table_key]);
-  };
-  return null;
-}
-
-function xt_db_system_impl_memory$$rpc_call_async(_impl,_rpc_spec,_args){
-  throw "db.impl.memory does not support rpc_call_async";
-}
-
-function xt_db_system_impl_memory$$impl_memory(schema,lookup){
-  return xt_db_system_impl_memory$$ImplMemory({},schema,lookup,{},{});
-}
-
 function xt_db_system_impl_supabase_realtime$$prepare_connect_url(impl,params){
   let {client} = impl;
   let {defaults} = client;
@@ -7225,15 +7167,6 @@ function xt_db_system_impl_supabase_realtime$$add_realtime_callback(impl,conn_id
   return handler;
 }
 
-function xt_db_system_impl_supabase_realtime$$remove_realtime_callback(impl,conn_id,callback_id){
-  let client = xt_db_system_impl_supabase_realtime$$get_realtime(impl,conn_id);
-  if(null != client){
-    let callbacks = xt_lang_common_data$$get_in(client,["state","callbacks"]);
-    delete(callbacks[callback_id]);
-  }
-  return true;
-}
-
 function xt_db_system_impl_supabase_realtime$$create_sync_callback(impl){
   return function (event){
     let caching_fn = xt_lang_common_data$$get_in(impl,["metadata","caching_fn"]) || xt_lang_common_data$$get_in(impl,["state","caching_fn"]);
@@ -7314,111 +7247,6 @@ function xt_db_system_impl_supabase_realtime$$unsubscribe(impl,conn_id,topics){
     }
     return true;
   });
-}
-
-function js_net_conn_sqlite$$SqliteClient(defaults,raw){
-  globalThis["xt_lang_common_protocol$$IMPLEMENTATIONS"]["js.net.conn_sqlite/SqliteClient"] = true;
-  xt_lang_common_protocol$$register_protocol_impl(xt_net_conn_sql$$ISqlClient["on"],"js.net.conn_sqlite/SqliteClient",{
-    "connect":js_net_conn_sqlite$$client_connect,
-    "disconnect":js_net_conn_sqlite$$client_disconnect,
-    "query":js_net_conn_sqlite$$client_query,
-    "query_async":js_net_conn_sqlite$$client_query_async
-  });
-  return {
-    "::":"js.net.conn_sqlite/SqliteClient",
-    "::/protocols":[xt_net_conn_sql$$ISqlClient["on"]],
-    "::/protocol-impls":{
-        [xt_net_conn_sql$$ISqlClient["on"]]:{
-          "connect":js_net_conn_sqlite$$client_connect,
-          "disconnect":js_net_conn_sqlite$$client_disconnect,
-          "query":js_net_conn_sqlite$$client_query,
-          "query_async":js_net_conn_sqlite$$client_query_async
-        }
-      },
-    "defaults":defaults,
-    "raw":raw
-  };
-}
-
-function js_net_conn_sqlite$$decode_json_scalar(value){
-  if(("string" == (typeof value)) && (value.startsWith("[") || value.startsWith("{") || (value == "true") || (value == "false") || (value == "null"))){
-    return JSON.parse(value);
-  }
-  else{
-    return value;
-  }
-}
-
-function js_net_conn_sqlite$$raw_query(db,query){
-  let columns = [];
-  let values = db.exec({
-    "sql":query,
-    "rowMode":"array",
-    "columnNames":columns,
-    "returnValue":"resultRows"
-  });
-  if((1 == values.length) && (1 == values[0].length)){
-    return js_net_conn_sqlite$$decode_json_scalar(values[0][0]);
-  }
-  return columns.length ? [{"columns":columns,"values":values}] : values;
-}
-
-function js_net_conn_sqlite$$raw_init(sqlite3,opts){
-  let config = opts || {};
-  let filename = config["filename"] || ":memory:";
-  let flags = config["flags"] || "c";
-  let conn = new sqlite3["oo1"]["DB"](filename,flags);
-  return conn;
-}
-
-function js_net_conn_sqlite$$client_connect(client,opts){
-  let {defaults} = client;
-  let init_module = sqlite3InitModule["default"] || sqlite3InitModule;
-  return init_module().then(function (sqlite3){
-    return js_net_conn_sqlite$$raw_init(sqlite3,Object.assign(Object.assign({},defaults),opts));
-  }).then(function (raw){
-    client["raw"] = raw;
-    return client;
-  });
-}
-
-function js_net_conn_sqlite$$client_disconnect(client){
-  let {raw} = client;
-  raw.close();
-  return true;
-}
-
-function js_net_conn_sqlite$$client_query(client,query){
-  let {raw} = client;
-  return js_net_conn_sqlite$$raw_query(raw,query);
-}
-
-function js_net_conn_sqlite$$client_query_async(client,query){
-  let {raw} = client;
-  return Promise.resolve().then(function (){
-    return js_net_conn_sqlite$$raw_query(raw,query);
-  });
-}
-
-function js_net_conn_sqlite$$create(defaults){
-  return js_net_conn_sqlite$$SqliteClient(defaults,null);
-}
-
-function xt_db_system_main_client$$create_client(type,defaults){
-  if(type == "sqlite"){
-    return js_net_conn_sqlite$$create(defaults);
-  }
-  else if(type == "postgres"){
-    return js_net_conn_postgres$$create(defaults);
-  }
-  else if(type == "supabase"){
-    let client = js_net_http_fetch$$create(defaults,xt_net_addon_supabase$$middleware_supabase());
-    client["create_ws_client"] = js_net_ws_native$$create;
-    return client;
-  }
-  else{
-    return null;
-  }
 }
 
 function xt_db_system_impl_supabase$$ImplSupabase(client,schema,lookup,state,listeners,opts,metadata){
@@ -7547,73 +7375,17 @@ function xt_db_system_impl_supabase$$impl_supabase(client,schema,lookup){
   return impl;
 }
 
-function xt_db_system_main$$create_impl(type,defaults,schema,lookup){
-  let client = xt_db_system_main_client$$create_client(type,defaults);
-  if(type == "memory"){
-    return xt_db_system_impl_memory$$impl_memory(schema,lookup);
-  }
-  else if(type == "sqlite"){
-    return xt_db_system_impl_sqlite$$impl_sqlite(client,schema,lookup);
-  }
-  else if(type == "postgres"){
-    return xt_db_system_impl_postgres$$impl_postgres(client,schema,lookup);
-  }
-  else if(type == "supabase"){
-    return xt_db_system_impl_supabase$$impl_supabase(client,schema,lookup);
-  }
+function xt_db_system_backend_supabase$$provider(){
+  return {
+    "create_client":xt_db_system_backend_supabase$$create_client,
+    "create_impl":xt_db_system_impl_supabase$$impl_supabase
+  };
 }
 
-function xt_db_system_main$$create_impl_init(impl){
-  let {lookup,schema} = impl;
-  let type = impl["::"];
-  if(type == "xt.db.system.impl_sqlite/ImplSqlite"){
-    return xt_db_system_impl_sqlite$$impl_sqlite_init(impl);
-  }
-  else if(type == "xt.db.system.impl_postgres/ImplPostgres"){
-    return xt_db_system_impl_postgres$$impl_postgres_init(impl);
-  }
-  else{
-    return Promise.resolve().then(function (){
-      return impl;
-    });
-  }
-}
-
-function xt_db_node_proxy_util$$get_default_transport(node){
-  return xt_lang_common_data$$get_in(node,["state","adaptor_proxy","default_transport_id"]);
-}
-
-function xt_db_node_proxy_util$$get_transport_id(node,opts){
-  return xt_lang_common_data$$get_in(opts,["transport_id"]) || xt_db_node_proxy_util$$get_default_transport(node) || (xt_substrate$$transport_list(node))[0];
-}
-
-function xt_db_node_proxy_util$$request_meta(node,request){
-  let transport_id = xt_db_node_proxy_util$$get_transport_id(node,request);
-  return {"transport_id":transport_id};
-}
-
-function xt_db_node_proxy_util$$request_client(node,action,args,opts){
-  let local_meta = {};
-  local_meta["local"] = true;
-  return xt_substrate$$get_handler(node,action) ? xt_substrate$$request(node,null,action,args,local_meta) : xt_substrate$$request(
-    node,
-    null,
-    action,
-    args,
-    xt_db_node_proxy_util$$request_meta(node,opts)
-  );
-}
-
-function xt_db_node_client_supabase$$user_get(node,service_id,opts){
-  return xt_db_node_proxy_util$$request_client(node,"@xt.supabase/user-get",[service_id,opts || {}],opts);
-}
-
-function xt_db_node_client_base$$subscribe_db(node,primary_id,conn_id,topics,opts){
-  return xt_db_node_proxy_util$$request_client(node,"@xt.db/subscribe-db",[primary_id,conn_id,topics],opts);
-}
-
-function xt_db_node_client_base$$unsubscribe_db(node,primary_id,conn_id,topics,opts){
-  return xt_db_node_proxy_util$$request_client(node,"@xt.db/unsubscribe-db",[primary_id,conn_id,topics],opts);
+function xt_db_system_backend_supabase$$create_client(defaults){
+  let client = js_net_http_fetch$$create(defaults,xt_net_addon_supabase$$middleware_supabase());
+  client["create_ws_client"] = js_net_ws_native$$create;
+  return client;
 }
 
 function xt_db_node_kernel_supabase$$supabase_rpc_error_detail(body){
@@ -8191,8 +7963,19 @@ function xt_db_node_kernel_base$$kernel_check_exists(node,config){
   return (null != xt_substrate$$get_service(node,xt_lang_common_data$$get_in(config,["common","id"]))) && (null != xt_substrate$$get_service(node,xt_lang_common_data$$get_in(config,["primary","id"]))) && (null != xt_substrate$$get_service(node,xt_lang_common_data$$get_in(config,["caching","id"])));
 }
 
+function xt_db_node_kernel_base$$set_backends(node,backends){
+  xt_lang_common_data$$set_in(node,["state","db_backends"],backends || {});
+  return node;
+}
+
 function xt_db_node_kernel_base$$kernel_setup_single(node,service_id,type,defaults,schema,lookup){
-  return xt_db_system_main$$create_impl_init(xt_db_system_main$$create_impl(type,defaults,schema,lookup)).then(function (impl){
+  return xt_db_system_main$$create_impl_init(xt_db_system_main$$create_impl(
+    type,
+    defaults,
+    schema,
+    lookup,
+    xt_lang_common_data$$get_in(node,["state","db_backends"])
+  )).then(function (impl){
     xt_substrate$$set_service(node,service_id,impl);
     return node;
   });
@@ -8200,7 +7983,7 @@ function xt_db_node_kernel_base$$kernel_setup_single(node,service_id,type,defaul
 
 function xt_db_node_kernel_base$$kernel_teardown_single(node,service_id){
   let impl = xt_substrate$$get_service(node,service_id);
-  if(xt_lang_common_protocol$$protocol_implements(impl,"xt.db.system.impl_common/ISourceLifecycle")){
+  if(xt_lang_common_protocol$$protocol_implements(impl,xt_db_system_impl_common$$ISourceLifecycle["on"])){
     xt_db_system_impl_common$$stop_db(impl);
   }
   xt_substrate$$remove_service(node,service_id);
@@ -8725,14 +8508,23 @@ var xt_db_node_runtime$$DEFAULT_TRANSPORT = "xt.db.default.transport";
 
 var xt_db_node_runtime$$DEFAULT_WORKER = "xt.db.default.worker";
 
-function xt_db_node_runtime$$init_server(node){
+function xt_db_node_runtime$$init_server(node,...optional){
+  let options = (optional.length > 0) ? optional[0] : null;
+  options = (options || {});
+  if(null != options["backends"]){
+    xt_db_node_kernel_base$$set_backends(node,options["backends"]);
+  }
   xt_substrate_page_proxy$$install(node);
   xt_db_node_kernel_base$$init_handlers(node);
-  xt_db_node_kernel_supabase$$init_handlers(node);
+  for(let install of (null == options["init_handlers"]) ? [] : options["init_handlers"]){
+    install(node);
+  };
+  return node;
 }
 
-function xt_db_node_runtime$$sharedworker_init_kernel(node,transport_id,worker_id){
-  xt_db_node_runtime$$init_server(node);
+function xt_db_node_runtime$$sharedworker_init_kernel(node,transport_id,worker_id,...optional){
+  let options = (optional.length > 0) ? optional[0] : null;
+  xt_db_node_runtime$$init_server(node,options);
   globalThis["onconnect"] = (function (e){
     let port = e["ports"][0];
     let connection_transport_id = xt_substrate_base_frame$$rand_id(
@@ -8810,94 +8602,10 @@ xt_substrate$$register_handler(node,"@statstrade-web/auth/graphql",async functio
   }
   return body;
 },null);
-xt_substrate$$register_handler(node,"@xt.db/realtime/subscribe",function (_space,args,_request,node){
-  let primary_id = args[0];
-  let space_id = args[1];
-  let subscriber_id = args[2];
-  let topic = args[3];
-  let signal = args[4];
-  let service_id = "xt/db/realtime/" + primary_id + "/" + subscriber_id;
-  let entry = xt_substrate$$get_service(node,service_id);
-  if(entry){
-    return entry["promise"];
-  }
-  let primary = xt_substrate$$get_service(node,primary_id);
-  if(!primary){
-    return {
-      "status":"error",
-      "message":"Realtime database service is not initialized."
-    };
-  }
-  let connection_id = service_id + "/subscription";
-  let callback_id = service_id + "/notify";
-  xt_db_system_impl_supabase_realtime$$add_realtime_callback(primary,connection_id,callback_id,function (event){
-    if((topic == event["topic"]) && ((null != event["db/sync"]) || (null != event["db/remove"]))){
-      xt_substrate$$publish(node,space_id,signal,{},{});
-    }
-  });
-  let init = xt_db_node_client_base$$subscribe_db(node,primary_id,connection_id,[topic],{}).then(function (results){
-    if(true == results[0]){
-      return {"status":"live"};
-    }
-    else{
-      xt_db_system_impl_supabase_realtime$$remove_realtime_callback(primary,connection_id,callback_id);
-      xt_substrate$$remove_service(node,service_id);
-      return {
-        "status":"error",
-        "message":"Supabase Realtime could not subscribe."
-      };
-    }
-  }).catch(function (error){
-    xt_db_system_impl_supabase_realtime$$remove_realtime_callback(primary,connection_id,callback_id);
-    xt_substrate$$remove_service(node,service_id);
-    return {
-      "status":"error",
-      "message":error["message"] || "Supabase Realtime could not subscribe."
-    };
-  });
-  xt_substrate$$set_service(node,service_id,{
-    "promise":init,
-    "primary":primary,
-    "connection-id":connection_id,
-    "callback-id":callback_id,
-    "topic":topic
-  });
-  return init;
-},null);
-xt_substrate$$register_handler(node,"@xt.db/realtime/unsubscribe",function (_space,args,_request,node){
-  let primary_id = args[0];
-  let subscriber_id = args[1];
-  let service_id = "xt/db/realtime/" + primary_id + "/" + subscriber_id;
-  let entry = xt_substrate$$get_service(node,service_id);
-  if(!entry){
-    return true;
-  }
-  let primary = entry["primary"];
-  let connection_id = entry["connection-id"];
-  let callback_id = entry["callback-id"];
-  let topic = entry["topic"];
-  let stopping = entry["unsubscribe"];
-  if(stopping){
-    return stopping;
-  }
-  if(primary){
-    xt_db_system_impl_supabase_realtime$$remove_realtime_callback(primary,connection_id,callback_id);
-  }
-  let stop = entry["promise"].then(function (result){
-    if("live" == result["status"]){
-      return xt_db_node_client_base$$unsubscribe_db(node,primary_id,connection_id,[topic],{});
-    }
-    else{
-      return true;
-    }
-  }).then(function (_){
-    xt_substrate$$remove_service(node,service_id);
-    return true;
-  }).catch(function (_){
-    xt_substrate$$remove_service(node,service_id);
-    return true;
-  });
-  entry["unsubscribe"] = stop;
-  return stop;
-},null);
-xt_db_node_runtime$$sharedworker_init_kernel(node,null,"statstrade-web");
+xt_db_node_runtime$$sharedworker_init_kernel(node,null,"statstrade-web",{
+  "backends":{
+    "supabase":xt_db_system_backend_supabase$$provider(),
+    "sqlite":xt_db_system_backend_sqlite$$provider()
+  },
+  "init_handlers":[xt_db_node_kernel_supabase$$init_handlers]
+});

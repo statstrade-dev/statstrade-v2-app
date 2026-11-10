@@ -94,7 +94,7 @@ function internal_drive_action(promise,entry,drive_fn){
 function promise(thunk){
   let out = make_pending_state(null);
   try{
-    out["is_async"] = new Promise(function (resolve,reject){
+    out["is_async"] = new Promise(function (async_resolve__45151,async_reject__45152){
       setTimeout(function (){
         Promise.resolve((function (){
           try{
@@ -103,7 +103,7 @@ function promise(thunk){
           catch(err){
             return internal_settle_action(out,"rejected",err,internal_drive_action);
           }
-        })()).then(resolve,reject);
+        })()).then(async_resolve__45151,async_reject__45152);
       },0);
     });
     return out;

@@ -2,19 +2,19 @@ import React from 'react'
 
 import * as kd from '@xtalk/lang/common-data.js'
 
-import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
+import * as ui_controls from '@statstrade/edge/ui-controls.jsx'
 
 import * as sb from '@statstrade/edge/remote/util-supabase.jsx'
 
 import * as action_manager from '@statstrade/group/manage-organisation-action.jsx'
 
-// statsui.basic.layout.manage.context-manage/LayoutManageContext [17] 
+// statsui.basic.layout.manage.context-manage/LayoutManageContext [18] 
 export var LayoutManageContext = React.createContext();
 
-// statsui.basic.layout.manage.context-manage/useLayoutManageContext [20] 
+// statsui.basic.layout.manage.context-manage/useLayoutManageContext [21] 
 export function useLayoutManageContext(){
   let [session] = sb.useListenSession();
-  let controls = hf.useControls([
+  let controls = ui_controls.useControls([
     ["showMainMenu",false],
     ["showProfileMenu",false],
     ["showOrgSelector",false],
@@ -45,7 +45,7 @@ export function useLayoutManageContext(){
   return Object.assign({controls,session},orgContext);
 }
 
-// statsui.basic.layout.manage.context-manage/useTopBar [67] 
+// statsui.basic.layout.manage.context-manage/useTopBar [68] 
 export function useTopBar(content,deps){
   let ctx = React.useContext(LayoutManageContext);
   React.useEffect(function (){

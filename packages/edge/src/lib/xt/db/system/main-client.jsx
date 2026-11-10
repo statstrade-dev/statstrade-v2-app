@@ -1,27 +1,30 @@
-import * as js_sqlite from '@statstrade/edge/lib/js/net/conn-sqlite.js'
-
-import * as js_ws from '@statstrade/edge/lib/js/net/ws-native.js'
-
-import * as js_postgres from '@statstrade/edge/lib/js/net/conn-postgres.js'
-
-import * as addon from '@statstrade/edge/lib/xt/net/addon-supabase.jsx'
-
-import * as js_fetch from '@statstrade/edge/lib/js/net/http-fetch.js'
-
-// xt.db.system.main-client/create-client [20] 
-export function create_client(type,defaults){
-  if(type == "sqlite"){
-    return js_sqlite.create(defaults);
+// xt.db.system.main-client/get-provider [8] 
+export function get_provider(type,backends){
+  let selected = backends || {};
+  let provider = selected[type];
+  if(null == provider){
+    throw Object.assign(
+      new Error("Database backend is not selected"),
+      {"data":{"type":type,"selected":Object.keys(selected)}}
+    );
   }
-  else if(type == "postgres"){
-    return js_postgres.create(defaults);
-  }
-  else if(type == "supabase"){
-    let client = js_fetch.create(defaults,addon.middleware_supabase());
-    client["create_ws_client"] = js_ws.create;
-    return client;
-  }
-  else{
+  return provider;
+}
+
+// xt.db.system.main-client/create-client [18] 
+export function create_client(type,defaults,...optional){
+  let backends = (optional.length > 0) ? optional[0] : null;
+  if(type == "memory"){
     return null;
   }
+  let provider = get_provider(type,backends);
+  let create = provider["create_client"];
+  if(!("function" == (typeof create))){
+    throw "Backend provider is missing create_client";
+  }
+  let client = create(defaults);
+  if(null == client){
+    throw "Selected backend has no client for this runtime";
+  }
+  return client;
 }

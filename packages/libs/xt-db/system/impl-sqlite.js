@@ -31,6 +31,11 @@ function ImplSqlite(client,schema,lookup,listeners,opts,metadata){
     "process_remove_event":process_remove_event
   });
   proto.register_protocol_impl(
+    impl_common.ISourceInit["on"],
+    "xt.db.system.impl_sqlite/ImplSqlite",
+    {"init_db":impl_sqlite_init}
+  );
+  proto.register_protocol_impl(
     impl_common.ISourceRemote["on"],
     "xt.db.system.impl_sqlite/ImplSqlite",
     {"pull_async":pull_async,"rpc_call_async":rpc_call_async}
@@ -50,6 +55,7 @@ function ImplSqlite(client,schema,lookup,listeners,opts,metadata){
           "process_add_event":process_add_event,
           "process_remove_event":process_remove_event
         },
+        [impl_common.ISourceInit["on"]]:{"init_db":impl_sqlite_init},
         [impl_common.ISourceRemote["on"]]:{"pull_async":pull_async,"rpc_call_async":rpc_call_async},
         [impl_common.ISourceListener["on"]]:{
           "add_db_listener":impl_common.add_db_listener_default,
@@ -64,6 +70,7 @@ function ImplSqlite(client,schema,lookup,listeners,opts,metadata){
     "metadata":metadata,
     "::/protocols":[
         impl_common.ISourceLocal["on"],
+        impl_common.ISourceInit["on"],
         impl_common.ISourceRemote["on"],
         impl_common.ISourceListener["on"]
       ],
@@ -138,6 +145,17 @@ function rpc_call_async(_impl,_rpc_spec,_args){
   throw "ImplSqlite does not support rpc_call_async";
 }
 
+function impl_sqlite_init(impl){
+  let {client,lookup,opts,schema} = impl;
+  let sql = manage.table_create_all(schema,lookup,opts).join("\n\n");
+  return conn_sql.connect(client,{}).then(function (client){
+    if(0 < sql.length){
+      conn_sql.query(client,sql);
+    }
+    return impl;
+  });
+}
+
 function impl_sqlite(client,schema,lookup){
   return ImplSqlite(client,schema,lookup,{},{
     "return_join_fn":function (arr){
@@ -193,17 +211,6 @@ function impl_sqlite(client,schema,lookup){
   },{});
 }
 
-function impl_sqlite_init(impl){
-  let {client,lookup,opts,schema} = impl;
-  let sql = manage.table_create_all(schema,lookup,opts).join("\n\n");
-  return conn_sql.connect(client,{}).then(function (client){
-    if(0 < sql.length){
-      conn_sql.query(client,sql);
-    }
-    return impl;
-  });
-}
-
 module.exports = {
   ["pull"]:pull,
   ["pull_async"]:pull_async,
@@ -213,7 +220,7 @@ module.exports = {
   ["process_remove_event"]:process_remove_event,
   ["clear_db"]:clear_db,
   ["rpc_call_async"]:rpc_call_async,
+  ["impl_sqlite_init"]:impl_sqlite_init,
   ["ImplSqlite"]:ImplSqlite,
-  ["impl_sqlite"]:impl_sqlite,
-  ["impl_sqlite_init"]:impl_sqlite_init
+  ["impl_sqlite"]:impl_sqlite
 }

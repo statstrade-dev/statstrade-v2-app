@@ -6,7 +6,7 @@ import {Github} from '@tamagui/lucide-icons'
 
 import * as kd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
-import * as hf from '@statstrade/edge/lib/js/lib/react-hook-form.jsx'
+import * as ui_controls from '@statstrade/edge/ui-controls.jsx'
 
 import * as ui_router from '@statstrade/component/ui-router.jsx'
 
@@ -26,10 +26,10 @@ import * as gu from '@statstrade/edge/global-ui.jsx'
 
 import * as logo_google from '@statstrade/component/logo/logo-google.jsx'
 
-// statstrade-web.feature.auth.sign-in/SignInContext [29] 
+// statstrade-web.feature.auth.sign-in/SignInContext [30] 
 export var SignInContext = React.createContext({});
 
-// statstrade-web.feature.auth.sign-in/SignInForm [32] 
+// statstrade-web.feature.auth.sign-in/SignInForm [33] 
 export function SignInForm(){
   let context = React.useContext(SignInContext);
   let {api,controls,forms} = context;
@@ -69,17 +69,21 @@ export function SignInForm(){
           textContentType="password"/>
         <T.XStack flexDirection="row-reverse" gap="$4">
           <T.FormTrigger asChild={true} borderWidth={0}>
-            <ui.ButtonInverse
-              flex={4}
-              size="$5"
-              icon={isBusy ? (function (){
-                  return (
-                    <T.Spinner/>);
-                }) : null}
-              disabled={isBusy || !forms.sign_in.formState.isValid}>{isBusy ? "" : ui.t("Sign In")}
-            </ui.ButtonInverse>
+            <span className="st-auth-primary" style={{"display":"contents"}}>
+              <ui.ButtonInverse
+                className="st-primary-button"
+                flex={4}
+                size="$5"
+                icon={isBusy ? (function (){
+                    return (
+                      <T.Spinner/>);
+                  }) : null}
+                disabled={isBusy || !forms.sign_in.formState.isValid}>{isBusy ? "" : ui.t("Sign In")}
+              </ui.ButtonInverse>
+            </span>
           </T.FormTrigger>
           <ui.ButtonOutlined
+            className="st-secondary-button"
             flex={1}
             size="$5"
             borderWidth={0}
@@ -93,7 +97,7 @@ export function SignInForm(){
     </T.Form>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenLogin [102] 
+// statstrade-web.feature.auth.sign-in/SignInScreenLogin [106] 
 export function SignInScreenLogin(){
   let context = React.useContext(SignInContext);
   let {api,controls,forms,pathPrefix} = context;
@@ -101,11 +105,14 @@ export function SignInScreenLogin(){
   return (
     <React.Fragment>
       <ui_section.MinHeader
+        paragraphProps={{"className":"st-auth-caption"}}
         title={ui.t("Sign in to Statstrade")}
         paragraph={ui.t("Welcome. Please enter your details.")}/>
       <T.XStack gap="$4" flexWrap="wrap">
         <ui.ButtonOutlined
           flex={1}
+          className="st-secondary-button"
+          aria-label="Continue with Google"
           tooltip="Google Sign In"
           icon={logo_google.LogoGoogle}
           disabled={isBusy}
@@ -116,9 +123,12 @@ export function SignInScreenLogin(){
                       "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
                     }
               });
-            }}/>
+            }}>Continue with Google
+        </ui.ButtonOutlined>
         <ui.ButtonOutlined
           flex={1}
+          className="st-secondary-button"
+          aria-label="Continue with GitHub"
           tooltip="Github Sign In"
           icon={Github}
           disabled={isBusy}
@@ -129,7 +139,8 @@ export function SignInScreenLogin(){
                       "redirectTo":client_auth.authRedirectTo(process.env.NEXT_PUBLIC_SITE_URL,window.location.origin)
                     }
               });
-            }}/>
+            }}>Continue with GitHub
+        </ui.ButtonOutlined>
       </T.XStack>
       <ui.HorizontalText
         text={ui.t("OR")}
@@ -141,15 +152,25 @@ export function SignInScreenLogin(){
         <SignInForm/>
         <ui.Horizontal marginVertical="$2" borderColor="$color1"/>
         <T.XStack gap="$3">
-          <ui.ButtonLink href={client_auth.authHref(pathPrefix,"forgot-password")}>{ui.t("Forgot Password")}</ui.ButtonLink>
+          <span className="st-auth-link" style={{"display":"contents"}}>
+            <ui.ButtonLink
+              className="st-auth-link"
+              href={client_auth.authHref(pathPrefix,"forgot-password")}>{ui.t("Forgot Password")}
+            </ui.ButtonLink>
+          </span>
           <T.View flex={1}/>
-          <ui.ButtonLink href={client_auth.authHref(pathPrefix,"new-account")}>{ui.t("New Account")}</ui.ButtonLink>
+          <span className="st-auth-link" style={{"display":"contents"}}>
+            <ui.ButtonLink
+              className="st-auth-link"
+              href={client_auth.authHref(pathPrefix,"new-account")}>{ui.t("New Account")}
+            </ui.ButtonLink>
+          </span>
         </T.XStack>
       </T.YStack>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenSuccess [170] 
+// statstrade-web.feature.auth.sign-in/SignInScreenSuccess [183] 
 export function SignInScreenSuccess(){
   let router = ui_router.useRouter();
   let context = React.useContext(SignInContext);
@@ -166,36 +187,39 @@ export function SignInScreenSuccess(){
   return (
     <React.Fragment>
       <ui_section.MinHeader
+        paragraphProps={{"className":"st-auth-caption"}}
         title={ui.t("Sign in Success")}
-        paragraph={ui.t("Redirecting to Dashboard.")}/>
+        paragraph={ui.t("Opening your account.")}/>
       <ui_section.SectionMinInfo
         logo={(
             <T.View><T.Spinner size="large" color="$accent9"/></T.View>)}
         left={(
-            <ui.ButtonLink href="/">{ui.t("Go Home")}</ui.ButtonLink>)}
+            <span className="st-auth-link" style={{"display":"contents"}}><ui.ButtonLink href="/">{ui.t("Go Home")}</ui.ButtonLink></span>)}
         right={(
-            <ui.ButtonLink href="/account">{ui.t("Go to Account")}</ui.ButtonLink>)}/>
+            <span className="st-auth-link" style={{"display":"contents"}}>
+              <ui.ButtonLink href="/account">{ui.t("Go to Account")}</ui.ButtonLink>
+            </span>)}/>
     </React.Fragment>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreenMain [202] 
+// statstrade-web.feature.auth.sign-in/SignInScreenMain [218] 
 export function SignInScreenMain(){
   let context = React.useContext(SignInContext);
   let {controls} = context;
   let Component = (null == ({"success":SignInScreenSuccess})[[controls.currentStage]]) ? SignInScreenLogin : ({"success":SignInScreenSuccess})[[controls.currentStage]];
   return (
-    <ui_section.MinFrameCenter><Component/></ui_section.MinFrameCenter>);
+    <section className="st-auth-panel"><Component/></section>);
 }
 
-// statstrade-web.feature.auth.sign-in/SignInScreen [215] 
+// statstrade-web.feature.auth.sign-in/SignInScreen [231] 
 export function SignInScreen(props){
   let ctx = common_auth.useSignInContext(props);
-  let controls = hf.useControls([
+  let controls = ui_controls.useControls([
     ["currentStage","initial"],
     "currentError",
     [
       "currentRedirect",
-      process.env.NEXT_PUBLIC_SIGN_IN_REDIRECT || "/"
+      props.redirectTo || process.env.NEXT_PUBLIC_SIGN_IN_REDIRECT || "/"
     ],
     ["isVerified",false]
   ]);

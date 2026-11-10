@@ -1,0 +1,905 @@
+// statstrade-superadmin.lib.substrate-groups/Categories [144] 
+export var Categories = [
+  {"id":"operations","label":"operations"},
+  {"id":"accounts","label":"accounts & billing"},
+  {"id":"control-plane","label":"control plane"},
+  {"id":"network","label":"network operations"},
+  {"id":"governance","label":"governance & delivery"},
+  {"id":"platform","label":"platform operations"},
+  {"id":"growth","label":"growth"},
+  {"id":"safety","label":"trust & safety"}
+];
+
+// statstrade-superadmin.lib.substrate-groups/Groups [145] 
+export var Groups = [
+  {
+  "area":"superadmin",
+  "label":"Overview",
+  "key":"overview",
+  "id":"superadmin/overview",
+  "href":"/superadmin",
+  "number":"A01.S01",
+  "source":"visual-language",
+  "category":"operations",
+  "namespace":"statstrade-superadmin.groups.a01.s01-overview"
+},
+  {
+  "area":"superadmin",
+  "label":"Users",
+  "key":"users",
+  "id":"superadmin/users",
+  "href":"/superadmin/users",
+  "number":"A01.S02",
+  "source":"visual-language",
+  "category":"operations",
+  "namespace":"statstrade-superadmin.groups.a01.s02-users"
+},
+  {
+  "area":"superadmin",
+  "label":"Audit",
+  "key":"audit",
+  "id":"superadmin/audit",
+  "href":"/superadmin/audit",
+  "number":"A01.S03",
+  "source":"visual-language",
+  "category":"operations",
+  "namespace":"statstrade-superadmin.groups.a01.s03-audit"
+},
+  {
+  "area":"superadmin",
+  "label":"User operations",
+  "key":"user-operations",
+  "id":"superadmin/user-operations",
+  "href":"/superadmin/user-operations",
+  "number":"A02.S01",
+  "source":"visual-language",
+  "category":"accounts",
+  "namespace":"statstrade-superadmin.groups.a02.s01-user-operations"
+},
+  {
+  "area":"superadmin",
+  "label":"Organisations",
+  "key":"organisations",
+  "id":"superadmin/organisations",
+  "href":"/superadmin/organisations",
+  "number":"A02.S02",
+  "source":"visual-language",
+  "category":"accounts",
+  "namespace":"statstrade-superadmin.groups.a02.s02-organisations"
+},
+  {
+  "area":"superadmin",
+  "label":"Billing operations",
+  "key":"billing",
+  "id":"superadmin/billing",
+  "href":"/superadmin/billing",
+  "number":"A02.S03",
+  "source":"visual-language",
+  "category":"accounts",
+  "namespace":"statstrade-superadmin.groups.a02.s03-billing"
+},
+  {
+  "area":"superadmin",
+  "label":"System control",
+  "key":"system",
+  "id":"superadmin/system",
+  "href":"/superadmin/system",
+  "number":"A03.S01",
+  "source":"visual-language",
+  "category":"control-plane",
+  "namespace":"statstrade-superadmin.groups.a03.s01-system"
+},
+  {
+  "area":"superadmin",
+  "label":"Catalog & pricing",
+  "key":"catalog",
+  "id":"superadmin/catalog",
+  "href":"/superadmin/catalog",
+  "number":"A03.S02",
+  "source":"visual-language",
+  "category":"control-plane",
+  "namespace":"statstrade-superadmin.groups.a03.s02-catalog"
+},
+  {
+  "area":"superadmin",
+  "label":"Inventory & tokens",
+  "key":"inventory",
+  "id":"superadmin/inventory",
+  "href":"/superadmin/inventory",
+  "number":"A03.S03",
+  "source":"visual-language",
+  "category":"control-plane",
+  "namespace":"statstrade-superadmin.groups.a03.s03-inventory"
+},
+  {
+  "area":"superadmin",
+  "label":"Market operations",
+  "key":"market",
+  "id":"superadmin/market",
+  "href":"/superadmin/market",
+  "number":"A04.S01",
+  "source":"visual-language",
+  "category":"network",
+  "namespace":"statstrade-superadmin.groups.a04.s01-market"
+},
+  {
+  "area":"superadmin",
+  "label":"MCP & integrations",
+  "key":"integrations",
+  "id":"superadmin/integrations",
+  "href":"/superadmin/integrations",
+  "number":"A04.S02",
+  "source":"visual-language",
+  "category":"network",
+  "namespace":"statstrade-superadmin.groups.a04.s02-integrations"
+},
+  {
+  "area":"superadmin",
+  "label":"Content operations",
+  "key":"content",
+  "id":"superadmin/content",
+  "href":"/superadmin/content",
+  "number":"A05.S01",
+  "source":"visual-language",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s01-content"
+},
+  {
+  "area":"superadmin",
+  "label":"Newsroom imports",
+  "key":"content/newsroom",
+  "parent":"superadmin/content",
+  "id":"superadmin/content/newsroom",
+  "href":"/newsroom/imports",
+  "number":"A05.S01.T01",
+  "source":"runtime",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s01.t01-newsroom"
+},
+  {
+  "area":"superadmin",
+  "label":"Finance & settlement",
+  "key":"finance",
+  "id":"superadmin/finance",
+  "href":"/superadmin/finance",
+  "number":"A05.S02",
+  "source":"visual-language",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s02-finance"
+},
+  {
+  "area":"superadmin",
+  "label":"Data & analytics",
+  "key":"analytics",
+  "id":"superadmin/analytics",
+  "href":"/superadmin/analytics",
+  "number":"A05.S03",
+  "source":"visual-language",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s03-analytics"
+},
+  {
+  "area":"superadmin",
+  "label":"Compliance & privacy",
+  "key":"compliance",
+  "id":"superadmin/compliance",
+  "href":"/superadmin/compliance",
+  "number":"A05.S04",
+  "source":"visual-language",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s04-compliance"
+},
+  {
+  "area":"superadmin",
+  "label":"Support & cases",
+  "key":"support",
+  "id":"superadmin/support",
+  "href":"/superadmin/support",
+  "number":"A05.S05",
+  "source":"visual-language",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s05-support"
+},
+  {
+  "area":"superadmin",
+  "label":"Release & developer",
+  "key":"releases",
+  "id":"superadmin/releases",
+  "href":"/superadmin/releases",
+  "number":"A05.S06",
+  "source":"visual-language",
+  "category":"governance",
+  "namespace":"statstrade-superadmin.groups.a05.s06-releases"
+},
+  {
+  "area":"superadmin",
+  "label":"Access control",
+  "key":"access",
+  "id":"superadmin/access",
+  "href":"/superadmin/access",
+  "number":"A06.S01",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s01-access"
+},
+  {
+  "area":"superadmin",
+  "label":"Sessions & security",
+  "key":"sessions",
+  "id":"superadmin/sessions",
+  "href":"/superadmin/sessions",
+  "number":"A06.S02",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s02-sessions"
+},
+  {
+  "area":"superadmin",
+  "label":"System health",
+  "key":"health",
+  "id":"superadmin/health",
+  "href":"/superadmin/health",
+  "number":"A06.S03",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s03-health"
+},
+  {
+  "area":"superadmin",
+  "label":"Approvals",
+  "key":"approvals",
+  "id":"superadmin/approvals",
+  "href":"/superadmin/approvals",
+  "number":"A06.S04",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s04-approvals"
+},
+  {
+  "area":"superadmin",
+  "label":"Settings",
+  "key":"settings",
+  "id":"superadmin/settings",
+  "href":"/superadmin/settings",
+  "number":"A06.S05",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s05-settings"
+},
+  {
+  "area":"superadmin",
+  "label":"Platform policy",
+  "key":"settings/platform",
+  "parent":"superadmin/settings",
+  "id":"superadmin/settings/platform",
+  "href":"/superadmin/settings/platform",
+  "number":"A06.S05.T01",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s05.t01-platform"
+},
+  {
+  "area":"superadmin",
+  "label":"Security policy",
+  "key":"settings/security",
+  "parent":"superadmin/settings",
+  "id":"superadmin/settings/security",
+  "href":"/superadmin/settings/security",
+  "number":"A06.S05.T02",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s05.t02-security"
+},
+  {
+  "area":"superadmin",
+  "label":"Notifications",
+  "key":"settings/notifications",
+  "parent":"superadmin/settings",
+  "id":"superadmin/settings/notifications",
+  "href":"/superadmin/settings/notifications",
+  "number":"A06.S05.T03",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s05.t03-notifications"
+},
+  {
+  "area":"superadmin",
+  "label":"Audit policy",
+  "key":"settings/audit",
+  "parent":"superadmin/settings",
+  "id":"superadmin/settings/audit",
+  "href":"/superadmin/settings/audit",
+  "number":"A06.S05.T04",
+  "source":"visual-language",
+  "category":"platform",
+  "namespace":"statstrade-superadmin.groups.a06.s05.t04-audit"
+},
+  {
+  "area":"superadmin",
+  "label":"Marketing",
+  "key":"marketing",
+  "id":"superadmin/marketing",
+  "href":"/superadmin/marketing",
+  "number":"A07.S01",
+  "source":"visual-language",
+  "category":"growth",
+  "namespace":"statstrade-superadmin.groups.a07.s01-marketing"
+},
+  {
+  "area":"superadmin",
+  "label":"Audiences",
+  "key":"marketing/audiences",
+  "parent":"superadmin/marketing",
+  "id":"superadmin/marketing/audiences",
+  "href":"/superadmin/marketing/audiences",
+  "number":"A07.S01.T01",
+  "source":"visual-language",
+  "category":"growth",
+  "namespace":"statstrade-superadmin.groups.a07.s01.t01-audiences"
+},
+  {
+  "area":"superadmin",
+  "label":"Invites",
+  "key":"marketing/invites",
+  "parent":"superadmin/marketing",
+  "id":"superadmin/marketing/invites",
+  "href":"/superadmin/marketing/invites",
+  "number":"A07.S01.T02",
+  "source":"visual-language",
+  "category":"growth",
+  "namespace":"statstrade-superadmin.groups.a07.s01.t02-invites"
+},
+  {
+  "area":"superadmin",
+  "label":"Campaigns",
+  "key":"marketing/campaigns",
+  "parent":"superadmin/marketing",
+  "id":"superadmin/marketing/campaigns",
+  "href":"/superadmin/marketing/campaigns",
+  "number":"A07.S01.T03",
+  "source":"visual-language",
+  "category":"growth",
+  "namespace":"statstrade-superadmin.groups.a07.s01.t03-campaigns"
+},
+  {
+  "area":"superadmin",
+  "label":"Templates",
+  "key":"marketing/templates",
+  "parent":"superadmin/marketing",
+  "id":"superadmin/marketing/templates",
+  "href":"/superadmin/marketing/templates",
+  "number":"A07.S01.T04",
+  "source":"visual-language",
+  "category":"growth",
+  "namespace":"statstrade-superadmin.groups.a07.s01.t04-templates"
+},
+  {
+  "area":"superadmin",
+  "label":"Delivery",
+  "key":"marketing/delivery",
+  "parent":"superadmin/marketing",
+  "id":"superadmin/marketing/delivery",
+  "href":"/superadmin/marketing/delivery",
+  "number":"A07.S01.T05",
+  "source":"visual-language",
+  "category":"growth",
+  "namespace":"statstrade-superadmin.groups.a07.s01.t05-delivery"
+},
+  {
+  "area":"superadmin",
+  "label":"Moderation",
+  "key":"moderation",
+  "id":"superadmin/moderation",
+  "href":"/superadmin/moderation",
+  "number":"A08.S01",
+  "source":"visual-language",
+  "category":"safety",
+  "namespace":"statstrade-superadmin.groups.a08.s01-moderation"
+},
+  {
+  "area":"superadmin",
+  "label":"Suspicious activity",
+  "key":"suspicious-activity",
+  "id":"superadmin/suspicious-activity",
+  "href":"/superadmin/suspicious-activity",
+  "number":"A08.S02",
+  "source":"visual-language",
+  "category":"safety",
+  "namespace":"statstrade-superadmin.groups.a08.s02-suspicious-activity"
+},
+  {
+  "area":"superadmin",
+  "label":"Navigation",
+  "key":"shell",
+  "id":"superadmin/shell",
+  "number":"A00.S01",
+  "source":"runtime",
+  "category":"operations",
+  "namespace":"statstrade-superadmin.groups.a00.s01-shell"
+},
+  {
+  "area":"superadmin",
+  "label":"Global configuration",
+  "key":"global",
+  "parent":"superadmin/system",
+  "id":"superadmin/global",
+  "number":"A03.S01.T01",
+  "source":"runtime",
+  "category":"control-plane",
+  "namespace":"statstrade-superadmin.groups.a03.s01.t01-global"
+},
+  {
+  "area":"superadmin",
+  "label":"Table browser",
+  "key":"tables",
+  "id":"superadmin/tables",
+  "number":"A00.S02",
+  "source":"runtime",
+  "category":"control-plane",
+  "namespace":"statstrade-superadmin.groups.a00.s02-tables"
+}
+];
+
+// statstrade-superadmin.lib.substrate-groups/GroupLookup [146] 
+export var GroupLookup = {
+  "marketing":{
+    "area":"superadmin",
+    "label":"Marketing",
+    "key":"marketing",
+    "id":"superadmin/marketing",
+    "href":"/superadmin/marketing",
+    "number":"A07.S01",
+    "source":"visual-language",
+    "category":"growth",
+    "namespace":"statstrade-superadmin.groups.a07.s01-marketing"
+  },
+  "organisations":{
+    "area":"superadmin",
+    "label":"Organisations",
+    "key":"organisations",
+    "id":"superadmin/organisations",
+    "href":"/superadmin/organisations",
+    "number":"A02.S02",
+    "source":"visual-language",
+    "category":"accounts",
+    "namespace":"statstrade-superadmin.groups.a02.s02-organisations"
+  },
+  "settings/audit":{
+    "area":"superadmin",
+    "label":"Audit policy",
+    "key":"settings/audit",
+    "parent":"superadmin/settings",
+    "id":"superadmin/settings/audit",
+    "href":"/superadmin/settings/audit",
+    "number":"A06.S05.T04",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s05.t04-audit"
+  },
+  "marketing/audiences":{
+    "area":"superadmin",
+    "label":"Audiences",
+    "key":"marketing/audiences",
+    "parent":"superadmin/marketing",
+    "id":"superadmin/marketing/audiences",
+    "href":"/superadmin/marketing/audiences",
+    "number":"A07.S01.T01",
+    "source":"visual-language",
+    "category":"growth",
+    "namespace":"statstrade-superadmin.groups.a07.s01.t01-audiences"
+  },
+  "sessions":{
+    "area":"superadmin",
+    "label":"Sessions & security",
+    "key":"sessions",
+    "id":"superadmin/sessions",
+    "href":"/superadmin/sessions",
+    "number":"A06.S02",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s02-sessions"
+  },
+  "settings":{
+    "area":"superadmin",
+    "label":"Settings",
+    "key":"settings",
+    "id":"superadmin/settings",
+    "href":"/superadmin/settings",
+    "number":"A06.S05",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s05-settings"
+  },
+  "health":{
+    "area":"superadmin",
+    "label":"System health",
+    "key":"health",
+    "id":"superadmin/health",
+    "href":"/superadmin/health",
+    "number":"A06.S03",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s03-health"
+  },
+  "access":{
+    "area":"superadmin",
+    "label":"Access control",
+    "key":"access",
+    "id":"superadmin/access",
+    "href":"/superadmin/access",
+    "number":"A06.S01",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s01-access"
+  },
+  "tables":{
+    "area":"superadmin",
+    "label":"Table browser",
+    "key":"tables",
+    "id":"superadmin/tables",
+    "number":"A00.S02",
+    "source":"runtime",
+    "category":"control-plane",
+    "namespace":"statstrade-superadmin.groups.a00.s02-tables"
+  },
+  "releases":{
+    "area":"superadmin",
+    "label":"Release & developer",
+    "key":"releases",
+    "id":"superadmin/releases",
+    "href":"/superadmin/releases",
+    "number":"A05.S06",
+    "source":"visual-language",
+    "category":"governance",
+    "namespace":"statstrade-superadmin.groups.a05.s06-releases"
+  },
+  "settings/notifications":{
+    "area":"superadmin",
+    "label":"Notifications",
+    "key":"settings/notifications",
+    "parent":"superadmin/settings",
+    "id":"superadmin/settings/notifications",
+    "href":"/superadmin/settings/notifications",
+    "number":"A06.S05.T03",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s05.t03-notifications"
+  },
+  "billing":{
+    "area":"superadmin",
+    "label":"Billing operations",
+    "key":"billing",
+    "id":"superadmin/billing",
+    "href":"/superadmin/billing",
+    "number":"A02.S03",
+    "source":"visual-language",
+    "category":"accounts",
+    "namespace":"statstrade-superadmin.groups.a02.s03-billing"
+  },
+  "suspicious-activity":{
+    "area":"superadmin",
+    "label":"Suspicious activity",
+    "key":"suspicious-activity",
+    "id":"superadmin/suspicious-activity",
+    "href":"/superadmin/suspicious-activity",
+    "number":"A08.S02",
+    "source":"visual-language",
+    "category":"safety",
+    "namespace":"statstrade-superadmin.groups.a08.s02-suspicious-activity"
+  },
+  "marketing/campaigns":{
+    "area":"superadmin",
+    "label":"Campaigns",
+    "key":"marketing/campaigns",
+    "parent":"superadmin/marketing",
+    "id":"superadmin/marketing/campaigns",
+    "href":"/superadmin/marketing/campaigns",
+    "number":"A07.S01.T03",
+    "source":"visual-language",
+    "category":"growth",
+    "namespace":"statstrade-superadmin.groups.a07.s01.t03-campaigns"
+  },
+  "shell":{
+    "area":"superadmin",
+    "label":"Navigation",
+    "key":"shell",
+    "id":"superadmin/shell",
+    "number":"A00.S01",
+    "source":"runtime",
+    "category":"operations",
+    "namespace":"statstrade-superadmin.groups.a00.s01-shell"
+  },
+  "approvals":{
+    "area":"superadmin",
+    "label":"Approvals",
+    "key":"approvals",
+    "id":"superadmin/approvals",
+    "href":"/superadmin/approvals",
+    "number":"A06.S04",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s04-approvals"
+  },
+  "support":{
+    "area":"superadmin",
+    "label":"Support & cases",
+    "key":"support",
+    "id":"superadmin/support",
+    "href":"/superadmin/support",
+    "number":"A05.S05",
+    "source":"visual-language",
+    "category":"governance",
+    "namespace":"statstrade-superadmin.groups.a05.s05-support"
+  },
+  "settings/security":{
+    "area":"superadmin",
+    "label":"Security policy",
+    "key":"settings/security",
+    "parent":"superadmin/settings",
+    "id":"superadmin/settings/security",
+    "href":"/superadmin/settings/security",
+    "number":"A06.S05.T02",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s05.t02-security"
+  },
+  "users":{
+    "area":"superadmin",
+    "label":"Users",
+    "key":"users",
+    "id":"superadmin/users",
+    "href":"/superadmin/users",
+    "number":"A01.S02",
+    "source":"visual-language",
+    "category":"operations",
+    "namespace":"statstrade-superadmin.groups.a01.s02-users"
+  },
+  "content/newsroom":{
+    "area":"superadmin",
+    "label":"Newsroom imports",
+    "key":"content/newsroom",
+    "parent":"superadmin/content",
+    "id":"superadmin/content/newsroom",
+    "href":"/newsroom/imports",
+    "number":"A05.S01.T01",
+    "source":"runtime",
+    "category":"governance",
+    "namespace":"statstrade-superadmin.groups.a05.s01.t01-newsroom"
+  },
+  "overview":{
+    "area":"superadmin",
+    "label":"Overview",
+    "key":"overview",
+    "id":"superadmin/overview",
+    "href":"/superadmin",
+    "number":"A01.S01",
+    "source":"visual-language",
+    "category":"operations",
+    "namespace":"statstrade-superadmin.groups.a01.s01-overview"
+  },
+  "marketing/delivery":{
+    "area":"superadmin",
+    "label":"Delivery",
+    "key":"marketing/delivery",
+    "parent":"superadmin/marketing",
+    "id":"superadmin/marketing/delivery",
+    "href":"/superadmin/marketing/delivery",
+    "number":"A07.S01.T05",
+    "source":"visual-language",
+    "category":"growth",
+    "namespace":"statstrade-superadmin.groups.a07.s01.t05-delivery"
+  },
+  "user-operations":{
+    "area":"superadmin",
+    "label":"User operations",
+    "key":"user-operations",
+    "id":"superadmin/user-operations",
+    "href":"/superadmin/user-operations",
+    "number":"A02.S01",
+    "source":"visual-language",
+    "category":"accounts",
+    "namespace":"statstrade-superadmin.groups.a02.s01-user-operations"
+  },
+  "content":{
+    "area":"superadmin",
+    "label":"Content operations",
+    "key":"content",
+    "id":"superadmin/content",
+    "href":"/superadmin/content",
+    "number":"A05.S01",
+    "source":"visual-language",
+    "category":"governance",
+    "namespace":"statstrade-superadmin.groups.a05.s01-content"
+  },
+  "inventory":{
+    "area":"superadmin",
+    "label":"Inventory & tokens",
+    "key":"inventory",
+    "id":"superadmin/inventory",
+    "href":"/superadmin/inventory",
+    "number":"A03.S03",
+    "source":"visual-language",
+    "category":"control-plane",
+    "namespace":"statstrade-superadmin.groups.a03.s03-inventory"
+  },
+  "audit":{
+    "area":"superadmin",
+    "label":"Audit",
+    "key":"audit",
+    "id":"superadmin/audit",
+    "href":"/superadmin/audit",
+    "number":"A01.S03",
+    "source":"visual-language",
+    "category":"operations",
+    "namespace":"statstrade-superadmin.groups.a01.s03-audit"
+  },
+  "settings/platform":{
+    "area":"superadmin",
+    "label":"Platform policy",
+    "key":"settings/platform",
+    "parent":"superadmin/settings",
+    "id":"superadmin/settings/platform",
+    "href":"/superadmin/settings/platform",
+    "number":"A06.S05.T01",
+    "source":"visual-language",
+    "category":"platform",
+    "namespace":"statstrade-superadmin.groups.a06.s05.t01-platform"
+  },
+  "compliance":{
+    "area":"superadmin",
+    "label":"Compliance & privacy",
+    "key":"compliance",
+    "id":"superadmin/compliance",
+    "href":"/superadmin/compliance",
+    "number":"A05.S04",
+    "source":"visual-language",
+    "category":"governance",
+    "namespace":"statstrade-superadmin.groups.a05.s04-compliance"
+  },
+  "moderation":{
+    "area":"superadmin",
+    "label":"Moderation",
+    "key":"moderation",
+    "id":"superadmin/moderation",
+    "href":"/superadmin/moderation",
+    "number":"A08.S01",
+    "source":"visual-language",
+    "category":"safety",
+    "namespace":"statstrade-superadmin.groups.a08.s01-moderation"
+  },
+  "system":{
+    "area":"superadmin",
+    "label":"System control",
+    "key":"system",
+    "id":"superadmin/system",
+    "href":"/superadmin/system",
+    "number":"A03.S01",
+    "source":"visual-language",
+    "category":"control-plane",
+    "namespace":"statstrade-superadmin.groups.a03.s01-system"
+  },
+  "global":{
+    "area":"superadmin",
+    "label":"Global configuration",
+    "key":"global",
+    "parent":"superadmin/system",
+    "id":"superadmin/global",
+    "number":"A03.S01.T01",
+    "source":"runtime",
+    "category":"control-plane",
+    "namespace":"statstrade-superadmin.groups.a03.s01.t01-global"
+  },
+  "finance":{
+    "area":"superadmin",
+    "label":"Finance & settlement",
+    "key":"finance",
+    "id":"superadmin/finance",
+    "href":"/superadmin/finance",
+    "number":"A05.S02",
+    "source":"visual-language",
+    "category":"governance",
+    "namespace":"statstrade-superadmin.groups.a05.s02-finance"
+  },
+  "integrations":{
+    "area":"superadmin",
+    "label":"MCP & integrations",
+    "key":"integrations",
+    "id":"superadmin/integrations",
+    "href":"/superadmin/integrations",
+    "number":"A04.S02",
+    "source":"visual-language",
+    "category":"network",
+    "namespace":"statstrade-superadmin.groups.a04.s02-integrations"
+  },
+  "marketing/invites":{
+    "area":"superadmin",
+    "label":"Invites",
+    "key":"marketing/invites",
+    "parent":"superadmin/marketing",
+    "id":"superadmin/marketing/invites",
+    "href":"/superadmin/marketing/invites",
+    "number":"A07.S01.T02",
+    "source":"visual-language",
+    "category":"growth",
+    "namespace":"statstrade-superadmin.groups.a07.s01.t02-invites"
+  },
+  "catalog":{
+    "area":"superadmin",
+    "label":"Catalog & pricing",
+    "key":"catalog",
+    "id":"superadmin/catalog",
+    "href":"/superadmin/catalog",
+    "number":"A03.S02",
+    "source":"visual-language",
+    "category":"control-plane",
+    "namespace":"statstrade-superadmin.groups.a03.s02-catalog"
+  },
+  "market":{
+    "area":"superadmin",
+    "label":"Market operations",
+    "key":"market",
+    "id":"superadmin/market",
+    "href":"/superadmin/market",
+    "number":"A04.S01",
+    "source":"visual-language",
+    "category":"network",
+    "namespace":"statstrade-superadmin.groups.a04.s01-market"
+  },
+  "analytics":{
+    "area":"superadmin",
+    "label":"Data & analytics",
+    "key":"analytics",
+    "id":"superadmin/analytics",
+    "href":"/superadmin/analytics",
+    "number":"A05.S03",
+    "source":"visual-language",
+    "category":"governance",
+    "namespace":"statstrade-superadmin.groups.a05.s03-analytics"
+  },
+  "marketing/templates":{
+    "area":"superadmin",
+    "label":"Templates",
+    "key":"marketing/templates",
+    "parent":"superadmin/marketing",
+    "id":"superadmin/marketing/templates",
+    "href":"/superadmin/marketing/templates",
+    "number":"A07.S01.T04",
+    "source":"visual-language",
+    "category":"growth",
+    "namespace":"statstrade-superadmin.groups.a07.s01.t04-templates"
+  }
+};
+
+// statstrade-superadmin.lib.substrate-groups/WorkspaceGroupKeys [147] 
+export var WorkspaceGroupKeys = {
+  "super/system/swap":"market",
+  "super/system/service":"integrations",
+  "super/global":"global",
+  "user":"user-operations",
+  "super/admin/newsroom":"content/newsroom",
+  "billing":"billing",
+  "organisation":"organisations",
+  "super/system/room":"market",
+  "super":"system",
+  "super/admin/organisation":"organisations",
+  "super/system/template":"catalog",
+  "super/admin/user":"users",
+  "room":"market",
+  "chain":"inventory"
+};
+
+// statstrade-superadmin.lib.substrate-groups/getGroup [149] 
+export function getGroup(key){
+  let section = key.startsWith("superadmin/") ? key.slice(11) : key;
+  let spec = GroupLookup[section];
+  if(!spec){
+    throw new Error("Unknown Superadmin group: " + key);
+  }
+  return spec;
+}
+
+// statstrade-superadmin.lib.substrate-groups/instanceGroupId [160] 
+export function instanceGroupId(key,instance_id){
+  let spec = getGroup(key);
+  return spec["id"] + "@" + instance_id;
+}

@@ -33,15 +33,21 @@ export function table_upsert_single(schema,table_name,m,opts){
   let ks = cols.filter(function (col){
     return null != m[col];
   });
-  return raw.raw_upsert(table_name,"id",ks,[m],opts);
+  return raw.raw_upsert(
+    table_name,
+    base_schema.primary_columns(schema,table_name),
+    ks,
+    [m],
+    opts
+  );
 }
 
 // xt.db.text.sql-table/table-filter-id [55] 
 export function table_filter_id(entry){
-  return !((0 == Object.keys(entry["ref_links"]).length) && (1 == Object.keys(entry["data"]).length));
+  return !((0 == Object.keys(entry["ref_links"]).length) && (null != entry["data"]["id"]) && (1 == Object.keys(entry["data"]).length));
 }
 
-// xt.db.text.sql-table/table-get-data [62] 
+// xt.db.text.sql-table/table-get-data [63] 
 export function table_get_data(entry){
   let out = Object.assign({},entry["data"]);
   for(let [link,m] of Object.entries(entry["ref_links"])){
@@ -50,15 +56,15 @@ export function table_get_data(entry){
   return out;
 }
 
-// xt.db.text.sql-table/table-emit-insert [71] 
+// xt.db.text.sql-table/table-emit-insert [72] 
 export var table_emit_insert = raw.raw_insert;
 
-// xt.db.text.sql-table/table-emit-upsert [74] 
+// xt.db.text.sql-table/table-emit-upsert [75] 
 export var table_emit_upsert = function (table_name,cols,out,opts){
-  return raw.raw_upsert(table_name,"id",cols,out,opts);
+  return raw.raw_upsert(table_name,opts["identity_columns"] || "id",cols,out,opts);
 };
 
-// xt.db.text.sql-table/table-emit-flat [83] 
+// xt.db.text.sql-table/table-emit-flat [84] 
 export function table_emit_flat(emit_fn,schema,lookup,flat,opts){
   let ordered = xtd.arr_keep(base_schema.table_order(lookup),function (col){
     return (null != flat[col]) ? [col,flat[col]] : null;
@@ -86,6 +92,7 @@ export function table_emit_flat(emit_fn,schema,lookup,flat,opts){
     else{
       sopts = Object.assign({},opts);
     }
+    sopts["identity_columns"] = base_schema.primary_columns(schema,table_name);
     if(0 < sout.length){
       return emit_fn(table_name,cols,sout,sopts);
     }
@@ -93,26 +100,26 @@ export function table_emit_flat(emit_fn,schema,lookup,flat,opts){
   return xtd.arr_keep(ordered,emit_pair_fn);
 }
 
-// xt.db.text.sql-table/table-insert [120] 
+// xt.db.text.sql-table/table-insert [122] 
 export function table_insert(schema,lookup,table_name,data,opts){
   let flat = f.flatten(schema,table_name,data,{});
   return table_emit_flat(table_emit_insert,schema,lookup,flat,opts);
 }
 
-// xt.db.text.sql-table/table-upsert [127] 
+// xt.db.text.sql-table/table-upsert [129] 
 export function table_upsert(schema,lookup,table_name,data,opts){
   let flat = f.flatten(schema,table_name,data,{});
   return table_emit_flat(table_emit_upsert,schema,lookup,flat,opts);
 }
 
-// xt.db.text.sql-table/prepare-add-input [139] 
+// xt.db.text.sql-table/prepare-add-input [141] 
 export function prepare_add_input(data,schema,lookup,opts){
   let flat = f.flatten_bulk(schema,data);
   let statements = table_emit_flat(table_emit_upsert,schema,lookup,flat,opts);
   return statements.join("\n\n");
 }
 
-// xt.db.text.sql-table/prepare-remove-input [152] 
+// xt.db.text.sql-table/prepare-remove-input [154] 
 export function prepare_remove_input(data,schema,lookup,opts){
   let ordered = f.flatten_bulk_ids(schema,lookup,data);
   let statements = xtd.arr_mapcat(ordered,function (entry){

@@ -16,11 +16,11 @@ vitest.afterEach(function (){
 });
 vitest.it("refreshes both membership list keys after create or update",function (){
   let useApiHook = rq.useApi;
-  let useFormStateHook = hf.useFormStateMap;
+  let useFormStateHook = hf.useFormState;
   let apiValue = {"kind":"organisation-api"};
   let formsValue = {"kind":"organisation-forms"};
   let apiSpy = vitest.vi.spyOn(rq,"useApi");
-  let formSpy = vitest.vi.spyOn(hf,"useFormStateMap");
+  let formSpy = vitest.vi.spyOn(hf,"useFormState");
   apiSpy.mockReturnValue(apiValue);
   formSpy.mockReturnValue(formsValue);
   let captured = null;
@@ -31,11 +31,11 @@ vitest.it("refreshes both membership list keys after create or update",function 
   renderToStaticMarkup(React.createElement(Probe,{}));
   let config = apiSpy.mock.calls[0][0];
   vitest.expect(captured.api).toBe(apiValue);
-  vitest.expect(captured.forms).toBe(formsValue);
+  vitest.expect(captured.forms.organisation_create).toBe(formsValue);
   vitest.expect(config.queries.organisations_list.default).toEqual([]);
   vitest.expect(config.mutations.organisation_create.refresh).toEqual(["organisations_list","user_list_member_organisations"]);
   vitest.expect(config.mutations.organisation_update.refresh).toEqual(["organisations_list","user_list_member_organisations"]);
-  vitest.expect(formSpy.mock.calls[0][0].organisation_create.defaultValues).toEqual({"name":"","title":"","description":""});
+  vitest.expect(formSpy.mock.calls[0][0].defaultValues).toEqual({"name":"","title":"","description":""});
 });
 
 // statsui.group.manage-organisation-action-test/test-manage-organisation-access-context [45] 

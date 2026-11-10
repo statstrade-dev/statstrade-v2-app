@@ -1,27 +1,56 @@
 import * as xtd from '@statstrade/edge/lib/xt/lang/common-data.jsx'
 
-// xt.db.text.base-schema/CACHED_SCHEMA [8] 
+import * as str from '@statstrade/edge/lib/xt/lang/common-string.jsx'
+
+// xt.db.text.base-schema/CACHED_SCHEMA [9] 
 export var CACHED_SCHEMA = new Map();
 
-// xt.db.text.base-schema/CACHED_LOOKUP [10] 
+// xt.db.text.base-schema/CACHED_LOOKUP [11] 
 export var CACHED_LOOKUP = new Map();
 
-// xt.db.text.base-schema/get-order [12] 
+// xt.db.text.base-schema/get-order [13] 
 export var get_order = function (e){
   return e["order"];
 };
 
-// xt.db.text.base-schema/get-ident [15] 
+// xt.db.text.base-schema/get-ident [16] 
 export var get_ident = function (e){
   return e["ident"];
 };
 
-// xt.db.text.base-schema/get-ident-id [18] 
+// xt.db.text.base-schema/get-ident-id [19] 
 export function get_ident_id(e){
   return ("ref" == e["type"]) ? (e["ident"] + "_id") : e["ident"];
 }
 
-// xt.db.text.base-schema/list-tables [26] 
+// xt.db.text.base-schema/primary-columns [27] 
+export function primary_columns(schema,table_name){
+  let table = schema[table_name];
+  let entries = xtd.arr_sort(Object.values(table).filter(function (entry){
+    return entry["primary"];
+  }),get_order,function (x,y){
+    return x < y;
+  });
+  return (entries.length > 0) ? entries.map(get_ident_id) : ["id"];
+}
+
+// xt.db.text.base-schema/record-key [38] 
+export function record_key(schema,table_name,data){
+  let values = primary_columns(schema,table_name).map(function (column){
+    let value = data[column];
+    if((null == value) && str.ends_withp(column,"_id")){
+      let field = column.substring(0,column.length - 3);
+      value = data[field];
+      if((null != value) && ("object" == (typeof value)) && !Array.isArray(value)){
+        value = value["id"];
+      }
+    }
+    return value;
+  });
+  return (values.length == 1) ? values[0] : JSON.stringify(values);
+}
+
+// xt.db.text.base-schema/list-tables [55] 
 export function list_tables(schema){
   return xtd.arr_sort(Object.keys(schema),function (x){
     return x;
@@ -30,7 +59,7 @@ export function list_tables(schema){
   });
 }
 
-// xt.db.text.base-schema/get-cached-schema [34] 
+// xt.db.text.base-schema/get-cached-schema [63] 
 export function get_cached_schema(schema){
   let cached = CACHED_SCHEMA.get(schema);
   if(null == cached){
@@ -40,7 +69,7 @@ export function get_cached_schema(schema){
   return cached;
 }
 
-// xt.db.text.base-schema/create-data-keys [44] 
+// xt.db.text.base-schema/create-data-keys [73] 
 export function create_data_keys(schema,table_name){
   let table_def = schema[table_name];
   return xtd.arr_sort(Object.values(table_def).filter(function (e){
@@ -50,7 +79,7 @@ export function create_data_keys(schema,table_name){
   }).map(get_ident);
 }
 
-// xt.db.text.base-schema/create-ref-keys [57] 
+// xt.db.text.base-schema/create-ref-keys [86] 
 export function create_ref_keys(schema,table_name){
   let table_def = schema[table_name];
   return xtd.arr_sort(Object.values(table_def).filter(function (e){
@@ -60,7 +89,7 @@ export function create_ref_keys(schema,table_name){
   }).map(get_ident);
 }
 
-// xt.db.text.base-schema/create-rev-keys [68] 
+// xt.db.text.base-schema/create-rev-keys [97] 
 export function create_rev_keys(schema,table_name){
   let table_def = schema[table_name];
   return Object.values(table_def).filter(function (e){
@@ -68,7 +97,7 @@ export function create_rev_keys(schema,table_name){
   }).map(get_ident);
 }
 
-// xt.db.text.base-schema/create-table-entries [78] 
+// xt.db.text.base-schema/create-table-entries [107] 
 export function create_table_entries(schema,table_name){
   let table_def = schema[table_name];
   return xtd.arr_sort(Object.values(table_def).filter(function (e){
@@ -78,7 +107,7 @@ export function create_table_entries(schema,table_name){
   });
 }
 
-// xt.db.text.base-schema/create-defaults [88] 
+// xt.db.text.base-schema/create-defaults [117] 
 export function create_defaults(schema,table_name){
   let table_def = schema[table_name];
   return xtd.obj_keepf(table_def,function (m){
@@ -88,7 +117,7 @@ export function create_defaults(schema,table_name){
   });
 }
 
-// xt.db.text.base-schema/create-all-keys [100] 
+// xt.db.text.base-schema/create-all-keys [129] 
 export function create_all_keys(schema,table_name){
   let ref_ks = create_ref_keys(schema,table_name);
   let ref_id_ks = xtd.obj_from_pairs(ref_ks.map(function (k){
@@ -104,7 +133,7 @@ export function create_all_keys(schema,table_name){
   };
 }
 
-// xt.db.text.base-schema/get-all-keys [114] 
+// xt.db.text.base-schema/get-all-keys [143] 
 export function get_all_keys(schema,table_name){
   let cached = get_cached_schema(schema);
   let table_keys = cached[table_name];
@@ -115,42 +144,42 @@ export function get_all_keys(schema,table_name){
   return table_keys;
 }
 
-// xt.db.text.base-schema/data-keys [125] 
+// xt.db.text.base-schema/data-keys [154] 
 export function data_keys(schema,table_name){
   return (get_all_keys(schema,table_name))["data"];
 }
 
-// xt.db.text.base-schema/ref-keys [131] 
+// xt.db.text.base-schema/ref-keys [160] 
 export function ref_keys(schema,table_name){
   return (get_all_keys(schema,table_name))["ref"];
 }
 
-// xt.db.text.base-schema/ref-id-keys [137] 
+// xt.db.text.base-schema/ref-id-keys [166] 
 export function ref_id_keys(schema,table_name){
   return (get_all_keys(schema,table_name))["ref_id"];
 }
 
-// xt.db.text.base-schema/rev-keys [143] 
+// xt.db.text.base-schema/rev-keys [172] 
 export function rev_keys(schema,table_name){
   return (get_all_keys(schema,table_name))["rev"];
 }
 
-// xt.db.text.base-schema/table-defaults [149] 
+// xt.db.text.base-schema/table-defaults [178] 
 export function table_defaults(schema,table_name){
   return (get_all_keys(schema,table_name))["defaults"];
 }
 
-// xt.db.text.base-schema/table-entries [155] 
+// xt.db.text.base-schema/table-entries [184] 
 export function table_entries(schema,table_name){
   return (get_all_keys(schema,table_name))["table"];
 }
 
-// xt.db.text.base-schema/table-columns [161] 
+// xt.db.text.base-schema/table-columns [190] 
 export function table_columns(schema,table_name){
   return table_entries(schema,table_name).map(get_ident_id);
 }
 
-// xt.db.text.base-schema/create-table-order [168] 
+// xt.db.text.base-schema/create-table-order [197] 
 export function create_table_order(lookup){
   return xtd.arr_sort(Object.entries(lookup),function (pair){
     return pair[1]["position"];
@@ -161,7 +190,7 @@ export function create_table_order(lookup){
   });
 }
 
-// xt.db.text.base-schema/table-order [178] 
+// xt.db.text.base-schema/table-order [207] 
 export function table_order(lookup){
   let cached = CACHED_LOOKUP.get(lookup);
   if(null == cached){
@@ -171,7 +200,7 @@ export function table_order(lookup){
   return cached;
 }
 
-// xt.db.text.base-schema/table-coerce [188] 
+// xt.db.text.base-schema/table-coerce [217] 
 export function table_coerce(schema,table,data,ctypes){
   let out = {};
   let ref_fn = function (ntable,vdata){

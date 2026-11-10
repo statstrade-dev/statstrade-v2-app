@@ -1,12 +1,10 @@
-import React from 'react'
-
-import * as T from 'tamagui'
-
 import * as ui_router from '@statstrade/component/ui-router.jsx'
 
-import * as profile_store from '@statstrade/component/db/profile-store.jsx'
+import * as page_api from '@statstrade/edge/substrate/page-api.jsx'
 
-// statstrade-web.feature.profile.profile-public/profile-handle-from-path [11] 
+import * as reputation from '@statstrade/feature/reputation/public-summary.jsx'
+
+// statstrade-web.feature.profile.profile-public/profile-handle-from-path [12] 
 export function profile_handle_from_path(pathname){
   let parts = (pathname || "").split("/");
   let handle = parts[2] || "";
@@ -21,7 +19,7 @@ export function profile_handle_from_path(pathname){
   }
 }
 
-// statstrade-web.feature.profile.profile-public/profile-display-name [22] 
+// statstrade-web.feature.profile.profile-public/profile-display-name [23] 
 export function profile_display_name(profile){
   let firstName = (profile.first_name || "").trim();
   let lastName = (profile.last_name || "").trim();
@@ -31,7 +29,7 @@ export function profile_display_name(profile){
   return name || (profile.handle && ("@" + profile.handle)) || "";
 }
 
-// statstrade-web.feature.profile.profile-public/profile-location [34] 
+// statstrade-web.feature.profile.profile-public/profile-location [35] 
 export function profile_location(profile){
   let city = (profile.city || "").trim();
   let country = (profile.country_code || "").trim();
@@ -49,63 +47,41 @@ export function profile_location(profile){
   }
 }
 
-// statstrade-web.feature.profile.profile-public/PublicProfile [44] 
+// statstrade-web.feature.profile.profile-public/PublicProfile [45] 
 export function PublicProfile(){
   let pathname = ui_router.usePathname();
   let handle = profile_handle_from_path(pathname);
-  let [profile,setProfile] = React.useState(null);
-  let [loading,setLoading] = React.useState(true);
-  let [error,setError] = React.useState(null);
-  React.useEffect(function (){
-    let cancelled = false;
-    if(handle){
-      setLoading(true);
-      setProfile(null);
-      setError(null);
-      profile_store.fetch_public_profile(handle).then(function (row){
-        if(!cancelled){
-          setProfile(row);
-        }
-      }).catch(function (e){
-        if(!cancelled){
-          setError(e.message || "Could not load this profile.");
-        }
-      }).finally(function (){
-        if(!cancelled){
-          setLoading(false);
-        }
-      });
-    }
-    if(!handle){
-      setLoading(false);
-    }
-    return function (){
-      cancelled = true;
-    };
-  },[handle]);
+  let api = page_api.usePageApi("public-profile");
+  let profile = api.data.profile;
+  let loading = api.owner.status == "loading";
+  let error = api.owner.error;
   return (
-    <T.YStack
-      gap="$4"
-      width="100%"
-      maxWidth={760}
-      alignSelf="center"
-      padding="$5">
+    <section className="st-page st-user-page">
+      <p className="st-kicker">Participant / public profile</p>
       {loading ? (
-        <T.Text role="status" color="$color10">Loading profile…</T.Text>) : (error ? (
-        <T.Text role="alert" color="$red10">{error}</T.Text>) : (!profile ? (
-        <T.Text role="status" color="$color10">Profile not found.</T.Text>) : (
-        <T.YStack
-          gap="$3"
-          padding="$5"
-          borderWidth={1}
-          borderColor="$color5"
-          borderRadius="$4">
-          <T.H1 fontSize="$8" fontWeight="700">{profile_display_name(profile)}</T.H1>
-          <T.Text fontSize="$3" color="$color10">{"@" + profile.handle}</T.Text>
-          {profile_location(profile) ? (
-            <T.Text fontSize="$3" color="$color10">{profile_location(profile)}</T.Text>) : null}
+        <p role="status" className="st-notice">Loading profile…</p>) : (error ? (
+        <p role="alert" className="st-notice">{error}</p>) : (!profile ? (
+        <section className="st-panel">
+          <h1>Profile not found</h1>
+          <p role="status">This public profile is unavailable.</p>
+        </section>) : (
+        <div>
+          <header className="st-profile-identity">
+            <div className="st-profile-avatar" aria-hidden={true}>
+              {(profile.first_name || profile.handle || "?").slice(0,1).toUpperCase()}
+            </div>
+            <div>
+              <h1>{profile_display_name(profile)}</h1>
+              <p>{"@" + profile.handle}</p>
+              {profile_location(profile) ? (
+                <p>{profile_location(profile)}</p>) : null}
+            </div>
+          </header>
           {profile.bio ? (
-            <T.Paragraph fontSize="$4" lineHeight="$6">{profile.bio}</T.Paragraph>) : null}
-        </T.YStack>)))}
-    </T.YStack>);
+            <section className="st-panel"><h2>About</h2><p>{profile.bio}</p></section>) : null}
+          <section className="st-panel">
+            <reputation.PublishedReputation summaries={api.data.reputation}/>
+          </section>
+        </div>)))}
+    </section>);
 }

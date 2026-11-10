@@ -1,15 +1,19 @@
 import * as runtime from '@xtalk/db/node/runtime.js'
 
+import * as kernel_supabase from '@xtalk/db/node/kernel-supabase.js'
+
 import * as client_base from '@xtalk/db/node/client-base.js'
+
+import * as supabase from '@xtalk/db/system/backend-supabase.js'
 
 import * as common from '@statstrade/web-superadmin/lib/substrate-common.jsx'
 
 import * as substrate from '@xtalk/substrate/substrate.js'
 
-// statstrade-superadmin.lib.substrate-bare/SubstrateContext [11] 
+// statstrade-superadmin.lib.substrate-bare/SubstrateContext [13] 
 export var SubstrateContext = common.SubstrateContext;
 
-// statstrade-superadmin.lib.substrate-bare/createConfig [13] 
+// statstrade-superadmin.lib.substrate-bare/createConfig [15] 
 export function createConfig(token){
   let config = common.createConfig("memory",{});
   if(token){
@@ -18,10 +22,13 @@ export function createConfig(token){
   return config;
 }
 
-// statstrade-superadmin.lib.substrate-bare/initNode [21] 
+// statstrade-superadmin.lib.substrate-bare/initNode [23] 
 export async function initNode(client_id,worker_url,config){
   let client = substrate.node_create({"id":client_id || "statstrade-superadmin-client"});
-  runtime.init_server(client);
+  runtime.init_server(client,{
+    "backends":{"supabase":supabase.provider()},
+    "init_handlers":[kernel_supabase.init_handlers]
+  });
   let node_config = config || createConfig();
   let init = await client_base.kernel_init(client,node_config,{},{},{});
   return {
@@ -33,7 +40,7 @@ export async function initNode(client_id,worker_url,config){
   };
 }
 
-// statstrade-superadmin.lib.substrate-bare/closeNode [36] 
+// statstrade-superadmin.lib.substrate-bare/closeNode [39] 
 export async function closeNode(resource){
   if(resource && !resource["closed"]){
     resource["closed"] = true;
@@ -42,17 +49,17 @@ export async function closeNode(resource){
   return true;
 }
 
-// statstrade-superadmin.lib.substrate-bare/useSubstrateContext [47] 
+// statstrade-superadmin.lib.substrate-bare/useSubstrateContext [50] 
 export function useSubstrateContext(){
   return common.useSubstrateContext();
 }
 
-// statstrade-superadmin.lib.substrate-bare/useSubstrateNode [53] 
+// statstrade-superadmin.lib.substrate-bare/useSubstrateNode [56] 
 export function useSubstrateNode(options){
   return common.useSubstrateNode(options,initNode,closeNode);
 }
 
-// statstrade-superadmin.lib.substrate-bare/SubstrateProvider [59] 
+// statstrade-superadmin.lib.substrate-bare/SubstrateProvider [62] 
 export function SubstrateProvider({children,options}){
   return common.SubstrateProvider(children,options,initNode,closeNode);
 }

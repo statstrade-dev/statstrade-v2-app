@@ -60,6 +60,7 @@ const configureWebpack = (config) => {
 module.exports = () => {
   /** @type {import('next').NextConfig} */
   let config = {
+    ...(process.env.STATSTRADE_NEXT_DIST_DIR ? { distDir: process.env.STATSTRADE_NEXT_DIST_DIR } : {}),
     devIndicators: {
       position: 'bottom-right',
     },
